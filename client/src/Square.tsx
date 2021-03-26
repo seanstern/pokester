@@ -1,12 +1,15 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 
 interface SquareProps {
     value: number;
 }
 const Square: FC<SquareProps> = (props) => {
-    const { value } = props;
+    const [value, setValue] = useState<string>();
     return (
-        <button className="square">
+        <button
+            className="square"
+            onClick={() => setValue('X')}
+        >
             {value}
         </button>
     );
