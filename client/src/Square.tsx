@@ -8,15 +8,17 @@ export enum SquareValue {
 
 interface SquareProps {
     value: SquareValue;
-    setValue: () => void;
+    highlight: boolean;
+    handleClick: () => void;
 }
 
 const Square: FC<SquareProps> = (props) => {
-    const { value, setValue } = props;
+    const { value, highlight, handleClick } = props;
     return (
         <button
             className="square"
-            onClick={setValue}
+            onClick={handleClick}
+            style={highlight ? {fontWeight: 'bold'} : undefined}
         >
             {value}
         </button>

@@ -1,13 +1,16 @@
-import { SquareValues } from './Board';
+import { SquareValues } from './Game';
 import { SquareValue } from './Square';
 
 const isWinner = (v0: SquareValue, v1: SquareValue, v2: SquareValue): boolean => (
     v0 !== SquareValue.BLANK && (v0 === v1) && (v1 === v2)
 );
 
-type WinnerCoordinates = [[number, number], [number, number], [number, number]];
+type WinnerCoordinates = [
+    [number, number],
+    [number, number],
+    [number, number],
+];
 const getWinner = (sv: SquareValues): WinnerCoordinates | null => {
-
     for(let r = 0; r < sv.length; r++) {
         if (isWinner(...sv[r])) {
             return [[r,0],[r,1],[r,2]];
