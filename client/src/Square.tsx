@@ -1,14 +1,22 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
+
+export enum SquareValue {
+    BLANK = '',
+    X = 'X',
+    O = 'O',
+}
 
 interface SquareProps {
-    value: number;
+    value: SquareValue;
+    setValue: () => void;
 }
+
 const Square: FC<SquareProps> = (props) => {
-    const [value, setValue] = useState<string>();
+    const { value, setValue } = props;
     return (
         <button
             className="square"
-            onClick={() => setValue('X')}
+            onClick={setValue}
         >
             {value}
         </button>
