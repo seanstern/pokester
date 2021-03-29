@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useReducer, useState } from 'react';
 import Board from './Board';
 import getWinner from './getWinner';
 import PropsOf from './PropsOf';
@@ -18,34 +18,72 @@ type BoardProps = PropsOf<typeof Board>;
 
 interface GameProps {}
 
-const Game: FC<GameProps> = (props) => {
-    const [squareValues, setSquareValues] = useState<SquareValues>([
-        [SquareValue.BLANK, SquareValue.BLANK, SquareValue.BLANK],
-        [SquareValue.BLANK, SquareValue.BLANK, SquareValue.BLANK],
-        [SquareValue.BLANK, SquareValue.BLANK, SquareValue.BLANK],
-    ]);
-    const [turn, setTurn] = useState<SquareValue.X | SquareValue.O>(SquareValue.X);
 
-    const winnerCoords = getWinner(squareValues);
+type GameState = {
+    history: SquareValues[];
+    turn: SquareValue.X | SquareValue.O;
+};
+type GameAction = (
+    { 
+        type: 'make_move',
+        payload: [number, number],
+    } |
+    { type: 'undo' }
+);
+
+const reducer = (state: GameState, action: GameAction) => {
+    const { history, turn } = state;
+    switch (action.type) {
+        case 'undo':
+            if (history.length <= 1) return state;
+            return {
+                history: history.slice(0, history.length - 1),
+                turn: getNextTurn(turn),
+            } as GameState;
+        case 'make_move':
+            const recentHist = history[history.length - 1];
+            const { payload: [rIdx, cIdx] } = action;
+            if (recentHist[rIdx][cIdx] !== SquareValue.BLANK) return state;
+            if (getWinner(recentHist)) return state;
+            const newTurn = getNextTurn(turn);        
+            const nextHist = recentHist.map((curR) => curR.map((curV) => curV)) as SquareValues;
+            nextHist[rIdx][cIdx] = turn;
+            const newHistory = [...history, nextHist];
+            return {
+                history: newHistory,
+                turn: newTurn,
+            } as GameState;
+        default:
+            return state;
+    }
+};
+
+const initState = {
+    history: [[
+        [SquareValue.BLANK, SquareValue.BLANK, SquareValue.BLANK],
+        [SquareValue.BLANK, SquareValue.BLANK, SquareValue.BLANK],
+        [SquareValue.BLANK, SquareValue.BLANK, SquareValue.BLANK],
+    ]],
+    turn: SquareValue.X,
+} as GameState;
+
+const Game: FC<GameProps> = (props) => {
+
+
+    const [{ history, turn}, dispatch] = useReducer(reducer, initState);
+
+
+    const curState = history[history.length - 1];
+    const winnerCoords = getWinner(curState);
     const status = (winnerCoords) ? `${getNextTurn(turn)} WON!!` : `${turn}'s TURN`
 
-    const squaresProps = squareValues.map(
+    const squaresProps = curState.map(
         (r, rIdx) => (r.map(
             (v, vIdx) => ({
                 value: v,
                 highlight: !!winnerCoords?.find(([wR, wC]) => wR === rIdx && wC === vIdx),
-                handleClick: () => {
-                    if (squareValues[rIdx][vIdx] !== SquareValue.BLANK) return;
-                    if (winnerCoords) return;
-                    setTurn((oTurn) => getNextTurn(oTurn));        
-                    setSquareValues((oSVs) => {
-                        const nSVs = oSVs.map((oR) => (oR.map((oV) => oV)));
-                        nSVs[rIdx][vIdx] = turn;
-                        return nSVs as SquareValues;
-                    });
-                },
-                
-            })
+                handleClick: () => dispatch({ type: 'make_move', payload: [rIdx, vIdx]}),
+            }),
         ))
     ) as BoardProps['squaresProps'];
     
@@ -56,7 +94,11 @@ const Game: FC<GameProps> = (props) => {
             </div>
             <div className="game-info">
                 <div>{status}</div>
-                <ol>{/* TODO */}</ol>
+                <button 
+                    onClick={() => dispatch({type: 'undo'})}
+                >
+                    Undo
+                </button>
             </div>
         </div>
     );
