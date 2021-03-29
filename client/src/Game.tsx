@@ -1,4 +1,4 @@
-import React, { FC, useReducer, useState } from 'react';
+import React, { FC, useReducer } from 'react';
 import Board from './Board';
 import getWinner from './getWinner';
 import PropsOf from './PropsOf';
