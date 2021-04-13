@@ -72,7 +72,9 @@ const get: RequestHandler = async (req, res, next) => {
 
         const { board } = game.toJSON();
 
-        return res.status(200).send({ board, hasStarted, isMyTurn });
+        const mySymbol = game.players.indexOf(sessionID) === 0 ? SquareValue.X : SquareValue.O;
+
+        return res.status(200).send({ board, hasStarted, isMyTurn, mySymbol });
     } catch (err) {
         return next(err);
     }   

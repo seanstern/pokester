@@ -42,7 +42,7 @@ const Game: FC<IGameProps> = () => {
             );
         case 'success':
         default:
-            const { data: { hasStarted, isMyTurn, board } } = gameQ;
+            const { data: { hasStarted, isMyTurn, board, mySymbol } } = gameQ;
             const squaresProps = board.map(
                 (value, squareIdx ) => ({
                     value,
@@ -50,6 +50,14 @@ const Game: FC<IGameProps> = () => {
                     handleClick: () => isMyTurn && takeTurn({ gameID, squareIdx }),
                 })
             ) as unknown as BoardProps['squaresProps'];
+            let status: string = 'Waiting for another player to join...';
+            if (hasStarted) {
+                if (isMyTurn) {
+                    status = `Your (${mySymbol}'s) turn!`
+                } else {
+                    status = `Their (${mySymbol === SquareValue.X ? SquareValue.O : SquareValue.X}'s) turn!`;
+                }
+            }
             return (
                 <div className="game">
                     <div className="game-board">
@@ -59,7 +67,7 @@ const Game: FC<IGameProps> = () => {
                         Game {gameID}
                     </div>
                     <div className="game-info">
-                        {!hasStarted ? 'Waiting for another player to join...' : 'Game in progress.'}
+                        {status}
                     </div>
                 </div>
             );
