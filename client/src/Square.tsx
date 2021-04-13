@@ -1,18 +1,18 @@
 import React, { FC } from 'react';
 
 export enum SquareValue {
-    BLANK = '',
+    BLANK = ' ',
     X = 'X',
     O = 'O',
 }
 
-interface SquareProps {
+interface ISquareProps {
     value: SquareValue;
     highlight: boolean;
     handleClick: () => void;
 }
 
-const Square: FC<SquareProps> = (props) => {
+const Square: FC<ISquareProps> = (props) => {
     const { value, highlight, handleClick } = props;
     return (
         <button

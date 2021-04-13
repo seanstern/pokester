@@ -7,29 +7,29 @@ type SquareProps = PropsOf<typeof Square>;
 
 
 type SquaresProps = [
-    [SquareProps, SquareProps, SquareProps],
-    [SquareProps, SquareProps, SquareProps],
-    [SquareProps, SquareProps, SquareProps],
+    SquareProps, SquareProps, SquareProps,
+    SquareProps, SquareProps, SquareProps,
+    SquareProps, SquareProps, SquareProps,
 ];
 
-interface BoardProps {
+interface IBoardProps {
     squaresProps: SquaresProps;
 }
 
-const Board: FC<BoardProps> = (props) => {
+const Board: FC<IBoardProps> = (props) => {
 
     const { squaresProps: sp } = props;
 
     return (
         <div>
             <div className="board-row">
-                {sp[0].map((v) => ( <Square {...v} />))}
+                {sp.slice(0, 3).map((v, idx) => ( <Square key={idx} {...v} />))}
             </div>
             <div className="board-row">
-                {sp[1].map((v) => ( <Square {...v} />))}
+                {sp.slice(3, 6).map((v, idx) => ( <Square key={idx} {...v} />))}
             </div>
             <div className="board-row">
-                {sp[2].map((v) => ( <Square {...v} />))} 
+                {sp.slice(6, 9).map((v, idx) => ( <Square key={idx} {...v} />))} 
             </div>
         </div>
     );
