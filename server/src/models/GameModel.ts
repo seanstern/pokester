@@ -4,7 +4,7 @@ import ITimeStampedDocument from './ITimestampedDocument';
 enum SquareValue {
     X = 'X',
     O = 'O',
-    BLANK = 'BLANK',
+    BLANK = ' ',
 }
 
 const squareValueStrings = Object.values(SquareValue) as string[];
@@ -16,7 +16,7 @@ interface IGameCreator {
         SquareValue, SquareValue, SquareValue,
     ];
     players: [string] | [string, string];
-    nextMove: 0 | 1;
+    nextTurn: 0 | 1;
 }
 
 const gameSchemaFields: Record<keyof IGameCreator, any> = {
@@ -40,7 +40,7 @@ const gameSchemaFields: Record<keyof IGameCreator, any> = {
             );
         },
     },
-    nextMove: {
+    nextTurn: {
         type: Number,
         required: true,
         enum: [0, 1],
@@ -55,7 +55,7 @@ const gameSchema = new Schema(
 interface IGameDoc extends ITimeStampedDocument {
     board: Types.Array<SquareValue>;
     players: Types.Array<string>;
-    nextMove: number;
+    nextTurn: number;
 }
 
 const GameModel = model<IGameDoc>('Game', gameSchema);

@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { create, get, getAll, move } from '../controllers/GameController';
+import GameController from '../controllers/GameController';
 
 const gamesRoutes = Router();
 gamesRoutes.route('/')
-    .get(getAll)
-    .post(create);
+    .get(GameController.getAll)
+    .post(GameController.create);
 gamesRoutes.route('/:gameID')
-    .get(get)
-    .patch(move);
+    .get(GameController.get)
+    .patch(GameController.takeTurn);
 
 export default gamesRoutes;

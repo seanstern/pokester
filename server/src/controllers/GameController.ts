@@ -15,14 +15,14 @@ const BLANK_BOARD = [
     SquareValue.BLANK,
 ] as IGameCreator['board'];
 
-export const create: RequestHandler = async (req, res, next) => {
+const create: RequestHandler = async (req, res, next) => {
     try {
         const { sessionID } = req;
 
         const game: IGameCreator = {
             board: BLANK_BOARD,
             players: [sessionID] as [string],
-            nextMove: 0,
+            nextTurn: 0,
         };
 
         const { id } = await GameModel.create<IGameCreator>(game);
@@ -33,7 +33,7 @@ export const create: RequestHandler = async (req, res, next) => {
     }
 };
 
-export const getAll: RequestHandler = async (req, res, next) => {
+const getAll: RequestHandler = async (req, res, next) => {
     try {
         const games = await GameModel
             .find({ players: { $size: 1} })
@@ -44,9 +44,9 @@ export const getAll: RequestHandler = async (req, res, next) => {
     } catch (err) {
         return next(err);
     }
-}
+};
 
-export const get: RequestHandler = async (req, res, next) => {
+const get: RequestHandler = async (req, res, next) => {
     try {
         const { params: { gameID }, sessionID } = req;
 
@@ -68,7 +68,7 @@ export const get: RequestHandler = async (req, res, next) => {
 
         const hasStarted = game.players.length === 2;
         
-        const isMyTurn = game.players[game.nextMove] === sessionID;
+        const isMyTurn = game.players[game.nextTurn] === sessionID;
 
         const { board } = game.toJSON();
 
@@ -76,11 +76,11 @@ export const get: RequestHandler = async (req, res, next) => {
     } catch (err) {
         return next(err);
     }   
-}
+};
 
-export const move: RequestHandler<{ gameID: string }, any, { idx: number }> = async (req, res, next) => {
+const takeTurn: RequestHandler<{ gameID: string }, any, { squareIdx: number }> = async (req, res, next) => {
     try {
-        const { body: { idx }, params: { gameID }, sessionID } = req;
+        const { body: { squareIdx }, params: { gameID }, sessionID } = req;
 
         const game = await GameModel.findOne({ _id: gameID, players: sessionID }).exec();
         if (game === null) {
@@ -92,21 +92,21 @@ export const move: RequestHandler<{ gameID: string }, any, { idx: number }> = as
             throw new Error('game has not started');
         }
 
-        const isMyTurn = game.players[game.nextMove] === sessionID;
+        const isMyTurn = game.players[game.nextTurn] === sessionID;
         if (!isMyTurn) {
             throw new Error('not your turn');
         }
 
-        const isFreeSpace = game.board[idx] === SquareValue.BLANK;
+        const isFreeSpace = game.board[squareIdx] === SquareValue.BLANK;
         if (!isFreeSpace) {
             throw new Error('cannot move in occupied space');
         }
 
-        const moveValue = game.nextMove === 0 ? SquareValue.X : SquareValue.O;
-        const nextMove = game.nextMove === 0 ? 1 : 0;
+        const moveValue = game.nextTurn === 0 ? SquareValue.X : SquareValue.O;
+        const nextMove = game.nextTurn === 0 ? 1 : 0;
 
-        game.board.set(idx, moveValue);
-        game.nextMove = game.nextMove === 0 ? 1 : 0;
+        game.board.set(squareIdx, moveValue);
+        game.nextTurn = game.nextTurn === 0 ? 1 : 0;
 
         await game.save();
 
@@ -114,4 +114,12 @@ export const move: RequestHandler<{ gameID: string }, any, { idx: number }> = as
     } catch (err) {
         return next(err);
     }
-}
+};
+
+
+export default {
+    create,
+    get,
+    getAll,
+    takeTurn,
+};
