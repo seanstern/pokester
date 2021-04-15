@@ -80,7 +80,7 @@ const get: RequestHandler = async (req, res, next) => {
     }   
 };
 
-const takeTurn: RequestHandler<{ gameID: string }, any, { squareIdx: number }> = async (req, res, next) => {
+const takeTurn: RequestHandler<{ gameID: string }, void, { squareIdx: number }> = async (req, res, next) => {
     try {
         const { body: { squareIdx }, params: { gameID }, sessionID } = req;
 
@@ -105,8 +105,7 @@ const takeTurn: RequestHandler<{ gameID: string }, any, { squareIdx: number }> =
         }
 
         const moveValue = game.nextTurn === 0 ? SquareValue.X : SquareValue.O;
-        const nextMove = game.nextTurn === 0 ? 1 : 0;
-
+        
         game.board.set(squareIdx, moveValue);
         game.nextTurn = game.nextTurn === 0 ? 1 : 0;
 
