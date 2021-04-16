@@ -4,7 +4,7 @@ import GameModel, {
 	IGameDoc,
 	SquareValue,
 } from '../models/GameModel';
-import ISelectedDocument from '../models/ISelectedDocument';
+import TSelectedDocument from '../models/TSelectedDocument';
 
 const BLANK_BOARD = [
 	SquareValue.BLANK,
@@ -40,7 +40,7 @@ const getAll: RequestHandler = async (req, res, next) => {
 	try {
 		const games = (await GameModel.find({ players: { $size: 1 } })
 			.select('_id')
-			.exec()) as ISelectedDocument<IGameDoc, never>[];
+			.exec()) as TSelectedDocument<IGameDoc, never>[];
 
 		return res.status(200).json(games.map(({ id }) => id));
 	} catch (err) {

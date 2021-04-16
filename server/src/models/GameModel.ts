@@ -1,25 +1,25 @@
 import { model, Schema, Types } from 'mongoose';
 import ITimeStampedDocument from './ITimestampedDocument';
 
-enum SquareValue {
+enum ESquareValue {
 	X = 'X',
 	O = 'O',
 	BLANK = ' ',
 }
 
-const squareValueStrings = Object.values(SquareValue) as string[];
+const squareValueStrings = Object.values(ESquareValue) as string[];
 
 interface IGameCreator {
 	board: [
-		SquareValue,
-		SquareValue,
-		SquareValue,
-		SquareValue,
-		SquareValue,
-		SquareValue,
-		SquareValue,
-		SquareValue,
-		SquareValue
+		ESquareValue,
+		ESquareValue,
+		ESquareValue,
+		ESquareValue,
+		ESquareValue,
+		ESquareValue,
+		ESquareValue,
+		ESquareValue,
+		ESquareValue
 	];
 	players: [string] | [string, string];
 	nextTurn: 0 | 1;
@@ -59,7 +59,7 @@ const gameSchema = new Schema(gameSchemaFields, {
 });
 
 interface IGameDoc extends ITimeStampedDocument {
-	board: Types.Array<SquareValue>;
+	board: Types.Array<ESquareValue>;
 	players: Types.Array<string>;
 	nextTurn: number;
 }
@@ -68,4 +68,4 @@ const GameModel = model<IGameDoc>('Game', gameSchema);
 
 export default GameModel;
 
-export { IGameCreator, IGameDoc, SquareValue, squareValueStrings };
+export { IGameCreator, IGameDoc, ESquareValue as SquareValue, squareValueStrings };
