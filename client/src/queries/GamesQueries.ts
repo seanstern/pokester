@@ -24,6 +24,7 @@ interface IGame {
 	hasStarted: boolean;
 	isMyTurn: boolean;
 	mySymbol: ESquareValue.X | ESquareValue.O;
+	isOver: boolean;
 }
 
 const useGetAll = () =>
@@ -101,9 +102,12 @@ const useTakeTurn = () => {
 					hasStarted: prevGameState.hasStarted,
 					isMyTurn: prevGameState.isMyTurn,
 					mySymbol: prevGameState.mySymbol,
+					isOver: prevGameState.isOver,
 				};
-				newGameState.board[squareIdx] = newGameState.mySymbol;
-				newGameState.isMyTurn = false;
+				if (newGameState.board[squareIdx] === ESquareValue.BLANK) {
+					newGameState.board[squareIdx] = newGameState.mySymbol;
+					newGameState.isMyTurn = false;
+				}
 
 				qc.setQueryData(qk, newGameState);
 

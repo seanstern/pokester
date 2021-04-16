@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import GamesQueries from './queries/GamesQueries';
 import Board from './Board';
 import TPropsOf from './TPropsOf';
@@ -40,16 +40,22 @@ const Game: FC<IGameProps> = () => {
 		case 'success':
 		default:
 			const {
-				data: { hasStarted, isMyTurn, board, mySymbol },
+				data: { hasStarted, isMyTurn, board, mySymbol, isOver },
 			} = gameQ;
 			const squaresProps = (board.map((value, squareIdx) => ({
 				value,
 				hightlight: false,
-				handleClick: () => isMyTurn && takeTurn({ gameID, squareIdx }),
+				handleClick: () =>
+					!isOver &&
+					isMyTurn &&
+					value === ESquareValue.BLANK &&
+					takeTurn({ gameID, squareIdx }),
 			})) as unknown) as TBoardProps['squaresProps'];
 			let status: string = 'Waiting for another player to join...';
 			if (hasStarted) {
-				if (isMyTurn) {
+				if (isOver) {
+					status = 'Game over!';
+				} else if (isMyTurn) {
 					status = `Your (${mySymbol}'s) turn!`;
 				} else {
 					status = `Their (${
@@ -60,13 +66,18 @@ const Game: FC<IGameProps> = () => {
 				}
 			}
 			return (
-				<div className="game">
-					<div className="game-board">
-						<Board {...{ squaresProps }} />
+				<>
+					<div className="game">
+						<div className="game-board">
+							<Board {...{ squaresProps }} />
+						</div>
+						<div className="game-info">Game {gameID}</div>
+						<div className="game-info">{status}</div>
 					</div>
-					<div className="game-info">Game {gameID}</div>
-					<div className="game-info">{status}</div>
-				</div>
+					<div>
+						<Link to="/">Back home</Link>
+					</div>
+				</>
 			);
 	}
 };

@@ -7,22 +7,25 @@ enum ESquareValue {
 	BLANK = ' ',
 }
 
+type TBoard = [
+	ESquareValue,
+	ESquareValue,
+	ESquareValue,
+	ESquareValue,
+	ESquareValue,
+	ESquareValue,
+	ESquareValue,
+	ESquareValue,
+	ESquareValue
+];
+
 const squareValueStrings = Object.values(ESquareValue) as string[];
 
 interface IGameCreator {
-	board: [
-		ESquareValue,
-		ESquareValue,
-		ESquareValue,
-		ESquareValue,
-		ESquareValue,
-		ESquareValue,
-		ESquareValue,
-		ESquareValue,
-		ESquareValue
-	];
+	board: TBoard;
 	players: [string] | [string, string];
 	nextTurn: 0 | 1;
+	isOver?: boolean;
 }
 
 const gameSchemaFields: Record<keyof IGameCreator, any> = {
@@ -51,6 +54,10 @@ const gameSchemaFields: Record<keyof IGameCreator, any> = {
 		required: true,
 		enum: [0, 1],
 	},
+	isOver: {
+		type: Boolean,
+		default: false,
+	},
 };
 
 const gameSchema = new Schema(gameSchemaFields, {
@@ -62,10 +69,17 @@ interface IGameDoc extends ITimeStampedDocument {
 	board: Types.Array<ESquareValue>;
 	players: Types.Array<string>;
 	nextTurn: number;
+	isOver: boolean;
 }
 
 const GameModel = model<IGameDoc>('Game', gameSchema);
 
 export default GameModel;
 
-export { IGameCreator, IGameDoc, ESquareValue as SquareValue, squareValueStrings };
+export {
+	IGameCreator,
+	IGameDoc,
+	ESquareValue,
+	squareValueStrings,
+	TBoard,
+};

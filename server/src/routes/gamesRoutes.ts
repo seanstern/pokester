@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import GameController from '../controllers/GameController';
+import GameController from '../controllers/GamesController';
 
 const gamesRoutes = Router();
 gamesRoutes.route('/').get(GameController.getAll).post(GameController.create);

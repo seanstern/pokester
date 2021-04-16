@@ -1,21 +1,23 @@
 import { RequestHandler } from 'express';
+import GameEngine from '../engines/GameEngine';
 import GameModel, {
 	IGameCreator,
 	IGameDoc,
-	SquareValue,
+	ESquareValue,
+	TBoard,
 } from '../models/GameModel';
 import TSelectedDocument from '../models/TSelectedDocument';
 
 const BLANK_BOARD = [
-	SquareValue.BLANK,
-	SquareValue.BLANK,
-	SquareValue.BLANK,
-	SquareValue.BLANK,
-	SquareValue.BLANK,
-	SquareValue.BLANK,
-	SquareValue.BLANK,
-	SquareValue.BLANK,
-	SquareValue.BLANK,
+	ESquareValue.BLANK,
+	ESquareValue.BLANK,
+	ESquareValue.BLANK,
+	ESquareValue.BLANK,
+	ESquareValue.BLANK,
+	ESquareValue.BLANK,
+	ESquareValue.BLANK,
+	ESquareValue.BLANK,
+	ESquareValue.BLANK,
 ] as IGameCreator['board'];
 
 const create: RequestHandler = async (req, res, next) => {
@@ -75,14 +77,14 @@ const get: RequestHandler = async (req, res, next) => {
 
 		const isMyTurn = game.players[game.nextTurn] === sessionID;
 
-		const { board } = game.toJSON();
+		const { board, isOver } = game.toJSON();
 
 		const mySymbol =
 			game.players.indexOf(sessionID) === 0
-				? SquareValue.X
-				: SquareValue.O;
+				? ESquareValue.X
+				: ESquareValue.O;
 
-		return res.status(200).send({ board, hasStarted, isMyTurn, mySymbol });
+		return res.status(200).send({ board, hasStarted, isMyTurn, mySymbol, isOver });
 	} catch (err) {
 		return next(err);
 	}
@@ -103,6 +105,7 @@ const takeTurn: RequestHandler<
 		const game = await GameModel.findOne({
 			_id: gameID,
 			players: sessionID,
+			isOver: false,
 		}).exec();
 		if (game === null) {
 			throw new Error('game does not exist');
@@ -118,15 +121,18 @@ const takeTurn: RequestHandler<
 			throw new Error('not your turn');
 		}
 
-		const isFreeSpace = game.board[squareIdx] === SquareValue.BLANK;
+		const isFreeSpace = game.board[squareIdx] === ESquareValue.BLANK;
 		if (!isFreeSpace) {
 			throw new Error('cannot move in occupied space');
 		}
 
-		const moveValue = game.nextTurn === 0 ? SquareValue.X : SquareValue.O;
+		const moveValue = game.nextTurn === 0 ? ESquareValue.X : ESquareValue.O;
 
 		game.board.set(squareIdx, moveValue);
 		game.nextTurn = game.nextTurn === 0 ? 1 : 0;
+		
+		const { status } = GameEngine.getFinalResult(game.board.toObject() as TBoard);
+		game.isOver = status === 'WINNER' || status === 'STALEMATE';
 
 		await game.save();
 
