@@ -3,27 +3,27 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 const PATH = '/api/games';
 
-enum SquareValue {
+export enum ESquareValue {
 	X = 'X',
 	O = 'O',
-	BLANK = 'BLANK',
+	BLANK = ' ',
 }
 
 interface IGame {
 	board: [
-		SquareValue,
-		SquareValue,
-		SquareValue,
-		SquareValue,
-		SquareValue,
-		SquareValue,
-		SquareValue,
-		SquareValue,
-		SquareValue
+		ESquareValue,
+		ESquareValue,
+		ESquareValue,
+		ESquareValue,
+		ESquareValue,
+		ESquareValue,
+		ESquareValue,
+		ESquareValue,
+		ESquareValue
 	];
 	hasStarted: boolean;
 	isMyTurn: boolean;
-	mySymbol: SquareValue.X | SquareValue.O;
+	mySymbol: ESquareValue.X | ESquareValue.O;
 }
 
 const useGetAll = () =>

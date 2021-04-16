@@ -2,16 +2,16 @@ import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import GamesQueries from './queries/GamesQueries';
 import Board from './Board';
-import PropsOf from './PropsOf';
-import { SquareValue } from './Square';
+import TPropsOf from './TPropsOf';
+import { ESquareValue } from './Square';
 
-export type SquareValues = [
-	[SquareValue, SquareValue, SquareValue],
-	[SquareValue, SquareValue, SquareValue],
-	[SquareValue, SquareValue, SquareValue]
+export type TSquareValues = [
+	[ESquareValue, ESquareValue, ESquareValue],
+	[ESquareValue, ESquareValue, ESquareValue],
+	[ESquareValue, ESquareValue, ESquareValue]
 ];
 
-type BoardProps = PropsOf<typeof Board>;
+type TBoardProps = TPropsOf<typeof Board>;
 
 interface IGameProps {}
 
@@ -46,16 +46,16 @@ const Game: FC<IGameProps> = () => {
 				value,
 				hightlight: false,
 				handleClick: () => isMyTurn && takeTurn({ gameID, squareIdx }),
-			})) as unknown) as BoardProps['squaresProps'];
+			})) as unknown) as TBoardProps['squaresProps'];
 			let status: string = 'Waiting for another player to join...';
 			if (hasStarted) {
 				if (isMyTurn) {
 					status = `Your (${mySymbol}'s) turn!`;
 				} else {
 					status = `Their (${
-						mySymbol === SquareValue.X
-							? SquareValue.O
-							: SquareValue.X
+						mySymbol === ESquareValue.X
+							? ESquareValue.O
+							: ESquareValue.X
 					}'s) turn!`;
 				}
 			}

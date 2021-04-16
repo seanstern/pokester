@@ -1,23 +1,23 @@
 import React, { FC } from 'react';
-import PropsOf from './PropsOf';
+import TPropsOf from './TPropsOf';
 import Square from './Square';
 
-type SquareProps = PropsOf<typeof Square>;
+type TSquareProps = TPropsOf<typeof Square>;
 
-type SquaresProps = [
-	SquareProps,
-	SquareProps,
-	SquareProps,
-	SquareProps,
-	SquareProps,
-	SquareProps,
-	SquareProps,
-	SquareProps,
-	SquareProps
+type TSquaresProps = [
+	TSquareProps,
+	TSquareProps,
+	TSquareProps,
+	TSquareProps,
+	TSquareProps,
+	TSquareProps,
+	TSquareProps,
+	TSquareProps,
+	TSquareProps
 ];
 
 interface IBoardProps {
-	squaresProps: SquaresProps;
+	squaresProps: TSquaresProps;
 }
 
 const Board: FC<IBoardProps> = (props) => {

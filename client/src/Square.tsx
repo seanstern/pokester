@@ -1,13 +1,9 @@
 import React, { FC } from 'react';
+import { ESquareValue } from './queries/GamesQueries';
 
-export enum SquareValue {
-	BLANK = ' ',
-	X = 'X',
-	O = 'O',
-}
-
+export { ESquareValue };
 interface ISquareProps {
-	value: SquareValue;
+	value: ESquareValue;
 	highlight: boolean;
 	handleClick: () => void;
 }

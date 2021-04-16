@@ -1,11 +1,11 @@
-import { SquareValues } from './Game';
-import { SquareValue } from './Square';
+import { TSquareValues } from './Game';
+import { ESquareValue } from './Square';
 
-const isWinner = (v0: SquareValue, v1: SquareValue, v2: SquareValue): boolean =>
-	v0 !== SquareValue.BLANK && v0 === v1 && v1 === v2;
+const isWinner = (v0: ESquareValue, v1: ESquareValue, v2: ESquareValue): boolean =>
+	v0 !== ESquareValue.BLANK && v0 === v1 && v1 === v2;
 
 type WinnerCoordinates = [[number, number], [number, number], [number, number]];
-const getWinner = (sv: SquareValues): WinnerCoordinates | null => {
+const getWinner = (sv: TSquareValues): WinnerCoordinates | null => {
 	for (let r = 0; r < sv.length; r++) {
 		if (isWinner(...sv[r])) {
 			return [
