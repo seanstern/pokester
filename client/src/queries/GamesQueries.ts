@@ -27,9 +27,10 @@ interface IGame {
 	isOver: boolean;
 }
 
-const useGetAll = () =>
-	useQuery(PATH, async () => {
+const useGetAll = (filter: 'join' | 'current' | 'past') =>
+	useQuery([PATH, filter], async () => {
 		const { data } = await axios.get<string[]>(PATH, {
+			params: { filter },
 			validateStatus: (status) => status === 200,
 		});
 		return data;
@@ -57,7 +58,7 @@ const useCreate = () => {
 			});
 			return data;
 		},
-		{ onSuccess: () => qc.invalidateQueries(PATH, { exact: true }) }
+		{ onSuccess: () => qc.invalidateQueries([PATH, 'current'], { exact: true }) }
 	);
 
 	return mutate;
@@ -120,6 +121,8 @@ const useTakeTurn = () => {
 			},
 			onSettled: (data, err, { gameID }) => {
 				qc.invalidateQueries(`${PATH}/${gameID}`, { exact: true });
+				qc.invalidateQueries([PATH, 'current'], { exact: true });
+				qc.invalidateQueries([PATH, 'past'], { exact: true })
 			},
 		}
 	);
