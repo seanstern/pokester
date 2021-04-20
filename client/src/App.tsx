@@ -1,25 +1,31 @@
 import React, { FC } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {
+	BrowserRouter as Router,
+	Switch,
+	Route,
+	Redirect,
+	Link,
+} from 'react-router-dom';
 import Game from './Game';
-import GameCreator from './GameCreator';
-import GamesList from './GamesList';
-// import logo from './logo.svg';
-// import './App.css';
+import GamesLists from './GamesLists';
 
-const qc = new QueryClient();
+const qc = new QueryClient({
+	defaultOptions: { queries: { refetchOnWindowFocus: false } },
+});
 
 const App: FC = () => (
 	<QueryClientProvider client={qc}>
 		<Router>
 			<Switch>
-				<Route path="/:gameID">
+				<Route path="/game/:gameID">
 					<Game />
+					<Link to="/lists/current">Home</Link>
 				</Route>
-				<Route path="/">
-					<GameCreator />
-					<GamesList />
+				<Route path="/lists">
+					<GamesLists />
 				</Route>
+				<Redirect to="/lists/join" />
 			</Switch>
 		</Router>
 	</QueryClientProvider>

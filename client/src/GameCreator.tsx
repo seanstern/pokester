@@ -12,7 +12,7 @@ const GameCreator: FC<IGameCreatorProps> = () => {
 		<button
 			onClick={() =>
 				create(undefined, {
-					onSuccess: (gameID) => history.push(`/${gameID}`),
+					onSuccess: (gameID) => history.push(`/game/${gameID}`),
 				})
 			}
 		>

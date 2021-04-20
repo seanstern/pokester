@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import GamesQueries from './queries/GamesQueries';
 import Board from './Board';
 import TPropsOf from './TPropsOf';
@@ -72,10 +72,7 @@ const Game: FC<IGameProps> = () => {
 							<Board {...{ squaresProps }} />
 						</div>
 						<div className="game-info">Game {gameID}</div>
-						<div className="game-info">{status}</div>
-					</div>
-					<div>
-						<Link to="/">Back home</Link>
+						<div className="game-info">{status}</div>	
 					</div>
 				</>
 			);
