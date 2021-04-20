@@ -38,9 +38,30 @@ const create: RequestHandler = async (req, res, next) => {
 	}
 };
 
-const getAll: RequestHandler = async (req, res, next) => {
+const getAll: RequestHandler<
+	void,
+	string[],
+	void,
+	{ filter?: string }
+> = async (req, res, next) => {
 	try {
-		const games = (await GameModel.find({ players: { $size: 1 } })
+		const { query: { filter }, sessionID } = req;
+		let conditions = {};
+		switch (filter) {
+			case 'join':
+				conditions = { players: { $size: 1, $ne: sessionID } };
+				break;
+			case 'current': 
+				conditions = { players: { $eq: sessionID }, isOver: false };
+				break;
+			case 'past':
+				conditions = { players: { $size: 2, $eq: sessionID }, isOver: true };
+				break;
+			default:
+				throw new Error('no filter criteria');
+		}	
+
+		const games = (await GameModel.find(conditions)
 			.select('_id')
 			.exec()) as TSelectedDocument<IGameDoc, never>[];
 
