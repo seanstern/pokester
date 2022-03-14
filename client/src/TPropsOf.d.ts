@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC } from "react";
 
 type TPropsOf<T> = T extends FC<infer R> ? R : never;
 
