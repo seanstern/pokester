@@ -1,8 +1,9 @@
 {
-    "private": true,
-    "workspaces": [
-        "client",
-        "server"
-    ],
-    "packageManager": "yarn@3.2.0"
+  "private": true,
+  "workspaces": [
+    "client",
+    "server",
+    "poker-engine"
+  ],
+  "packageManager": "yarn@3.2.0"
 }

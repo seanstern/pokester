@@ -2606,6 +2606,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@chevtek/poker-engine@workspace:*, @chevtek/poker-engine@workspace:poker-engine":
+  version: 0.0.0-use.local
+  resolution: "@chevtek/poker-engine@workspace:poker-engine"
+  dependencies:
+    "@tsconfig/node14": ^1.0.0
+    pokersolver: ^2.1.4
+    rimraf: ^3.0.2
+    typescript: ^4.0.2
+  languageName: unknown
+  linkType: soft
+
 "@csstools/normalize.css@npm:*":
   version: 12.0.0
   resolution: "@csstools/normalize.css@npm:12.0.0"
@@ -11483,6 +11494,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"pokersolver@npm:^2.1.4":
+  version: 2.1.4
+  resolution: "pokersolver@npm:2.1.4"
+  checksum: 6183b0cdbf2caabae448f1b9e9ee7314fadb942390804ffdb1d8e70278c5adc0e0e852842ee09fbbcaf7b74497094652fae9db7ad447a0832cbd4c84f51c305a
+  languageName: node
+  linkType: hard
+
 "portfinder@npm:^1.0.28":
   version: 1.0.28
   resolution: "portfinder@npm:1.0.28"
@@ -13575,6 +13593,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "server@workspace:server"
   dependencies:
+    "@chevtek/poker-engine": "workspace:*"
     "@tsconfig/node14": ^1.0.0
     "@types/express": ^4.17.13
     "@types/express-session": ^1.17.4
@@ -14779,7 +14798,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^4.4.2":
+"typescript@npm:^4.0.2, typescript@npm:^4.4.2":
   version: 4.6.2
   resolution: "typescript@npm:4.6.2"
   bin:
@@ -14789,7 +14808,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^4.4.2#~builtin<compat/typescript>":
+"typescript@patch:typescript@^4.0.2#~builtin<compat/typescript>, typescript@patch:typescript@^4.4.2#~builtin<compat/typescript>":
   version: 4.6.2
   resolution: "typescript@patch:typescript@npm%3A4.6.2#~builtin<compat/typescript>::version=4.6.2&hash=bda367"
   bin:
