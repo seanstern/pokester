@@ -18,8 +18,8 @@ export type JSONValue =
   | boolean
   | { [x: string]: JSONValue }
   | JSONValue[];
-export type JSONArray = JSONValue[];
-export type JSONObject = { [x: string]: JSONValue };
+type JSONArray = JSONValue[];
+type JSONObject = { [x: string]: JSONValue };
 
 export type Deserialize<T> = (json: JSONValue) => T;
 
@@ -40,7 +40,7 @@ const isString = (json: JSONValue): json is string => typeof json === "string";
  */
 export const deserializeString: Deserialize<string> = (json: JSONValue) => {
   if (!isString(json)) {
-    throw new Error(`Cannot deserialize JSON that is not string`);
+    throw new Error("Cannot deserialize JSON that is not string");
   }
   return json;
 };
@@ -62,7 +62,7 @@ const isNumber = (json: JSONValue): json is number => typeof json === "number";
  */
 export const deserializeNumber: Deserialize<number> = (json: JSONValue) => {
   if (!isNumber(json)) {
-    throw new Error(`Cannot deserialize JSON that is not number`);
+    throw new Error("Cannot deserialize JSON that is not number");
   }
   return json;
 };
@@ -85,7 +85,7 @@ const isBoolean = (json: JSONValue): json is boolean =>
  */
 export const deserializeBoolean: Deserialize<boolean> = (json: JSONValue) => {
   if (!isBoolean(json)) {
-    throw new Error(`Cannot deserialize JSON that is not boolean`);
+    throw new Error("Cannot deserialize JSON that is not boolean");
   }
   return json;
 };
@@ -110,7 +110,7 @@ export const createDeserializeArrayFn = <T>(
   deserializeElement: Deserialize<T>
 ): Deserialize<T[]> => (json: JSONValue) => {
   if (!isJSONArray(json)) {
-    throw new Error(`Cannot deserialize JSON that is not array`);
+    throw new Error("Cannot deserialize JSON that is not array");
   }
   return json.map(deserializeElement);
 };
@@ -146,11 +146,19 @@ export const creatDeserializeArgumentsFn = <T extends any[]>(
 ): Deserialize<T> => (json: JSONValue) =>
   ads.map(({ serializedKeyName, deserialize }) => {
     if (!isJSONObject(json)) {
-      throw new Error(
-        `Cannot deserialize argument with serializeKeyName '${serializedKeyName}' from JSON that is not object`
-      );
+      throw new Error("Cannot deserialize JSON that is not object");
     }
-    return deserialize(json[serializedKeyName]);
+    try {
+      return deserialize(json[serializedKeyName]);
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(
+          `${err.message}
+          Cannot deserialize key "${serializedKeyName}" in JSONObject`
+        );
+      }
+      throw err;
+    }
   }) as T;
 
 export type FieldDeserializationSpec<T, K extends keyof T> = {
@@ -172,10 +180,18 @@ export const createDeserializeFieldsFn = <T, K extends keyof T>(
 ): Deserialize<Pick<T, K>> => (json: JSONValue) =>
   Object.entries<Deserialize<any>>(fds).reduce((obj, [key, deserialize]) => {
     if (!isJSONObject(json)) {
-      throw new Error(
-        `Cannot deserialize field '${key}' from JSON that is not object`
-      );
+      throw new Error("Cannot deserialize field from JSON that is not object");
     }
-    obj[key] = deserialize(json[key]);
+    try {
+      obj[key] = deserialize(json[key]);
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(
+          `${err.message}
+          Cannot deserialize key "${key}" in JSONObject`
+        );
+      }
+      throw err;
+    }
     return obj;
   }, {} as { [key: string]: any }) as T;

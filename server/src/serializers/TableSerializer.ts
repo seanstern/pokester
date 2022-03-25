@@ -11,7 +11,10 @@ import {
   createDeserializeFieldsFn,
 } from "./CommonSerializer";
 import { deserialize as deserializeCard } from "./CardSerializer";
-import { createDeserializeFn as createPlayerDeserializeFn } from "./PlayerSerializer";
+import {
+  createDeserializeFn as createPlayerDeserializeFn,
+  createRefDeserializeFn as createPlayerRefDeserializeFn,
+} from "./PlayerSerializer";
 import { createDeserializeFn as createPotDeserialzeFn } from "./PotSerializer";
 
 const constructorArgumentsDeserializationSpec: ArgumentsDeserializationSpec<
@@ -60,11 +63,13 @@ type DeserializableFields =
   | "lastPosition"
   | "lastRaise"
   | "players"
-  | "pots"
-  | "smallBlindPosition"
-  | "winners";
-
-export const deserialize: Deserialize<Table> = (json) => {
+  | "smallBlindPosition";
+/**
+ * Given a JSON represenation of a Table, returns a Table.
+ * @param json a JSON representation of a Table
+ * @returns a Table
+ */
+export const deserialize: Deserialize<Table> = (json: JSONValue) => {
   const t = new Table(...deserializeArgs(json));
   const deserializePlayerArray = createDeserializeArrayFn(
     createPlayerDeserializeFn(t)
@@ -93,9 +98,7 @@ export const deserialize: Deserialize<Table> = (json) => {
     lastPosition: deserializeNumber,
     lastRaise: deserializeNumber,
     players: deserializePlayerArray,
-    pots: createDeserializeArrayFn(createPotDeserialzeFn(t)),
     smallBlindPosition: deserializeNumber,
-    winners: deserializePlayerArray,
   };
   const deserializeFields = createDeserializeFieldsFn(fieldDeserializationSpec);
   const {
@@ -112,10 +115,22 @@ export const deserialize: Deserialize<Table> = (json) => {
     lastPosition,
     lastRaise,
     players,
-    pots,
+
     smallBlindPosition,
-    winners,
   } = deserializeFields(json);
+
+  const refFieldDeserializationSpec: FieldDeserializationSpec<
+    Table,
+    "pots" | "winners"
+  > = {
+    pots: createDeserializeArrayFn(createPotDeserialzeFn(players)),
+    winners: createDeserializeArrayFn(createPlayerRefDeserializeFn(players)),
+  };
+  const deserializeRefField = createDeserializeFieldsFn(
+    refFieldDeserializationSpec
+  );
+  const { pots, winners } = deserializeRefField(json);
+
   t.autoMoveDealer = autoMoveDealer;
   t.bigBlindPosition = bigBlindPosition;
   t.communityCards = communityCards;

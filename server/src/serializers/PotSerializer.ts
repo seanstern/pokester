@@ -1,4 +1,4 @@
-import { Pot, Table } from "@chevtek/poker-engine";
+import { Pot, Table, Player } from "@chevtek/poker-engine";
 import {
   FieldDeserializationSpec,
   createDeserializeFieldsFn,
@@ -7,26 +7,29 @@ import {
   JSONValue,
   createDeserializeArrayFn,
 } from "./CommonSerializer";
-import { createDeserializeFn as createDeserializePlayerFn } from "./PlayerSerializer";
+import { createRefDeserializeFn as createPlayerRefDeserializeFn } from "./PlayerSerializer";
 
 type DeserializableFields = "amount" | "eligiblePlayers" | "winners";
-
 /**
- * Given a Table, return a function that will deserialize JSON representing
- * a Pot.
- * @param t the deserialized Table the Pot is for
- * @returns a Pot
+ * Given a list of Players, return a function that will deserialize a
+ * JSON representation of a Pot.
+ * @param t the deserialized Players sitting at the table
+ * @returns a function that will deserialize a JSON representation of a Pot;
+ *   function takes a JSONValue and returns a Pot
  */
-export const createDeserializeFn = (t: Table): Deserialize<Pot> => (
-  json: JSONValue
-) => {
+export const createDeserializeFn = (
+  players: (Player | null)[]
+): Deserialize<Pot> => (json: JSONValue) => {
+  const deserializeArrayOfPlayerRefs = createDeserializeArrayFn(
+    createPlayerRefDeserializeFn(players)
+  );
   const fieldDeserializationSpec: FieldDeserializationSpec<
     Pot,
     DeserializableFields
   > = {
     amount: deserializeNumber,
-    eligiblePlayers: createDeserializeArrayFn(createDeserializePlayerFn(t)),
-    winners: createDeserializeArrayFn(createDeserializePlayerFn(t)),
+    eligiblePlayers: deserializeArrayOfPlayerRefs,
+    winners: deserializeArrayOfPlayerRefs,
   };
   const deserializeFields = createDeserializeFieldsFn(fieldDeserializationSpec);
   const { amount, eligiblePlayers, winners } = deserializeFields(json);
