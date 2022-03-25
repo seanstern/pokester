@@ -121,6 +121,7 @@ export const deserialize: Deserialize<Table> = (json) => {
   t.communityCards = communityCards;
   t.currentBet = currentBet;
   t.currentPosition = currentPosition;
+  t.currentRound = currentRound;
   t.dealerPosition = dealerPosition;
   t.debug = debug;
   t.deck = deck;
