@@ -105,7 +105,7 @@ const isJSONArray = (json: JSONValue): json is JSONArray => Array.isArray(json);
  * @param deserializeElement a function that deserializes
  *   individual elements
  * @returns a function that will deserialize an array; function
- *   takes json and returns a list of deserialized elements
+ *   takes a JSONValue and returns a list of deserialized elements
  */
 export const createDeserializeArrayFn = <T>(
   deserializeElement: Deserialize<T>
@@ -139,7 +139,7 @@ export type ArgumentsDeserializationSpec<T extends any[]> = {
  * @param ads an argument deserialization specification (a
  *   list of {serializedKey, deserialize} objects)
  * @returns a function that will deserialize an object matching
- *   the specificaiton; function takes json and returns
+ *   the specificaiton; function takes a JSONValue and returns
  *   a list of deserialized values
  */
 export const creatDeserializeArgumentsFn = <T extends any[]>(
@@ -175,7 +175,7 @@ export type FieldDeserializationSpec<T, K extends keyof T> = Required<
  *   {[key: string]: deserialize}), returns a function
  *   that will deserialize an object matching the specificaiton
  * @returns a function that will deserialize an object matching
- *   the specification; function takes json and returns a
+ *   the specification; function takes a JSONValue and returns a
  *   a map of the type {[key: string]: deserialize}
  */
 export const createDeserializeFieldsFn = <T, K extends keyof T>(
@@ -199,7 +199,17 @@ export const createDeserializeFieldsFn = <T, K extends keyof T>(
     return obj;
   }, {} as { [key: string]: any }) as T;
 
-export const createOptionalDeserializeFn = <T>(
+/**
+ * Given a deserialization function, returns a version of the
+ * function that allows for the deserialization of an undefined
+ * JSONValue
+ * @param deserialize a deserializeation function; a function
+ *   that takes JSONValue and returns a deserialized version
+ *   of that value
+ * @returns a deserialization function that allows for the
+ *   deserialization of an undefined JSONValue
+ */
+export const createDeserializeOptionalFn = <T>(
   deserialize: Deserialize<T>
 ): Deserialize<T | undefined> => (json?: JSONValue) => {
   if (json === undefined) {
@@ -208,7 +218,17 @@ export const createOptionalDeserializeFn = <T>(
   return deserialize(json);
 };
 
-export const createNullableDeserializeFn = <T>(
+/**
+ * Given a deserialization function, returns a version of the
+ * function that allows for the deserialization of a null
+ * JSONValue
+ * @param deserialize a deserializeation function; a function
+ *   that takes JSONValue and returns a deserialized version
+ *   of that value
+ * @returns a deserialization function that allows for the
+ *   deserialization of a null JSONValue
+ */
+export const createDeserializeNullableFn = <T>(
   deserialize: Deserialize<T>
 ): Deserialize<T | null> => (json: JSONValue) => {
   if (json === null) {

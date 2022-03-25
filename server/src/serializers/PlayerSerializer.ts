@@ -10,7 +10,7 @@ import {
   createDeserializeArrayFn,
   deserializeBoolean,
   createDeserializeFieldsFn,
-  createOptionalDeserializeFn,
+  createDeserializeOptionalFn,
 } from "./CommonSerializer";
 import { deserialize as deseralizeCard } from "./CardSerializer";
 
@@ -45,8 +45,8 @@ const fieldDeserializationSpec: FieldDeserializationSpec<
   DeserializableFields
 > = {
   bet: deserializeNumber,
-  raise: createOptionalDeserializeFn(deserializeNumber),
-  holeCards: createOptionalDeserializeFn((json: JSONValue) => {
+  raise: createDeserializeOptionalFn(deserializeNumber),
+  holeCards: createDeserializeOptionalFn((json: JSONValue) => {
     const cardArray = deserializeCardArray(json);
     if (cardArray.length !== 2) {
       throw new Error("Cannot serialize JSON that is not tuple of length 2");
@@ -101,7 +101,7 @@ const deserializeFirstConstructorArgs = creatDeserializeArgumentsFn(
  *   function takes a JSONValue and returns one of the deserialized
  *   Players that matches the JSONValue
  */
-export const createRefDeserializeFn = (
+export const createDeserializeReferenceFn = (
   players: (Player | null)[]
 ): Deserialize<Player> => (json: JSONValue) => {
   const [id] = deserializeFirstConstructorArgs(json);

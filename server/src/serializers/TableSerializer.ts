@@ -9,15 +9,15 @@ import {
   deserializeNumber,
   JSONValue,
   createDeserializeFieldsFn,
-  createOptionalDeserializeFn,
-  createNullableDeserializeFn,
+  createDeserializeOptionalFn,
+  createDeserializeNullableFn,
 } from "./CommonSerializer";
 import { deserialize as deserializeCard } from "./CardSerializer";
 import {
   createDeserializeFn as createPlayerDeserializeFn,
-  createRefDeserializeFn as createPlayerRefDeserializeFn,
+  createDeserializeReferenceFn as createDeserializePlayerReferenceFn,
 } from "./PlayerSerializer";
-import { createDeserializeFn as createPotDeserialzeFn } from "./PotSerializer";
+import { createDeserializeFn as createDeserializePotFn } from "./PotSerializer";
 
 const constructorArgumentsDeserializationSpec: ArgumentsDeserializationSpec<
   ConstructorParameters<typeof Table>
@@ -73,11 +73,11 @@ type DeserializableFields =
  */
 export const deserialize: Deserialize<Table> = (json: JSONValue) => {
   const t = new Table(...deserializeArgs(json));
-  const deserializeOptionalNumber = createOptionalDeserializeFn(
+  const deserializeOptionalNumber = createDeserializeOptionalFn(
     deserializeNumber
   );
   const deserializeArrayOfNullablePlayers = createDeserializeArrayFn(
-    createNullableDeserializeFn(createPlayerDeserializeFn(t))
+    createDeserializeNullableFn(createPlayerDeserializeFn(t))
   );
   const fieldDeserializationSpec: FieldDeserializationSpec<
     Table,
@@ -88,7 +88,7 @@ export const deserialize: Deserialize<Table> = (json: JSONValue) => {
     communityCards: deserializeArrayOfCards,
     currentBet: deserializeOptionalNumber,
     currentPosition: deserializeOptionalNumber,
-    currentRound: createOptionalDeserializeFn((jsonValue: JSONValue) => {
+    currentRound: createDeserializeOptionalFn((jsonValue: JSONValue) => {
       if (!isBettingRound(jsonValue)) {
         throw new Error(
           "Cannot deserialize argument with serializeKeyName 'currentRound' from JSON that is not BettingRound"
@@ -127,9 +127,9 @@ export const deserialize: Deserialize<Table> = (json: JSONValue) => {
     Table,
     "pots" | "winners"
   > = {
-    pots: createDeserializeArrayFn(createPotDeserialzeFn(players)),
-    winners: createOptionalDeserializeFn(
-      createDeserializeArrayFn(createPlayerRefDeserializeFn(players))
+    pots: createDeserializeArrayFn(createDeserializePotFn(players)),
+    winners: createDeserializeOptionalFn(
+      createDeserializeArrayFn(createDeserializePlayerReferenceFn(players))
     ),
   };
   const deserializeRefField = createDeserializeFieldsFn(
