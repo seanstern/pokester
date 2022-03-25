@@ -10,6 +10,7 @@ import {
   createDeserializeArrayFn,
   deserializeBoolean,
   createDeserializeFieldsFn,
+  createOptionalDeserializeFn,
 } from "./CommonSerializer";
 import { deserialize as deseralizeCard } from "./CardSerializer";
 
@@ -44,14 +45,14 @@ const fieldDeserializationSpec: FieldDeserializationSpec<
   DeserializableFields
 > = {
   bet: deserializeNumber,
-  raise: deserializeNumber,
-  holeCards: (json: JSONValue) => {
+  raise: createOptionalDeserializeFn(deserializeNumber),
+  holeCards: createOptionalDeserializeFn((json: JSONValue) => {
     const cardArray = deserializeCardArray(json);
     if (cardArray.length !== 2) {
       throw new Error("Cannot serialize JSON that is not tuple of length 2");
     }
     return cardArray as [Card, Card];
-  },
+  }),
   folded: deserializeBoolean,
   showCards: deserializeBoolean,
   left: deserializeBoolean,

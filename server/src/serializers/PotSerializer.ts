@@ -6,6 +6,7 @@ import {
   Deserialize,
   JSONValue,
   createDeserializeArrayFn,
+  createOptionalDeserializeFn,
 } from "./CommonSerializer";
 import { createRefDeserializeFn as createPlayerRefDeserializeFn } from "./PlayerSerializer";
 
@@ -29,7 +30,7 @@ export const createDeserializeFn = (
   > = {
     amount: deserializeNumber,
     eligiblePlayers: deserializeArrayOfPlayerRefs,
-    winners: deserializeArrayOfPlayerRefs,
+    winners: createOptionalDeserializeFn(deserializeArrayOfPlayerRefs),
   };
   const deserializeFields = createDeserializeFieldsFn(fieldDeserializationSpec);
   const { amount, eligiblePlayers, winners } = deserializeFields(json);

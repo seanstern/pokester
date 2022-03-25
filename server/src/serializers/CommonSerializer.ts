@@ -13,6 +13,7 @@ export const serialize = (obj: any, keysToOmit: string[]): JSONValue =>
   );
 
 export type JSONValue =
+  | null
   | string
   | number
   | boolean
@@ -122,7 +123,7 @@ export const createDeserializeArrayFn = <T>(
  * @returns true when json is a JSONObject, false otherwise
  */
 const isJSONObject = (json: JSONValue): json is JSONObject =>
-  typeof json === "object" && !Array.isArray(json);
+  json !== null && typeof json === "object" && !Array.isArray(json);
 
 export type ArgumentsDeserializationSpec<T extends any[]> = {
   [K in keyof T]: {
@@ -161,9 +162,11 @@ export const creatDeserializeArgumentsFn = <T extends any[]>(
     }
   }) as T;
 
-export type FieldDeserializationSpec<T, K extends keyof T> = {
-  [P in K]: Deserialize<T[P]>;
-};
+export type FieldDeserializationSpec<T, K extends keyof T> = Required<
+  {
+    [P in K]: Deserialize<T[P]>;
+  }
+>;
 /**
  * Given a field deserialization specification (a map of type
  * {[key: string]: deserialize}), returns a function
@@ -195,3 +198,21 @@ export const createDeserializeFieldsFn = <T, K extends keyof T>(
     }
     return obj;
   }, {} as { [key: string]: any }) as T;
+
+export const createOptionalDeserializeFn = <T>(
+  deserialize: Deserialize<T>
+): Deserialize<T | undefined> => (json?: JSONValue) => {
+  if (json === undefined) {
+    return undefined;
+  }
+  return deserialize(json);
+};
+
+export const createNullableDeserializeFn = <T>(
+  deserialize: Deserialize<T>
+): Deserialize<T | null> => (json: JSONValue) => {
+  if (json === null) {
+    return null;
+  }
+  return deserialize(json);
+};
