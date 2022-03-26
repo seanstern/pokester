@@ -4,5 +4,6 @@
   "compilerOptions": {
     "outDir": "build",
     "sourceMap": true
-  }
+  },
+  "exclude": ["**/*.spec.ts"]
 }
