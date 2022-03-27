@@ -1,4 +1,10 @@
-const UNSERIALIZABLE_TYPES = ["function", "symbol", "bigint", "undefined"];
+export type Unserializable = Function | Symbol | BigInt | undefined;
+const UNSERIALIZABLE_TYPES_TYPE_OF_VALUES = [
+  "function",
+  "symbol",
+  "bigint",
+  "undefined",
+];
 /**
  * Given an object, returns a JSON conformant version of the object.
  * @param obj any object
@@ -10,7 +16,7 @@ export const serialize = <T>(
   v: Exclude<T, Function | Symbol | BigInt | undefined>,
   ...keysToOmit: string[]
 ): JSONValue => {
-  if (UNSERIALIZABLE_TYPES.includes(typeof v)) {
+  if (UNSERIALIZABLE_TYPES_TYPE_OF_VALUES.includes(typeof v)) {
     throw new Error(`Cannot serialize ${typeof v}`);
   }
   return JSON.parse(

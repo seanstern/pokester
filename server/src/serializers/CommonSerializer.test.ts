@@ -1,4 +1,12 @@
-import { serialize } from "./CommonSerializer";
+import {
+  serialize,
+  deserializeString,
+  Unserializable,
+  JSONValue,
+  Deserialize,
+  deserializeNumber,
+  deserializeBoolean,
+} from "./CommonSerializer";
 
 describe("serialize", () => {
   describe("produces valid json", () => {
@@ -232,4 +240,58 @@ describe("serialize", () => {
       });
     });
   });
+});
+
+describe("deseserialize*", () => {
+  const deserializeBaseCaseJSONValuesTable: [string, Deserialize<any>][] = [
+    ["string", deserializeString],
+    ["number", deserializeNumber],
+    ["boolean", deserializeBoolean],
+  ];
+
+  describe.each(deserializeBaseCaseJSONValuesTable)(
+    "%s",
+    (describeName, deserialize: Deserialize<any>) => {
+      const jsonValuesTable: [string, JSONValue][] = [
+        ["null", null],
+        ["string", "foo"],
+        ["number", 13],
+        ["boolean", false],
+        ["object", { a: "foo" }],
+        ["array", [null, "foo", 13]],
+      ];
+      const deserializableJSONValuesTable = jsonValuesTable.filter(
+        ([testName]) => testName === describeName
+      );
+      const throwableJSONValuesTable = jsonValuesTable.filter(
+        ([testName]) => testName !== describeName
+      );
+      const unserializableValuesTable: [string, Unserializable][] = [
+        ["function", () => 5],
+        ["symbol", Symbol("sym")],
+        ["bigint", 1n],
+        ["undefined", undefined],
+      ];
+      const throwableValuesTable = [
+        ...unserializableValuesTable,
+        ...throwableJSONValuesTable,
+      ];
+
+      test.each(deserializableJSONValuesTable)(
+        "produces a %s when given a %s",
+        (_, deserializableJSONValue) => {
+          expect(deserialize(deserializableJSONValue)).toStrictEqual(
+            deserializableJSONValue
+          );
+        }
+      );
+
+      test.each(throwableValuesTable)(
+        "throws when given %s",
+        (_, throwableValue) => {
+          expect(() => deserialize(throwableValue as any)).toThrow();
+        }
+      );
+    }
+  );
 });
