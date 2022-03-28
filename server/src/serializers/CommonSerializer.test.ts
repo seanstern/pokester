@@ -6,6 +6,7 @@ import {
   Deserialize,
   deserializeNumber,
   deserializeBoolean,
+  createDeserializeArrayFn,
 } from "./CommonSerializer";
 
 describe("serialize", () => {
@@ -242,54 +243,123 @@ describe("serialize", () => {
   });
 });
 
+type DeserializeBaseCaseJSONValueTableEntry<T> = {
+  type: string;
+  deserialize: Deserialize<T>;
+};
+const deserializeBaseCaseJSONValuesTable = [
+  {
+    type: "string",
+    deserialize: deserializeString,
+  } as DeserializeBaseCaseJSONValueTableEntry<string>,
+  {
+    type: "number",
+    deserialize: deserializeNumber,
+  } as DeserializeBaseCaseJSONValueTableEntry<number>,
+  {
+    type: "boolean",
+    deserialize: deserializeBoolean,
+  } as DeserializeBaseCaseJSONValueTableEntry<boolean>,
+];
+
 describe("deseserialize*", () => {
-  const deserializeBaseCaseJSONValuesTable: [string, Deserialize<any>][] = [
-    ["string", deserializeString],
-    ["number", deserializeNumber],
-    ["boolean", deserializeBoolean],
+  const unserializableValuesTable: { type: string; value: Unserializable }[] = [
+    { type: "function", value: (() => 5) as Function },
+    { type: "symbol", value: Symbol("sym") as Symbol },
+    { type: "bigint", value: 1n as BigInt },
+    { type: "undefined", value: undefined as undefined },
+  ];
+  const jsonValuesTable: { type: string; value: JSONValue }[] = [
+    { type: "null", value: null as null },
+    { type: "string", value: "foo" as string },
+    { type: "number", value: 13 as number },
+    { type: "boolean", value: false as boolean },
+    { type: "object", value: { a: "foo" } as { [key: string]: any } },
+    { type: "array", value: [null, "foo", 13] as any[] },
   ];
 
   describe.each(deserializeBaseCaseJSONValuesTable)(
-    "%s",
-    (describeName, deserialize: Deserialize<any>) => {
-      const jsonValuesTable: [string, JSONValue][] = [
-        ["null", null],
-        ["string", "foo"],
-        ["number", 13],
-        ["boolean", false],
-        ["object", { a: "foo" }],
-        ["array", [null, "foo", 13]],
-      ];
+    "$type",
+    ({ type: describeName, deserialize }) => {
       const deserializableJSONValuesTable = jsonValuesTable.filter(
-        ([testName]) => testName === describeName
+        ({ type: testName }) => testName === describeName
       );
       const throwableJSONValuesTable = jsonValuesTable.filter(
-        ([testName]) => testName !== describeName
+        ({ type: testName }) => testName !== describeName
       );
-      const unserializableValuesTable: [string, Unserializable][] = [
-        ["function", () => 5],
-        ["symbol", Symbol("sym")],
-        ["bigint", 1n],
-        ["undefined", undefined],
-      ];
       const throwableValuesTable = [
-        ...unserializableValuesTable,
         ...throwableJSONValuesTable,
+        ...unserializableValuesTable,
       ];
 
       test.each(deserializableJSONValuesTable)(
-        "produces a %s when given a %s",
-        (_, deserializableJSONValue) => {
-          expect(deserialize(deserializableJSONValue)).toStrictEqual(
-            deserializableJSONValue
-          );
+        "produces a $type when given a $type",
+        ({ value }) => {
+          expect(deserialize(value)).toStrictEqual(value);
         }
       );
 
       test.each(throwableValuesTable)(
-        "throws when given %s",
-        (_, throwableValue) => {
-          expect(() => deserialize(throwableValue as any)).toThrow();
+        "throws when given a $type",
+        ({ value }) => {
+          expect(() => deserialize(value as any)).toThrow();
+        }
+      );
+    }
+  );
+});
+
+describe("createDeserialize*Array", () => {
+  const unserializableValueArraysTable: {
+    type: string;
+    value: Unserializable[];
+  }[] = [
+    { type: "function", value: [() => 5, (x: number) => x + 1] },
+    { type: "symbol", value: [Symbol("sym"), Symbol("sym2")] },
+    { type: "bigint", value: [1n, 2n] },
+    { type: "undefined", value: [undefined, undefined] },
+  ];
+
+  const jsonValueArraysTable: { type: string; value: JSONValue[] }[] = [
+    { type: "empty", value: [] },
+    { type: "null", value: [null, null, null] },
+    { type: "string", value: ["foo", "bar", "baz"] },
+    { type: "number", value: [3, 1, 4, 1, 5, 9] },
+    { type: "boolean", value: [false, true] },
+    { type: "object", value: [{ a: "foo" }, { a: "bar" }] },
+    { type: "mixed", value: [null, "foo", 13] },
+  ];
+  describe.each(deserializeBaseCaseJSONValuesTable)(
+    "$type",
+    ({ type: describeName, deserialize: deserializeElement }) => {
+      const deserializableJSONValueArraysTable = jsonValueArraysTable.filter(
+        ({ type: testName }) =>
+          testName === describeName || testName === "empty"
+      );
+      const throwableJSONValueArraysTable = jsonValueArraysTable.filter(
+        ({ type: testName }) =>
+          testName !== describeName && testName !== "empty"
+      );
+      const throwableValuesTable = [
+        ...unserializableValueArraysTable,
+        ...throwableJSONValueArraysTable,
+      ];
+
+      const deserializeArray = createDeserializeArrayFn<
+        ReturnType<typeof deserializeElement>
+      >(deserializeElement);
+
+      test.each(deserializableJSONValueArraysTable)(
+        `produces a ${describeName}[] when given $type[]`,
+        ({ type, value }) => {
+          expect(deserializeArray(value)).toStrictEqual(value);
+        }
+      );
+
+      test.each(throwableValuesTable)(
+        "throws when given $type[]",
+        ({ type, value }) => {
+          expect(() => deserializeArray(value as any)).toThrow();
         }
       );
     }
