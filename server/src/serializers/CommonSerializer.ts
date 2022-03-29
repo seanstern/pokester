@@ -206,24 +206,28 @@ export type FieldDeserializationSpec<T, K extends keyof T> = Required<
  */
 export const createDeserializeFieldsFn = <T, K extends keyof T>(
   fds: FieldDeserializationSpec<T, K>
-): Deserialize<Pick<T, K>> => (json: JSONValue) =>
-  Object.entries<Deserialize<any>>(fds).reduce((obj, [key, deserialize]) => {
-    if (!isJSONObject(json)) {
-      throw new Error("Cannot deserialize field from JSON that is not object");
-    }
-    try {
-      obj[key] = deserialize(json[key]);
-    } catch (err) {
-      if (err instanceof Error) {
-        throw new Error(
-          `${err.message}
+): Deserialize<Pick<T, K>> => (json: JSONValue) => {
+  if (!isJSONObject(json)) {
+    throw new Error("Cannot deserialize field from JSON that is not object");
+  }
+  return Object.entries<Deserialize<any>>(fds).reduce(
+    (obj, [key, deserialize]) => {
+      try {
+        obj[key] = deserialize(json[key]);
+      } catch (err) {
+        if (err instanceof Error) {
+          throw new Error(
+            `${err.message}
           Cannot deserialize key "${key}" in JSONObject`
-        );
+          );
+        }
+        throw err;
       }
-      throw err;
-    }
-    return obj;
-  }, {} as { [key: string]: any }) as T;
+      return obj;
+    },
+    {} as { [key: string]: any }
+  ) as T;
+};
 
 /**
  * Given a deserialization function, returns a version of the

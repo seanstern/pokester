@@ -9,6 +9,8 @@ import {
   createDeserializeArrayFn,
   ArgumentsDeserializationSpec,
   createDeserializeArgumentsFn,
+  FieldDeserializationSpec,
+  createDeserializeFieldsFn,
 } from "./CommonSerializer";
 
 describe("serialize", () => {
@@ -367,9 +369,9 @@ describe("createDeserialize*ArrayFn", () => {
 
       test.each(throwableArraysTable)(
         `created deserialize ${describeName}[] fn throws when given $type[]`,
-        ({ type, value }) => {
+        ({ value }) => {
           expect(() => deserializeArray(value as any)).toThrow(
-            new RegExp(`${describeName}[^]*array`)
+            new RegExp(`${describeName}[^]*element [0-9]+ in array`)
           );
         }
       );
@@ -402,7 +404,7 @@ describe("createDeseraizlieArgumentsFn", () => {
   ];
   const deserializeArguments = createDeserializeArgumentsFn(ads);
 
-  describe("created deserialize fn produces valid deserialized array when given", () => {
+  describe("created deserializeArguments fn produces valid deserialized array when given", () => {
     test("serialized object with only valid serializedKeyNames", () => {
       expect(
         deserializeArguments({
@@ -425,7 +427,7 @@ describe("createDeseraizlieArgumentsFn", () => {
     });
   });
 
-  describe("created deserialize fn throws when given", () => {
+  describe("created deserializeArguments fn throws when given", () => {
     test.each([
       ["null", null],
       ["string", "foo"],
@@ -452,7 +454,87 @@ describe("createDeseraizlieArgumentsFn", () => {
           bar: "jumped over the lazy dog",
           baz: ["3", "1", "4"],
         });
-      }).toThrow(/number[^]*array[^]*baz/);
+      }).toThrow(/number[^]*element [0-9]+ in array[^]*baz/);
+    });
+  });
+});
+
+describe("createDeserializeFieldsFn", () => {
+  type DeserializedObject = {
+    foo: boolean;
+    bar: string;
+    baz: number[];
+  };
+  const fds: FieldDeserializationSpec<
+    DeserializedObject,
+    "foo" | "bar" | "baz"
+  > = {
+    foo: deserializeBoolean,
+    bar: deserializeString,
+    baz: createDeserializeArrayFn(deserializeNumber),
+  };
+
+  const deserializeFields = createDeserializeFieldsFn(fds);
+
+  describe("created deserializeFields fn produces valid deserialized object when given", () => {
+    test("serialized object with only valid fields", () => {
+      expect(
+        deserializeFields({
+          baz: [3, 1, 4, 1, 5, 9],
+          foo: false,
+          bar: "the quick brown fox",
+        })
+      ).toStrictEqual({
+        foo: false,
+        bar: "the quick brown fox",
+        baz: [3, 1, 4, 1, 5, 9],
+      });
+    });
+
+    test("serialized object with additional serializedKeyNames", () => {
+      expect(
+        deserializeFields({
+          baz: [3, 1, 4, 1, 5, 9],
+          foo: false,
+          bar: "the quick brown fox",
+          additional: "not really used",
+        })
+      ).toStrictEqual({
+        foo: false,
+        bar: "the quick brown fox",
+        baz: [3, 1, 4, 1, 5, 9],
+      });
+    });
+  });
+
+  describe("created deserializeFields fn throws when given", () => {
+    test.each([
+      ["null", null],
+      ["string", "foo"],
+      ["number", 5],
+      ["boolean", true],
+      ["array", [true, "foo", [-35, 0]]],
+    ])("%s", (_, val) => {
+      expect(() => deserializeFields(val)).toThrow(/object/);
+    });
+
+    test("object with missing fields", () => {
+      expect(() => {
+        deserializeFields({
+          foo: true,
+          bar: "jumped over the lazy dog",
+        });
+      }).toThrow(/array[^]*baz/);
+    });
+
+    test("object with serializedKeyName of wrong type", () => {
+      expect(() => {
+        deserializeFields({
+          foo: true,
+          bar: "jumped over the lazy dog",
+          baz: ["3", "1", "4"],
+        });
+      }).toThrow(/number[^]*element [0-9]+ in array[^]*baz/);
     });
   });
 });
