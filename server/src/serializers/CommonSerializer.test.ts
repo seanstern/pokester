@@ -7,6 +7,8 @@ import {
   deserializeNumber,
   deserializeBoolean,
   createDeserializeArrayFn,
+  ArgumentsDeserializationSpec,
+  createDeserializeArgumentsFn,
 } from "./CommonSerializer";
 
 describe("serialize", () => {
@@ -152,19 +154,19 @@ describe("serialize", () => {
 
   describe("throws", () => {
     test("when given function", () => {
-      expect(() => serialize((() => null) as any)).toThrow();
+      expect(() => serialize((() => null) as any)).toThrow(/function/);
     });
 
     test("when given a symbol", () => {
-      expect(() => serialize(Symbol("sym") as any)).toThrow();
+      expect(() => serialize(Symbol("sym") as any)).toThrow(/symbol/);
     });
 
     test("when given a bigint", () => {
-      expect(() => serialize(1n as any)).toThrow();
+      expect(() => serialize(1n as any)).toThrow(/bigint/);
     });
 
     test("when given undefined", () => {
-      expect(() => serialize(undefined as any)).toThrow();
+      expect(() => serialize(undefined as any)).toThrow(/undefined/);
     });
   });
 
@@ -262,20 +264,21 @@ const deserializeBaseCaseJSONValuesTable = [
   } as DeserializeBaseCaseJSONValueTableEntry<boolean>,
 ];
 
+const jsonValuesTable: { type: string; value: JSONValue }[] = [
+  { type: "null", value: null as null },
+  { type: "string", value: "foo" as string },
+  { type: "number", value: 13 as number },
+  { type: "boolean", value: false as boolean },
+  { type: "object", value: { a: "foo" } as { [key: string]: any } },
+  { type: "array", value: [null, "foo", 13] as any[] },
+];
+
 describe("deseserialize*", () => {
   const unserializableValuesTable: { type: string; value: Unserializable }[] = [
     { type: "function", value: (() => 5) as Function },
     { type: "symbol", value: Symbol("sym") as Symbol },
     { type: "bigint", value: 1n as BigInt },
     { type: "undefined", value: undefined as undefined },
-  ];
-  const jsonValuesTable: { type: string; value: JSONValue }[] = [
-    { type: "null", value: null as null },
-    { type: "string", value: "foo" as string },
-    { type: "number", value: 13 as number },
-    { type: "boolean", value: false as boolean },
-    { type: "object", value: { a: "foo" } as { [key: string]: any } },
-    { type: "array", value: [null, "foo", 13] as any[] },
   ];
 
   describe.each(deserializeBaseCaseJSONValuesTable)(
@@ -301,15 +304,17 @@ describe("deseserialize*", () => {
 
       test.each(throwableValuesTable)(
         "throws when given a $type",
-        ({ value }) => {
-          expect(() => deserialize(value as any)).toThrow();
+        ({ type, value }) => {
+          expect(() => deserialize(value as any)).toThrow(
+            new RegExp(describeName)
+          );
         }
       );
     }
   );
 });
 
-describe("createDeserialize*Array", () => {
+describe("createDeserialize*ArrayFn", () => {
   const unserializableValueArraysTable: {
     type: string;
     value: Unserializable[];
@@ -340,28 +345,114 @@ describe("createDeserialize*Array", () => {
         ({ type: testName }) =>
           testName !== describeName && testName !== "empty"
       );
-      const throwableValuesTable = [
+      const throwableArraysTable = [
         ...unserializableValueArraysTable,
         ...throwableJSONValueArraysTable,
       ];
+
+      const throwableValuesTable = jsonValuesTable.filter(
+        ({ type }) => type !== "array"
+      );
 
       const deserializeArray = createDeserializeArrayFn<
         ReturnType<typeof deserializeElement>
       >(deserializeElement);
 
       test.each(deserializableJSONValueArraysTable)(
-        `produces a ${describeName}[] when given $type[]`,
+        `created deserializ ${describeName}[] fn produces a ${describeName}[] when given $type[]`,
         ({ type, value }) => {
           expect(deserializeArray(value)).toStrictEqual(value);
         }
       );
 
-      test.each(throwableValuesTable)(
-        "throws when given $type[]",
+      test.each(throwableArraysTable)(
+        `created deserialize ${describeName}[] fn throws when given $type[]`,
         ({ type, value }) => {
-          expect(() => deserializeArray(value as any)).toThrow();
+          expect(() => deserializeArray(value as any)).toThrow(
+            new RegExp(`${describeName}[^]*array`)
+          );
+        }
+      );
+
+      test.each(throwableValuesTable)(
+        `created deserialize ${describeName}[] fn throws when given $type`,
+        ({ value }) => {
+          expect(() => deserializeArray(value)).toThrow(/array/);
         }
       );
     }
   );
+});
+
+describe("createDeseraizlieArgumentsFn", () => {
+  type DeserializedArgumentArray = [foo: boolean, bar: string, baz: number[]];
+  const ads: ArgumentsDeserializationSpec<DeserializedArgumentArray> = [
+    {
+      serializedKeyName: "foo",
+      deserialize: deserializeBoolean,
+    },
+    {
+      serializedKeyName: "bar",
+      deserialize: deserializeString,
+    },
+    {
+      serializedKeyName: "baz",
+      deserialize: createDeserializeArrayFn(deserializeNumber),
+    },
+  ];
+  const deserializeArguments = createDeserializeArgumentsFn(ads);
+
+  describe("created deserialize fn produces valid deserialized array when given", () => {
+    test("serialized object with only valid serializedKeyNames", () => {
+      expect(
+        deserializeArguments({
+          baz: [3, 1, 4, 1, 5, 9],
+          foo: false,
+          bar: "the quick brown fox",
+        })
+      ).toStrictEqual([false, "the quick brown fox", [3, 1, 4, 1, 5, 9]]);
+    });
+
+    test("serialized object with additional serializedKeyNames", () => {
+      expect(
+        deserializeArguments({
+          baz: [3, 1, 4, 1, 5, 9],
+          foo: false,
+          bar: "the quick brown fox",
+          additional: "not really used",
+        })
+      ).toStrictEqual([false, "the quick brown fox", [3, 1, 4, 1, 5, 9]]);
+    });
+  });
+
+  describe("created deserialize fn throws when given", () => {
+    test.each([
+      ["null", null],
+      ["string", "foo"],
+      ["number", 5],
+      ["boolean", true],
+      ["array", [true, "foo", [-35, 0]] as DeserializedArgumentArray],
+    ])("%s", (_, val) => {
+      expect(() => deserializeArguments(val)).toThrow(/object/);
+    });
+
+    test("object with missing serializedKeyName", () => {
+      expect(() => {
+        deserializeArguments({
+          foo: true,
+          bar: "jumped over the lazy dog",
+        });
+      }).toThrow(/array[^]*baz/);
+    });
+
+    test("object with serializedKeyName of wrong type", () => {
+      expect(() => {
+        deserializeArguments({
+          foo: true,
+          bar: "jumped over the lazy dog",
+          baz: ["3", "1", "4"],
+        });
+      }).toThrow(/number[^]*array[^]*baz/);
+    });
+  });
 });

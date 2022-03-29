@@ -1,7 +1,7 @@
 import { Table, BettingRound } from "@chevtek/poker-engine";
 import {
   ArgumentsDeserializationSpec,
-  creatDeserializeArgumentsFn,
+  createDeserializeArgumentsFn,
   FieldDeserializationSpec,
   Deserialize,
   deserializeBoolean,
@@ -35,7 +35,7 @@ const constructorArgumentsDeserializationSpec: ArgumentsDeserializationSpec<
     deserialize: (jsonValue) => jsonValue as number,
   },
 ];
-const deserializeArgs = creatDeserializeArgumentsFn(
+const deserializeArgs = createDeserializeArgumentsFn(
   constructorArgumentsDeserializationSpec
 );
 

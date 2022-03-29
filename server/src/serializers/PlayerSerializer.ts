@@ -1,7 +1,7 @@
 import { Player, Card, Table } from "@chevtek/poker-engine";
 import {
   ArgumentsDeserializationSpec,
-  creatDeserializeArgumentsFn,
+  createDeserializeArgumentsFn,
   Deserialize,
   deserializeString,
   deserializeNumber,
@@ -27,7 +27,7 @@ const initialConstructorArgumentsDeserializationSpec: ArgumentsDeserializationSp
     deserialize: deserializeNumber,
   },
 ];
-const deserializeInitialConstructorArgs = creatDeserializeArgumentsFn(
+const deserializeInitialConstructorArgs = createDeserializeArgumentsFn(
   initialConstructorArgumentsDeserializationSpec
 );
 
@@ -86,7 +86,7 @@ export const createDeserializeFn = (t: Table): Deserialize<Player> => (
 const firstConstructorArgumentDeserializationSpec = [
   initialConstructorArgumentsDeserializationSpec[0],
 ];
-const deserializeFirstConstructorArgs = creatDeserializeArgumentsFn(
+const deserializeFirstConstructorArgs = createDeserializeArgumentsFn(
   firstConstructorArgumentDeserializationSpec
 );
 /**

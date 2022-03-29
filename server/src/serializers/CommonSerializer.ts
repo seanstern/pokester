@@ -127,7 +127,19 @@ export const createDeserializeArrayFn = <T>(
   if (!isJSONArray(json)) {
     throw new Error("Cannot deserialize JSON that is not array");
   }
-  return json.map(deserializeElement);
+  return json.map((value, index) => {
+    try {
+      return deserializeElement(value);
+    } catch (err) {
+      if (err instanceof Error) {
+        throw new Error(
+          `${err.message}
+          Cannot deserialize element ${index} in array`
+        );
+      }
+      throw err;
+    }
+  });
 };
 
 /**
@@ -156,7 +168,7 @@ export type ArgumentsDeserializationSpec<T extends any[]> = {
  *   the specificaiton; function takes a JSONValue and returns
  *   a list of deserialized values
  */
-export const creatDeserializeArgumentsFn = <T extends any[]>(
+export const createDeserializeArgumentsFn = <T extends any[]>(
   ads: ArgumentsDeserializationSpec<T>
 ): Deserialize<T> => (json: JSONValue) =>
   ads.map(({ serializedKeyName, deserialize }) => {

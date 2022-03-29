@@ -1,7 +1,7 @@
 import { Card, CardRank, CardSuit } from "@chevtek/poker-engine";
 import {
   ArgumentsDeserializationSpec,
-  creatDeserializeArgumentsFn,
+  createDeserializeArgumentsFn,
   Deserialize,
   JSONValue,
 } from "./CommonSerializer";
@@ -50,7 +50,7 @@ const constructorArgumentsDeserializationSpec: ArgumentsDeserializationSpec<
     },
   },
 ];
-const deserializeConstructorArgs = creatDeserializeArgumentsFn(
+const deserializeConstructorArgs = createDeserializeArgumentsFn(
   constructorArgumentsDeserializationSpec
 );
 
