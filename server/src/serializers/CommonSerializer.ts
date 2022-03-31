@@ -239,9 +239,9 @@ export const createDeserializeFieldsFn = <T, K extends keyof T>(
  * @returns a deserialization function that allows for the
  *   deserialization of an undefined JSONValue
  */
-export const createDeserializeOptionalFn = <T>(
-  deserialize: Deserialize<T>
-): Deserialize<T | undefined> => (json?: JSONValue) => {
+export const createDeserializeOptionalFn = <T>(deserialize: Deserialize<T>) => (
+  json?: JSONValue
+) => {
   if (json === undefined) {
     return undefined;
   }

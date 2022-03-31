@@ -11,6 +11,8 @@ import {
   createDeserializeArgumentsFn,
   FieldDeserializationSpec,
   createDeserializeFieldsFn,
+  createDeserializeOptionalFn,
+  createDeserializeNullableFn,
 } from "./CommonSerializer";
 
 describe("serialize", () => {
@@ -266,8 +268,10 @@ const deserializeBaseCaseJSONValuesTable = [
   } as DeserializeBaseCaseJSONValueTableEntry<boolean>,
 ];
 
+const nullJSONValuesTableElement = { type: "null", value: null as null };
+
 const jsonValuesTable: { type: string; value: JSONValue }[] = [
-  { type: "null", value: null as null },
+  nullJSONValuesTableElement,
   { type: "string", value: "foo" as string },
   { type: "number", value: 13 as number },
   { type: "boolean", value: false as boolean },
@@ -275,14 +279,19 @@ const jsonValuesTable: { type: string; value: JSONValue }[] = [
   { type: "array", value: [null, "foo", 13] as any[] },
 ];
 
-describe("deseserialize*", () => {
-  const unserializableValuesTable: { type: string; value: Unserializable }[] = [
-    { type: "function", value: (() => 5) as Function },
-    { type: "symbol", value: Symbol("sym") as Symbol },
-    { type: "bigint", value: 1n as BigInt },
-    { type: "undefined", value: undefined as undefined },
-  ];
+const undefinedValuesTableEntry = {
+  type: "undefined",
+  value: undefined as undefined,
+};
 
+const unserializableValuesTable: { type: string; value: Unserializable }[] = [
+  { type: "function", value: (() => 5) as Function },
+  { type: "symbol", value: Symbol("sym") as Symbol },
+  { type: "bigint", value: 1n as BigInt },
+  undefinedValuesTableEntry,
+];
+
+describe("deseserialize*", () => {
   describe.each(deserializeBaseCaseJSONValuesTable)(
     "$type",
     ({ type: describeName, deserialize }) => {
@@ -361,7 +370,7 @@ describe("createDeserialize*ArrayFn", () => {
       >(deserializeElement);
 
       test.each(deserializableJSONValueArraysTable)(
-        `created deserializ ${describeName}[] fn produces a ${describeName}[] when given $type[]`,
+        `created deserialize ${describeName}[] fn produces a ${describeName}[] when given $type[]`,
         ({ type, value }) => {
           expect(deserializeArray(value)).toStrictEqual(value);
         }
@@ -537,4 +546,90 @@ describe("createDeserializeFieldsFn", () => {
       }).toThrow(/number[^]*element [0-9]+ in array[^]*baz/);
     });
   });
+});
+
+describe("createDeserializeOptional*Fn", () => {
+  describe.each(deserializeBaseCaseJSONValuesTable)(
+    "$type",
+    ({ type: describeName, deserialize }) => {
+      const deserializableValuesTable = [
+        ...jsonValuesTable.filter(
+          ({ type: testName }) => testName === describeName
+        ),
+        undefinedValuesTableEntry,
+      ];
+
+      const throwableJSONValuesTable = jsonValuesTable.filter(
+        ({ type: testName }) => testName !== describeName
+      );
+      const unserializableValuesTableSansUndefined = unserializableValuesTable.filter(
+        ({ type: testName }) => testName !== undefinedValuesTableEntry.type
+      );
+      const throwableValuesTable = [
+        ...throwableJSONValuesTable,
+        ...unserializableValuesTableSansUndefined,
+      ];
+
+      const deserializeOptional = createDeserializeOptionalFn<
+        ReturnType<typeof deserialize>
+      >(deserialize);
+
+      test.each(deserializableValuesTable)(
+        `created deserializeOptional ${describeName} produces a $type when given a $type`,
+        ({ value }) => {
+          expect(deserializeOptional(value)).toStrictEqual(value);
+        }
+      );
+
+      test.each(throwableValuesTable)(
+        `created deserializeOptional ${describeName} throws when given a $type`,
+        ({ type, value }) => {
+          expect(() => deserializeOptional(value as any)).toThrow(
+            new RegExp(describeName)
+          );
+        }
+      );
+    }
+  );
+});
+
+describe("createDeserializeNullable*Fn", () => {
+  describe.each(deserializeBaseCaseJSONValuesTable)(
+    "$type",
+    ({ type: describeName, deserialize }) => {
+      const deserializableValuesTable = jsonValuesTable.filter(
+        ({ type: testName }) =>
+          [describeName, nullJSONValuesTableElement.type].includes(testName)
+      );
+
+      const throwableJSONValuesTable = jsonValuesTable.filter(
+        ({ type: testName }) =>
+          ![describeName, nullJSONValuesTableElement.type].includes(testName)
+      );
+      const throwableValuesTable = [
+        ...throwableJSONValuesTable,
+        ...unserializableValuesTable,
+      ];
+
+      const deserializNullable = createDeserializeNullableFn<
+        ReturnType<typeof deserialize>
+      >(deserialize);
+
+      test.each(deserializableValuesTable)(
+        `created deserializeNullable ${describeName} produces a $type when given a $type`,
+        ({ value }) => {
+          expect(deserializNullable(value)).toStrictEqual(value);
+        }
+      );
+
+      test.each(throwableValuesTable)(
+        `created deserializeNullable ${describeName} throws when given a $type`,
+        ({ type, value }) => {
+          expect(() => deserializNullable(value as any)).toThrow(
+            new RegExp(describeName)
+          );
+        }
+      );
+    }
+  );
 });
