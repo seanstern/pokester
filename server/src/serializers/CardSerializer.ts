@@ -31,9 +31,7 @@ const constructorArgumentsDeserializationSpec: ArgumentsDeserializationSpec<
     serializedKeyName: "_rank",
     deserialize: (jsonValue) => {
       if (!isCardRank(jsonValue)) {
-        throw new Error(
-          "Cannot deserialize argument with serializeKeyName '_rank' from JSON that is not CardRank"
-        );
+        throw new Error("Cannot deserialize JSON that is not CardRank");
       }
       return jsonValue;
     },
@@ -42,9 +40,7 @@ const constructorArgumentsDeserializationSpec: ArgumentsDeserializationSpec<
     serializedKeyName: "_suit",
     deserialize: (jsonValue) => {
       if (!isCardSuit(jsonValue)) {
-        throw new Error(
-          "Cannot deserialize argument with serializeKeyName '_suit' from JSON that is not CardSuit"
-        );
+        throw new Error("Cannot deserialize JSON that is not CardSuit");
       }
       return jsonValue;
     },
