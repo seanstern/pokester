@@ -230,6 +230,37 @@ export const createDeserializeFieldsFn = <T, K extends keyof T>(
 };
 
 /**
+ * Given a deserialized object and fields that should be assigned to the
+ * the deserialized object, assigns all of the defined properties in the
+ * fields object to the deserialized object; returns the mutated deserialized
+ * object
+ *
+ * Note: This differs from Object.assign by
+ *   - Restricting fields of sourceFields to those properly typed on
+ *     targetMutableObj
+ *   - NOT assigning undefined fields on sourceFields
+ * @param targetMutableObj deserialized object to be assigned
+ *   properties of fields
+ * @param sourceFields fields to assign to
+ *   targetMutableObj
+ * @returns a mutated version of targetMutableObj
+ */
+export const assignDeserializedFieldsTo = <T>(
+  targetMutableObj: T,
+  sourceDeserializedFields: Partial<T>
+): T => {
+  for (const key in sourceDeserializedFields) {
+    const typedKey = key as keyof typeof sourceDeserializedFields;
+    if (sourceDeserializedFields[typedKey] !== undefined) {
+      targetMutableObj[typedKey] = sourceDeserializedFields[
+        typedKey
+      ] as T[typeof typedKey];
+    }
+  }
+  return targetMutableObj;
+};
+Object.assign;
+/**
  * Given a deserialization function, returns a version of the
  * function that allows for the deserialization of an undefined
  * JSONValue

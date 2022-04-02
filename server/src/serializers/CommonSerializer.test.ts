@@ -13,6 +13,7 @@ import {
   createDeserializeFieldsFn,
   createDeserializeOptionalFn,
   createDeserializeNullableFn,
+  assignDeserializedFieldsTo,
 } from "./CommonSerializer";
 
 describe("serialize", () => {
@@ -545,6 +546,37 @@ describe("createDeserializeFieldsFn", () => {
         });
       }).toThrow(/number[^]*element [0-9]+ in array[^]*baz/);
     });
+  });
+});
+
+describe("assignDeserializedFieldsTo", () => {
+  test("assigns fields to mutable deserialized object", () => {
+    class TestClass {
+      public strToReplace: string = "replace me";
+      public strToLeave: string = "leave me";
+      public optStrToReplace?: string;
+      public optStrToLeave?: string;
+      public boolToReplace: boolean = true;
+      public boolToLeave: boolean = false;
+      public optBoolToReplace?: boolean;
+      public optBoolToLeave?: boolean;
+    }
+
+    const testObj = new TestClass();
+    const mutatedTestObj = assignDeserializedFieldsTo(testObj, {
+      strToReplace: "replaced",
+      optStrToReplace: "also replaced",
+      boolToReplace: false,
+      optBoolToReplace: true,
+    });
+    expect(mutatedTestObj).toBe(testObj);
+
+    const expectedMutatedTestObj = new TestClass();
+    expectedMutatedTestObj.strToReplace = "replaced";
+    expectedMutatedTestObj.optStrToReplace = "also replaced";
+    expectedMutatedTestObj.boolToReplace = false;
+    expectedMutatedTestObj.optBoolToReplace = true;
+    expect(mutatedTestObj).toStrictEqual(expectedMutatedTestObj);
   });
 });
 
