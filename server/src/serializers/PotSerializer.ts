@@ -8,6 +8,7 @@ import {
   createDeserializeArrayFn,
   createDeserializeOptionalFn,
   serialize as serializeCommon,
+  assignDeserializedFieldsTo,
 } from "./CommonSerializer";
 import { createDeserializeReferenceFn as createDeserializePlayerReferenceFn } from "./PlayerSerializer";
 
@@ -41,10 +42,5 @@ export const createDeserializeFn = (
     winners: createDeserializeOptionalFn(deserializeArrayOfPlayerRefs),
   };
   const deserializeFields = createDeserializeFieldsFn(fieldDeserializationSpec);
-  const { amount, eligiblePlayers, winners } = deserializeFields(json);
-  const p = new Pot();
-  p.amount = amount;
-  p.eligiblePlayers = eligiblePlayers;
-  if (winners) p.winners = winners;
-  return p;
+  return assignDeserializedFieldsTo(new Pot(), deserializeFields(json));
 };

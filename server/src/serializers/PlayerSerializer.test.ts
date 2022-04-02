@@ -57,17 +57,15 @@ describe("createDeserializeFn's created deserialize fn", () => {
     expect(deserializedPlayer1).toStrictEqual(player);
   });
 
-  describe("throws when given", () => {
-    test("serialized Player with invalid number of hole cards", () => {
-      const serializedPlayer = serialize(new Player("playerId", 2245, t));
-      (serializedPlayer as any).holeCards = [
-        serializeCard(new Card(CardRank.KING, CardSuit.DIAMOND)),
-      ];
+  test("throws when given serialized Player with invalid number of hole cards", () => {
+    const serializedPlayer = serialize(new Player("playerId", 2245, t));
+    (serializedPlayer as any).holeCards = [
+      serializeCard(new Card(CardRank.KING, CardSuit.DIAMOND)),
+    ];
 
-      expect(() => deserialize(serializedPlayer)).toThrow(
-        /tuple.*length 2[^]*holeCards/
-      );
-    });
+    expect(() => deserialize(serializedPlayer)).toThrow(
+      /tuple.*length 2[^]*holeCards/
+    );
   });
 });
 

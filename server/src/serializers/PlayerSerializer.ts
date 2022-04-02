@@ -12,6 +12,7 @@ import {
   createDeserializeFieldsFn,
   createDeserializeOptionalFn,
   serialize as serializeCommon,
+  assignDeserializedFieldsTo,
 } from "./CommonSerializer";
 import { deserialize as deseralizeCard } from "./CardSerializer";
 
@@ -77,19 +78,11 @@ const deserializeFields = createDeserializeFieldsFn(fieldDeserializationSpec);
  */
 export const createDeserializeFn = (t: Table): Deserialize<Player> => (
   json: JSONValue
-) => {
-  const p = new Player(...deserializeInitialConstructorArgs(json), t);
-  const { bet, raise, holeCards, folded, showCards, left } = deserializeFields(
-    json
+) =>
+  assignDeserializedFieldsTo(
+    new Player(...deserializeInitialConstructorArgs(json), t),
+    deserializeFields(json)
   );
-  p.bet = bet;
-  if (raise) p.raise = raise;
-  if (holeCards) p.holeCards = holeCards;
-  p.folded = folded;
-  p.showCards = showCards;
-  p.left = left;
-  return p;
-};
 
 const firstConstructorArgumentDeserializationSpec = [
   initialConstructorArgumentsDeserializationSpec[0],
