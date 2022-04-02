@@ -11,8 +11,16 @@ import {
   deserializeBoolean,
   createDeserializeFieldsFn,
   createDeserializeOptionalFn,
+  serialize as serializeCommon,
 } from "./CommonSerializer";
 import { deserialize as deseralizeCard } from "./CardSerializer";
+
+/**
+ * Given a Player, returns a JSON conformant version of the Player
+ * @param p a Player
+ * @returns a JSON conformant version of the Player
+ */
+export const serialize = (p: Player) => serializeCommon(p, "table");
 
 type OmitLast<T> = T extends [...infer S, any] ? S : never;
 const initialConstructorArgumentsDeserializationSpec: ArgumentsDeserializationSpec<
@@ -75,8 +83,8 @@ export const createDeserializeFn = (t: Table): Deserialize<Player> => (
     json
   );
   p.bet = bet;
-  p.raise = raise;
-  p.holeCards = holeCards;
+  if (raise) p.raise = raise;
+  if (holeCards) p.holeCards = holeCards;
   p.folded = folded;
   p.showCards = showCards;
   p.left = left;
