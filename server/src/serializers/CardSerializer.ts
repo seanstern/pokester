@@ -4,7 +4,15 @@ import {
   createDeserializeArgumentsFn,
   Deserialize,
   JSONValue,
+  serialize as serializeCommon,
 } from "./CommonSerializer";
+
+/**
+ * Given an Card, returns a JSON conformant version of the Card
+ * @param c a Card
+ * @returns a JSON conformant version of the Card
+ */
+export const serialize: (c: Card) => JSONValue = serializeCommon;
 
 /**
  * Given a JSONValue, returns true when it represent a CardRank

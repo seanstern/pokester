@@ -1,12 +1,22 @@
 import { CardSuit, CardRank, Card } from "@chevtek/poker-engine";
-import { serialize } from "./CommonSerializer";
-import { deserialize } from "./CardSerializer";
+import { serialize, deserialize } from "./CardSerializer";
 
 const cardSuits = Object.values(CardSuit);
 const cardRanks = Object.values(CardRank);
 const allCardsTable = cardSuits.flatMap((cardSuit) =>
   cardRanks.map((cardRank) => [cardRank, cardSuit] as [CardRank, CardSuit])
 );
+
+describe("serialize produces valid JSON when given Card", () => {
+  test.each(allCardsTable)("%s of %s", (cardRank, cardSuit) => {
+    const card = new Card(cardRank, cardSuit);
+    expect(serialize(card)).toStrictEqual({
+      _rank: cardRank,
+      _suit: cardSuit,
+    });
+  });
+});
+
 describe("deserialize", () => {
   describe("produces valid Card when given serialized version of Card", () => {
     test.each(allCardsTable)("%s of %s", (cardRank, cardSuit) => {
