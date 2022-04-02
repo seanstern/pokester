@@ -11,6 +11,8 @@ import {
   createDeserializeFieldsFn,
   createDeserializeOptionalFn,
   createDeserializeNullableFn,
+  serialize as serializeCommon,
+  assignDeserializedFieldsTo,
 } from "./CommonSerializer";
 import { deserialize as deserializeCard } from "./CardSerializer";
 import {
@@ -18,6 +20,13 @@ import {
   createDeserializeReferenceFn as createDeserializePlayerReferenceFn,
 } from "./PlayerSerializer";
 import { createDeserializeFn as createDeserializePotFn } from "./PotSerializer";
+
+/**
+ * Given a Table, returns a JSON conformant version of the Table
+ * @param t a Table
+ * @returns a JSON conformant version of the Table
+ */
+export const serialize = (t: Table) => serializeCommon(t, "table");
 
 const constructorArgumentsDeserializationSpec: ArgumentsDeserializationSpec<
   ConstructorParameters<typeof Table>
@@ -90,9 +99,7 @@ export const deserialize: Deserialize<Table> = (json: JSONValue) => {
     currentPosition: deserializeOptionalNumber,
     currentRound: createDeserializeOptionalFn((jsonValue: JSONValue) => {
       if (!isBettingRound(jsonValue)) {
-        throw new Error(
-          "Cannot deserialize argument with serializeKeyName 'currentRound' from JSON that is not BettingRound"
-        );
+        throw new Error("Cannot deserialize JSON that is not BettingRound");
       }
       return jsonValue;
     }),
@@ -106,23 +113,9 @@ export const deserialize: Deserialize<Table> = (json: JSONValue) => {
     smallBlindPosition: deserializeOptionalNumber,
   };
   const deserializeFields = createDeserializeFieldsFn(fieldDeserializationSpec);
-  const {
-    autoMoveDealer,
-    bigBlindPosition,
-    communityCards,
-    currentBet,
-    currentPosition,
-    currentRound,
-    dealerPosition,
-    debug,
-    deck,
-    handNumber,
-    lastPosition,
-    lastRaise,
-    players,
-    smallBlindPosition,
-  } = deserializeFields(json);
+  const fields = deserializeFields(json);
 
+  const { players } = fields;
   const refFieldDeserializationSpec: FieldDeserializationSpec<
     Table,
     "pots" | "winners"
@@ -132,26 +125,12 @@ export const deserialize: Deserialize<Table> = (json: JSONValue) => {
       createDeserializeArrayFn(createDeserializePlayerReferenceFn(players))
     ),
   };
-  const deserializeRefField = createDeserializeFieldsFn(
+  const deserializeRefFields = createDeserializeFieldsFn(
     refFieldDeserializationSpec
   );
-  const { pots, winners } = deserializeRefField(json);
+  const refFields = deserializeRefFields(json);
 
-  t.autoMoveDealer = autoMoveDealer;
-  t.bigBlindPosition = bigBlindPosition;
-  t.communityCards = communityCards;
-  t.currentBet = currentBet;
-  t.currentPosition = currentPosition;
-  t.currentRound = currentRound;
-  t.dealerPosition = dealerPosition;
-  t.debug = debug;
-  t.deck = deck;
-  t.handNumber = handNumber;
-  t.lastPosition = lastPosition;
-  t.lastRaise = lastRaise;
-  t.players = players;
-  t.pots = pots;
-  t.smallBlindPosition = smallBlindPosition;
-  t.winners = winners;
-  return t;
+  const allFields = { ...fields, ...refFields };
+
+  return assignDeserializedFieldsTo(t, allFields);
 };
