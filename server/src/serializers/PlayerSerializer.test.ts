@@ -32,10 +32,7 @@ test("serialize produces valid JSON when given Player", () => {
     showCards: false,
     left: false,
     raise: 13,
-    holeCards: [
-      serializeCard(new Card(CardRank.KING, CardSuit.DIAMOND)),
-      serializeCard(new Card(CardRank.QUEEN, CardSuit.HEART)),
-    ],
+    holeCards: p.holeCards!.map((card) => serializeCard(card)),
   });
 });
 
@@ -82,7 +79,7 @@ describe("createDeserializeReferenceFn's created deserializeReference fn", () =>
   ];
   const deserializeReference = createDeserializeReferenceFn(players);
 
-  describe("produces valid reference to deserialized Player object when given valid serialized reference", () => {
+  describe("produces reference to deserialized Player object when given serialized reference", () => {
     const validSerializedPlayerReferencesTable = players.map((player) => ({
       serializedPlayerReference: { id: player.id },
       player,
