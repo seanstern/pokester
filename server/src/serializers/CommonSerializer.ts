@@ -10,7 +10,7 @@ const UNSERIALIZABLE_TYPES_TYPE_OF_VALUES = [
  * @param obj any object
  * @param keysToOmit keys that could be serialzed as JSON but are to
  *   be excluded from the resulting object; applied recursively
- * @returns a JSON conformat version of the object
+ * @returns a JSON conformant version of the object
  */
 export const serialize = <T>(
   v: Exclude<T, Function | Symbol | BigInt | undefined>,
