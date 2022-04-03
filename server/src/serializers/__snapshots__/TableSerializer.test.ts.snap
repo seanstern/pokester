@@ -1,0 +1,2050 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`serialize produces JSON when given Table Table at completion of round; players have called, checked, stoodUp, bet, folded, raised 1`] = `
+Object {
+  "autoMoveDealer": true,
+  "bigBlind": 10,
+  "bigBlindPosition": 0,
+  "buyIn": 1000,
+  "communityCards": Array [
+    Object {
+      "_rank": "T",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "s",
+    },
+  ],
+  "dealerPosition": 3,
+  "debug": false,
+  "deck": Array [
+    Object {
+      "_rank": "A",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "h",
+    },
+  ],
+  "handNumber": 1,
+  "players": Array [
+    Object {
+      "bet": 0,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "2",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "3",
+          "_suit": "s",
+        },
+      ],
+      "id": "Jane",
+      "left": false,
+      "raise": 50,
+      "showCards": true,
+      "stackSize": 3010,
+    },
+    Object {
+      "bet": 0,
+      "folded": true,
+      "holeCards": Array [
+        Object {
+          "_rank": "4",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "5",
+          "_suit": "s",
+        },
+      ],
+      "id": "Juan",
+      "left": false,
+      "showCards": false,
+      "stackSize": 9189,
+    },
+    null,
+    Object {
+      "bet": 0,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "6",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "7",
+          "_suit": "s",
+        },
+      ],
+      "id": "John",
+      "left": false,
+      "showCards": true,
+      "stackSize": 2010,
+    },
+    null,
+    null,
+    null,
+    Object {
+      "bet": 0,
+      "folded": true,
+      "holeCards": Array [
+        Object {
+          "_rank": "8",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "9",
+          "_suit": "s",
+        },
+      ],
+      "id": "Jay",
+      "left": true,
+      "showCards": false,
+      "stackSize": 31405,
+    },
+    null,
+    null,
+  ],
+  "pots": Array [
+    Object {
+      "amount": 340,
+      "eligiblePlayers": Array [
+        Object {
+          "bet": 0,
+          "folded": false,
+          "holeCards": Array [
+            Object {
+              "_rank": "2",
+              "_suit": "s",
+            },
+            Object {
+              "_rank": "3",
+              "_suit": "s",
+            },
+          ],
+          "id": "Jane",
+          "left": false,
+          "raise": 50,
+          "showCards": true,
+          "stackSize": 3010,
+        },
+        Object {
+          "bet": 0,
+          "folded": false,
+          "holeCards": Array [
+            Object {
+              "_rank": "6",
+              "_suit": "s",
+            },
+            Object {
+              "_rank": "7",
+              "_suit": "s",
+            },
+          ],
+          "id": "John",
+          "left": false,
+          "showCards": true,
+          "stackSize": 2010,
+        },
+      ],
+      "winners": Array [
+        Object {
+          "bet": 0,
+          "folded": false,
+          "holeCards": Array [
+            Object {
+              "_rank": "2",
+              "_suit": "s",
+            },
+            Object {
+              "_rank": "3",
+              "_suit": "s",
+            },
+          ],
+          "id": "Jane",
+          "left": false,
+          "raise": 50,
+          "showCards": true,
+          "stackSize": 3010,
+        },
+        Object {
+          "bet": 0,
+          "folded": false,
+          "holeCards": Array [
+            Object {
+              "_rank": "6",
+              "_suit": "s",
+            },
+            Object {
+              "_rank": "7",
+              "_suit": "s",
+            },
+          ],
+          "id": "John",
+          "left": false,
+          "showCards": true,
+          "stackSize": 2010,
+        },
+      ],
+    },
+  ],
+  "smallBlind": 5,
+  "smallBlindPosition": 7,
+  "winners": Array [
+    Object {
+      "bet": 0,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "2",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "3",
+          "_suit": "s",
+        },
+      ],
+      "id": "Jane",
+      "left": false,
+      "raise": 50,
+      "showCards": true,
+      "stackSize": 3010,
+    },
+    Object {
+      "bet": 0,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "6",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "7",
+          "_suit": "s",
+        },
+      ],
+      "id": "John",
+      "left": false,
+      "showCards": true,
+      "stackSize": 2010,
+    },
+  ],
+}
+`;
+
+exports[`serialize produces JSON when given Table Table at start of flop; players have: called, checked 1`] = `
+Object {
+  "autoMoveDealer": true,
+  "bigBlind": 10,
+  "bigBlindPosition": 0,
+  "buyIn": 1000,
+  "communityCards": Array [
+    Object {
+      "_rank": "T",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "s",
+    },
+  ],
+  "currentPosition": 7,
+  "currentRound": "flop",
+  "dealerPosition": 3,
+  "debug": false,
+  "deck": Array [
+    Object {
+      "_rank": "A",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "s",
+    },
+  ],
+  "handNumber": 1,
+  "lastPosition": 3,
+  "players": Array [
+    Object {
+      "bet": 0,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "2",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "3",
+          "_suit": "s",
+        },
+      ],
+      "id": "Jane",
+      "left": false,
+      "showCards": false,
+      "stackSize": 2990,
+    },
+    Object {
+      "bet": 0,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "4",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "5",
+          "_suit": "s",
+        },
+      ],
+      "id": "Juan",
+      "left": false,
+      "showCards": false,
+      "stackSize": 9189,
+    },
+    null,
+    Object {
+      "bet": 0,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "6",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "7",
+          "_suit": "s",
+        },
+      ],
+      "id": "John",
+      "left": false,
+      "showCards": false,
+      "stackSize": 1990,
+    },
+    null,
+    null,
+    null,
+    Object {
+      "bet": 0,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "8",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "9",
+          "_suit": "s",
+        },
+      ],
+      "id": "Jay",
+      "left": false,
+      "showCards": false,
+      "stackSize": 31405,
+    },
+    null,
+    null,
+  ],
+  "pots": Array [
+    Object {
+      "amount": 40,
+      "eligiblePlayers": Array [
+        Object {
+          "bet": 0,
+          "folded": false,
+          "holeCards": Array [
+            Object {
+              "_rank": "2",
+              "_suit": "s",
+            },
+            Object {
+              "_rank": "3",
+              "_suit": "s",
+            },
+          ],
+          "id": "Jane",
+          "left": false,
+          "showCards": false,
+          "stackSize": 2990,
+        },
+        Object {
+          "bet": 0,
+          "folded": false,
+          "holeCards": Array [
+            Object {
+              "_rank": "4",
+              "_suit": "s",
+            },
+            Object {
+              "_rank": "5",
+              "_suit": "s",
+            },
+          ],
+          "id": "Juan",
+          "left": false,
+          "showCards": false,
+          "stackSize": 9189,
+        },
+        Object {
+          "bet": 0,
+          "folded": false,
+          "holeCards": Array [
+            Object {
+              "_rank": "6",
+              "_suit": "s",
+            },
+            Object {
+              "_rank": "7",
+              "_suit": "s",
+            },
+          ],
+          "id": "John",
+          "left": false,
+          "showCards": false,
+          "stackSize": 1990,
+        },
+        Object {
+          "bet": 0,
+          "folded": false,
+          "holeCards": Array [
+            Object {
+              "_rank": "8",
+              "_suit": "s",
+            },
+            Object {
+              "_rank": "9",
+              "_suit": "s",
+            },
+          ],
+          "id": "Jay",
+          "left": false,
+          "showCards": false,
+          "stackSize": 31405,
+        },
+      ],
+    },
+  ],
+  "smallBlind": 5,
+  "smallBlindPosition": 7,
+}
+`;
+
+exports[`serialize produces JSON when given Table Table at start of pre-flop 1`] = `
+Object {
+  "autoMoveDealer": true,
+  "bigBlind": 10,
+  "bigBlindPosition": 0,
+  "buyIn": 1000,
+  "communityCards": Array [],
+  "currentBet": 10,
+  "currentPosition": 1,
+  "currentRound": "pre-flop",
+  "dealerPosition": 3,
+  "debug": false,
+  "deck": Array [
+    Object {
+      "_rank": "A",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "s",
+    },
+  ],
+  "handNumber": 1,
+  "lastPosition": 0,
+  "players": Array [
+    Object {
+      "bet": 10,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "2",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "3",
+          "_suit": "s",
+        },
+      ],
+      "id": "Jane",
+      "left": false,
+      "showCards": false,
+      "stackSize": 2990,
+    },
+    Object {
+      "bet": 0,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "4",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "5",
+          "_suit": "s",
+        },
+      ],
+      "id": "Juan",
+      "left": false,
+      "showCards": false,
+      "stackSize": 9199,
+    },
+    null,
+    Object {
+      "bet": 0,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "6",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "7",
+          "_suit": "s",
+        },
+      ],
+      "id": "John",
+      "left": false,
+      "showCards": false,
+      "stackSize": 2000,
+    },
+    null,
+    null,
+    null,
+    Object {
+      "bet": 5,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "8",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "9",
+          "_suit": "s",
+        },
+      ],
+      "id": "Jay",
+      "left": false,
+      "showCards": false,
+      "stackSize": 31410,
+    },
+    null,
+    null,
+  ],
+  "pots": Array [
+    Object {
+      "amount": 0,
+      "eligiblePlayers": Array [],
+    },
+  ],
+  "smallBlind": 5,
+  "smallBlindPosition": 7,
+}
+`;
+
+exports[`serialize produces JSON when given Table Table at start of river; players have called, checked, stoodUp, bet, folded, raised 1`] = `
+Object {
+  "autoMoveDealer": true,
+  "bigBlind": 10,
+  "bigBlindPosition": 0,
+  "buyIn": 1000,
+  "communityCards": Array [
+    Object {
+      "_rank": "T",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "s",
+    },
+  ],
+  "currentPosition": 0,
+  "currentRound": "river",
+  "dealerPosition": 3,
+  "debug": false,
+  "deck": Array [
+    Object {
+      "_rank": "A",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "h",
+    },
+  ],
+  "handNumber": 1,
+  "lastPosition": 3,
+  "players": Array [
+    Object {
+      "bet": 0,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "2",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "3",
+          "_suit": "s",
+        },
+      ],
+      "id": "Jane",
+      "left": false,
+      "raise": 50,
+      "showCards": false,
+      "stackSize": 2840,
+    },
+    Object {
+      "bet": 0,
+      "folded": true,
+      "holeCards": Array [
+        Object {
+          "_rank": "4",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "5",
+          "_suit": "s",
+        },
+      ],
+      "id": "Juan",
+      "left": false,
+      "showCards": false,
+      "stackSize": 9189,
+    },
+    null,
+    Object {
+      "bet": 0,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "6",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "7",
+          "_suit": "s",
+        },
+      ],
+      "id": "John",
+      "left": false,
+      "showCards": false,
+      "stackSize": 1840,
+    },
+    null,
+    null,
+    null,
+    Object {
+      "bet": 0,
+      "folded": true,
+      "holeCards": Array [
+        Object {
+          "_rank": "8",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "9",
+          "_suit": "s",
+        },
+      ],
+      "id": "Jay",
+      "left": true,
+      "showCards": false,
+      "stackSize": 31405,
+    },
+    null,
+    null,
+  ],
+  "pots": Array [
+    Object {
+      "amount": 340,
+      "eligiblePlayers": Array [
+        Object {
+          "bet": 0,
+          "folded": false,
+          "holeCards": Array [
+            Object {
+              "_rank": "2",
+              "_suit": "s",
+            },
+            Object {
+              "_rank": "3",
+              "_suit": "s",
+            },
+          ],
+          "id": "Jane",
+          "left": false,
+          "raise": 50,
+          "showCards": false,
+          "stackSize": 2840,
+        },
+        Object {
+          "bet": 0,
+          "folded": false,
+          "holeCards": Array [
+            Object {
+              "_rank": "6",
+              "_suit": "s",
+            },
+            Object {
+              "_rank": "7",
+              "_suit": "s",
+            },
+          ],
+          "id": "John",
+          "left": false,
+          "showCards": false,
+          "stackSize": 1840,
+        },
+      ],
+    },
+  ],
+  "smallBlind": 5,
+  "smallBlindPosition": 7,
+}
+`;
+
+exports[`serialize produces JSON when given Table Table at start of second round 1`] = `
+Object {
+  "autoMoveDealer": true,
+  "bigBlind": 10,
+  "bigBlindPosition": 1,
+  "buyIn": 1000,
+  "communityCards": Array [],
+  "currentBet": 10,
+  "currentPosition": 3,
+  "currentRound": "pre-flop",
+  "dealerPosition": 7,
+  "debug": false,
+  "deck": Array [
+    Object {
+      "_rank": "A",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "s",
+    },
+  ],
+  "handNumber": 2,
+  "lastPosition": 1,
+  "players": Array [
+    Object {
+      "bet": 5,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "2",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "3",
+          "_suit": "s",
+        },
+      ],
+      "id": "Jane",
+      "left": false,
+      "showCards": false,
+      "stackSize": 3005,
+    },
+    Object {
+      "bet": 10,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "4",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "5",
+          "_suit": "s",
+        },
+      ],
+      "id": "Juan",
+      "left": false,
+      "showCards": false,
+      "stackSize": 9179,
+    },
+    null,
+    Object {
+      "bet": 0,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "6",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "7",
+          "_suit": "s",
+        },
+      ],
+      "id": "John",
+      "left": false,
+      "showCards": false,
+      "stackSize": 2010,
+    },
+    null,
+    null,
+    null,
+    Object {
+      "bet": 0,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "8",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "9",
+          "_suit": "s",
+        },
+      ],
+      "id": "Jay",
+      "left": true,
+      "showCards": false,
+      "stackSize": 31405,
+    },
+    null,
+    null,
+  ],
+  "pots": Array [
+    Object {
+      "amount": 0,
+      "eligiblePlayers": Array [],
+    },
+  ],
+  "smallBlind": 5,
+  "smallBlindPosition": 0,
+}
+`;
+
+exports[`serialize produces JSON when given Table Table at start of turn; players have: called, checked, stoodUp, bet, folded 1`] = `
+Object {
+  "autoMoveDealer": true,
+  "bigBlind": 10,
+  "bigBlindPosition": 0,
+  "buyIn": 1000,
+  "communityCards": Array [
+    Object {
+      "_rank": "T",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "s",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "s",
+    },
+  ],
+  "currentPosition": 0,
+  "currentRound": "turn",
+  "dealerPosition": 3,
+  "debug": false,
+  "deck": Array [
+    Object {
+      "_rank": "A",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "c",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "d",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "K",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "Q",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "J",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "T",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "9",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "8",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "7",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "6",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "5",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "4",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "3",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "2",
+      "_suit": "h",
+    },
+    Object {
+      "_rank": "A",
+      "_suit": "s",
+    },
+  ],
+  "handNumber": 1,
+  "lastPosition": 3,
+  "players": Array [
+    Object {
+      "bet": 0,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "2",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "3",
+          "_suit": "s",
+        },
+      ],
+      "id": "Jane",
+      "left": false,
+      "showCards": false,
+      "stackSize": 2940,
+    },
+    Object {
+      "bet": 0,
+      "folded": true,
+      "holeCards": Array [
+        Object {
+          "_rank": "4",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "5",
+          "_suit": "s",
+        },
+      ],
+      "id": "Juan",
+      "left": false,
+      "showCards": false,
+      "stackSize": 9189,
+    },
+    null,
+    Object {
+      "bet": 0,
+      "folded": false,
+      "holeCards": Array [
+        Object {
+          "_rank": "6",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "7",
+          "_suit": "s",
+        },
+      ],
+      "id": "John",
+      "left": false,
+      "showCards": false,
+      "stackSize": 1940,
+    },
+    null,
+    null,
+    null,
+    Object {
+      "bet": 0,
+      "folded": true,
+      "holeCards": Array [
+        Object {
+          "_rank": "8",
+          "_suit": "s",
+        },
+        Object {
+          "_rank": "9",
+          "_suit": "s",
+        },
+      ],
+      "id": "Jay",
+      "left": true,
+      "showCards": false,
+      "stackSize": 31405,
+    },
+    null,
+    null,
+  ],
+  "pots": Array [
+    Object {
+      "amount": 140,
+      "eligiblePlayers": Array [
+        Object {
+          "bet": 0,
+          "folded": false,
+          "holeCards": Array [
+            Object {
+              "_rank": "2",
+              "_suit": "s",
+            },
+            Object {
+              "_rank": "3",
+              "_suit": "s",
+            },
+          ],
+          "id": "Jane",
+          "left": false,
+          "showCards": false,
+          "stackSize": 2940,
+        },
+        Object {
+          "bet": 0,
+          "folded": false,
+          "holeCards": Array [
+            Object {
+              "_rank": "6",
+              "_suit": "s",
+            },
+            Object {
+              "_rank": "7",
+              "_suit": "s",
+            },
+          ],
+          "id": "John",
+          "left": false,
+          "showCards": false,
+          "stackSize": 1940,
+        },
+      ],
+    },
+  ],
+  "smallBlind": 5,
+  "smallBlindPosition": 7,
+}
+`;
+
+exports[`serialize produces JSON when given Table Table with seated players 1`] = `
+Object {
+  "autoMoveDealer": true,
+  "bigBlind": 10,
+  "bigBlindPosition": 0,
+  "buyIn": 1000,
+  "communityCards": Array [],
+  "dealerPosition": 3,
+  "debug": false,
+  "deck": Array [],
+  "handNumber": 0,
+  "players": Array [
+    Object {
+      "bet": 0,
+      "folded": false,
+      "id": "Jane",
+      "left": false,
+      "showCards": false,
+      "stackSize": 3000,
+    },
+    Object {
+      "bet": 0,
+      "folded": false,
+      "id": "Juan",
+      "left": false,
+      "showCards": false,
+      "stackSize": 9199,
+    },
+    null,
+    Object {
+      "bet": 0,
+      "folded": false,
+      "id": "John",
+      "left": false,
+      "showCards": false,
+      "stackSize": 2000,
+    },
+    null,
+    null,
+    null,
+    Object {
+      "bet": 0,
+      "folded": false,
+      "id": "Jay",
+      "left": false,
+      "showCards": false,
+      "stackSize": 31415,
+    },
+    null,
+    null,
+  ],
+  "pots": Array [
+    Object {
+      "amount": 0,
+      "eligiblePlayers": Array [],
+    },
+  ],
+  "smallBlind": 5,
+  "smallBlindPosition": 7,
+}
+`;
+
+exports[`serialize produces JSON when given Table newly constructed empty Table 1`] = `
+Object {
+  "autoMoveDealer": true,
+  "bigBlind": 10,
+  "buyIn": 1000,
+  "communityCards": Array [],
+  "debug": false,
+  "deck": Array [],
+  "handNumber": 0,
+  "players": Array [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+  ],
+  "pots": Array [],
+  "smallBlind": 5,
+}
+`;
