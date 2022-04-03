@@ -30,10 +30,7 @@ import apiRoutes from "./routes/apiRoutes";
   app.use("/api", apiRoutes);
 
   try {
-    await connect("mongodb://127.0.0.1:27017/game", {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await connect("mongodb://127.0.0.1:27017/game");
     console.log("mongoose connected");
     connection.on("error", () => console.log("mongoose conneciton error"));
 
