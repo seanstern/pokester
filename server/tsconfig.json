@@ -5,5 +5,11 @@
     "outDir": "build",
     "sourceMap": true
   },
-  "exclude": ["**/*.spec.ts"]
+  "exclude": [
+    "**/*.test.ts",
+    "**/__fixtures__/**",
+    "**/*.fixture.ts",
+    "**/__snapshots__/**",
+    "**/*.snap"
+  ]
 }
