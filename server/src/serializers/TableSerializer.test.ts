@@ -1,4 +1,4 @@
-import { Table, BettingRound } from "@chevtek/poker-engine";
+import { Table } from "@chevtek/poker-engine";
 import * as TableFixtures from "../__fixtures__/poker-engine/Table.fixture";
 import { asJestCasesTable } from "../__fixtures__/TestCaseUtils";
 import { deserialize, serialize } from "./TableSerializer";
