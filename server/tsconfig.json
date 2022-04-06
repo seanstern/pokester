@@ -4,12 +4,5 @@
   "compilerOptions": {
     "outDir": "build",
     "sourceMap": true
-  },
-  "exclude": [
-    "**/*.test.ts",
-    "**/__fixtures__/**",
-    "**/*.fixture.ts",
-    "**/__snapshots__/**",
-    "**/*.snap"
-  ]
+  }
 }
