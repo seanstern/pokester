@@ -1,12 +1,11 @@
 import { Table } from "@chevtek/poker-engine";
-import { Schema, model } from "mongoose";
-import { deserialize, serialize } from "../serializers/TableSerializer";
+import { Schema } from "mongoose";
+import { deserialize, serialize } from "../../serializers/TableSerializer";
 
 /**
  * The interface for a PokerRoom document stored in MongoDB
  *
- * Intended to be private (i.e. scoped solely to this file)
- * because clients should NOT have
+ * Intended to be private because clients should NOT have
  *   - write access to creatorId
  *   - read or write access to serializedTable; it merely
  *     supplies the information to produce a deserialzed
@@ -41,7 +40,7 @@ interface SerializedPokerRoomDoc {
   playerIds: string[];
 }
 
-const pokerRoomSchema = new Schema<SerializedPokerRoomDoc>(
+const PokerRoomSchema = new Schema<SerializedPokerRoomDoc>(
   {
     name: {
       type: String,
@@ -73,9 +72,8 @@ const pokerRoomSchema = new Schema<SerializedPokerRoomDoc>(
  * The interface for a PokerRoom document pre- and post-initialization
  * (c.f. https://mongoosejs.com/docs/api.html#document_Document-init)
  *
- * Intended to be private (i.e. scoped solely to this file) for
- * all reasons specified in SerializedPokerRoomDoc and clients
- * should not have
+ * Intended to be private for all reasons specified in
+ * SerializedPokerRoomDoc and because clients should not have
  *    - read or write access to deserializedTable; it merely
  *      supplies a safe read/write locaiton for virtual table
  *      getter and setter (to be defined below)
@@ -83,7 +81,7 @@ const pokerRoomSchema = new Schema<SerializedPokerRoomDoc>(
  * This interface is useful for private read and writes via middleware
  * (c.f. https://mongoosejs.com/docs/middleware.html)
  */
-interface DeserializedPokerRoomDoc extends SerializedPokerRoomDoc {
+export interface DeserializedPokerRoomDoc extends SerializedPokerRoomDoc {
   deserializedTable: Table;
 }
 
@@ -119,8 +117,7 @@ const virtualTableGetter = function (this: DeserializedPokerRoomDoc) {
   return this.deserializedTable;
 };
 
-pokerRoomSchema
-  .virtual("table")
+PokerRoomSchema.virtual("table")
   .set(virtualTableSetter)
   .get(virtualTableGetter);
 
@@ -132,7 +129,7 @@ pokerRoomSchema
 const postInitDeserializeTable = function (this: DeserializedPokerRoomDoc) {
   virtualTableSetter.call(this, deserialize(this.serializedTable));
 };
-pokerRoomSchema.post("init", postInitDeserializeTable);
+PokerRoomSchema.post("init", postInitDeserializeTable);
 
 /**
  * Sets the virtual table field before writing to MongoDB.
@@ -146,13 +143,13 @@ pokerRoomSchema.post("init", postInitDeserializeTable);
 const preSaveSerializeTable = function (this: DeserializedPokerRoomDoc) {
   virtualTableSetter.call(this, this.deserializedTable);
 };
-pokerRoomSchema.pre("save", preSaveSerializeTable);
+PokerRoomSchema.pre("save", preSaveSerializeTable);
 
 /**
  * The public interface for a PokerRoom
  *
  */
-interface PokerRoomDoc {
+export interface PokerRoomDoc {
   /** The mutable name of the room */
   name: string;
 
@@ -173,7 +170,4 @@ interface PokerRoomDoc {
   table: Table;
 }
 
-export const PokerRoom = model<PokerRoomDoc>(
-  "PokerRoom",
-  (pokerRoomSchema as unknown) as Schema<PokerRoomDoc>
-);
+export default PokerRoomSchema;
