@@ -1,110 +1,48 @@
 import { Table } from "@chevtek/poker-engine";
-import { Schema, model, Model, HydratedDocument } from "mongoose";
+import { Schema, model } from "mongoose";
 import { deserialize, serialize } from "../serializers/TableSerializer";
 import { WithkReadonlyProps } from "./TypeUtils";
 
 /**
- * The document stored in MongoDB
+ * The interface for a PokerRoom document stored in MongoDB
  *
- * Named private because properties that need to be mutated ONLY within
- * this file (via setters and methods) will be be marked as readonly
- * within public interface exposed to clients.
+ * Intended to be private (i.e. scoped solely to this file)
+ * because clients should NOT have
+ *   - write access to creatorId
+ *   - read or write access to serializedTable; it merely
+ *     supplies the information to produce a deserialzed
+ *     Table instance (which clients CAN access); its value
+ *     is written pre-save based on deserialized Table
+ *     instance
+ *   - write access to playerIds; it merely supplies index-based
+ *     querying for playerIds that are otherwise inaccessible
+ *     in the serializedTable instance
+ *
+ * See PokerRoomDoc for fields that are intended for clients
+ *
+ * This interface is useful for private read and writes via middleware
+ * (c.f. https://mongoosejs.com/docs/middleware.html)
  */
-interface PrivatePokerRoomDoc {
+interface SerializedPokerRoomDoc {
   /** The name of the room */
   name: string;
+
   /** The id of the user who created the room */
-  readonly creatorId: string;
-  /**
-   * JSON representation of a Table.
-   *
-   * To be marked as readonly within the public interface exposed to
-   * clients.
-   */
+  creatorId: string;
+
+  /** JSON representation of a Table */
   serializedTable: any;
+
   /**
    * The ids of players in the room.
    *
-   * Represented outside the table in order to enable indexing.
-   * readonly because the field is only mutated via replacement of
-   * the array in the tableSetter
-   *
-   * To be marked as readonly within the public interfacce exposed
-   * to clients.
+   * Represented outside the serializedTable in order to indexed
+   * based queries
    */
-  playerIds: readonly string[];
+  playerIds: string[];
 }
 
-/**
- * Given a Table,
- *  - updates the this.playerIds of the caller to be the players
- *    at the Table
- *  - marks the this.serializedTable as modified and
- *  - returns a serialized verion of the Table.
- * Intended to be used as a setter for serializedTable
- * (c.f. https://mongoosejs.com/docs/tutorials/getters-setters.html#setters)
- *
- * Should only be called by the setTable method below because the typeof
- * serializedTable in PokerRoomDoc is any (i.e. its read/getter type) which
- * would lead to type conflicts on set. Conflict between setter v getter types
- * (Table v any) resolved by marking serlializedTable readonly and exposing
- * getTable and setTable methods in Model that is exposed to client.
- *
- * @param this a hydrated PokerRoomDoc
- * @param t a Table
- * @returns a serialized version of the Table
- */
-const setSerializedTable = function (
-  this: HydratedDocument<PrivatePokerRoomDoc>,
-  t: Table
-) {
-  /**
-   * Runtime check to ensure callers who try use the setter for serializedTable
-   * can only use Table. Necessary because the typeof serializedTable in
-   * PokerRoomDoc is any (i.e. it's read/getter type).
-   */
-  if (!(t instanceof Table)) {
-    throw new Error("Cannot set serializedTable with value that is not Table");
-  }
-  const playerIds = t.players.filter((p) => p !== null).map((p) => p!.id);
-  this.playerIds = playerIds;
-  return serialize(t);
-};
-
-const methods = {
-  /**
-   * Returns the Table represented by the this.serializedTable
-   * of the caller.
-   *
-   * Note: Mutating the this.serializedTable representation in
-   * the db requires calling the setTable method below
-   *
-   * @param this a hydrated PokerRoomDoc
-   * @returns the Table represented by the this.serializedTable
-   */
-  getTable: function (this: HydratedDocument<PrivatePokerRoomDoc>) {
-    return deserialize(this.serializedTable);
-  },
-  /**
-   * Given a Table, updates the this.serializedTable and this.playerIds
-   * of the caller to align to the given Table
-   * @param this a hydrated PokerRoomDoc
-   * @returns void
-   */
-  setTable: function (this: HydratedDocument<PrivatePokerRoomDoc>, t: Table) {
-    this.serializedTable = t;
-  },
-};
-
-type PokerRoomMethods = typeof methods;
-
-type PrivatePokerRoomModel = Model<PrivatePokerRoomDoc, {}, PokerRoomMethods>;
-
-const PokerRoomSchema = new Schema<
-  PrivatePokerRoomDoc,
-  PrivatePokerRoomModel,
-  PokerRoomMethods
->(
+const pokerRoomSchema = new Schema<SerializedPokerRoomDoc>(
   {
     name: {
       type: String,
@@ -124,7 +62,6 @@ const PokerRoomSchema = new Schema<
     serializedTable: {
       type: Schema.Types.Mixed,
       required: true,
-      set: setSerializedTable,
     },
   },
   {
@@ -132,20 +69,112 @@ const PokerRoomSchema = new Schema<
     timestamps: true,
   }
 );
-PokerRoomSchema.method(methods);
 
 /**
- * Clients should not attempt to mutate the fields listed below
- * directly and should instead rely on methods provided via
- * PokerRoomMethods.
+ * The interface for a PokerRoom document pre- and post-initialization
+ * (c.f. https://mongoosejs.com/docs/api.html#document_Document-init)
+ *
+ * Intended to be private (i.e. scoped solely to this file) for
+ * all reasons specified in SerializedPokerRoomDoc and clients
+ * should not have
+ *    - read or write access to deserializedTable; it merely
+ *      supplies a safe read/write locaiton for virtual table
+ *      getter and setter (to be defined below)
+ *
+ * This interface is useful for private read and writes via middleware
+ * (c.f. https://mongoosejs.com/docs/middleware.html)
  */
-type PokerRoomDoc = WithkReadonlyProps<
-  PrivatePokerRoomDoc,
-  "creatorId" | "serializedTable" | "playerIds"
->;
-type PokerRoomModel = Model<PokerRoomDoc, {}, PokerRoomMethods>;
+interface DeserializedPokerRoomDoc extends SerializedPokerRoomDoc {
+  deserializedTable: Table;
+}
 
-export const PokerRoomModel = model<PokerRoomDoc, PokerRoomModel>(
+/**
+ * Given a Table,
+ *  - sets the this.playerIds of the caller to be the players
+ *    at the Table
+ *  - sets this.serializedTable to a serialied version of the Table
+ *  - sets this.deserializedTable to the Table
+ *
+ * Intended to be used as a setter for the virtual table field
+ * (c.f. https://mongoosejs.com/docs/guide.html#virtuals)
+ *
+ * @param this a DeserializedPokerRoomDoc
+ * @param t a Table
+ */
+const virtualTableSetter = function (this: DeserializedPokerRoomDoc, t: Table) {
+  this.playerIds = t.players.filter((p) => p !== null).map((p) => p!.id);
+  this.serializedTable = serialize(t);
+  this.deserializedTable = t;
+};
+
+/**
+ * Returns this.deserializedTable
+ *
+ * Intended to be used as a setter for the virtual table field
+ * (c.f. https://mongoosejs.com/docs/guide.html#virtuals)
+ *
+ * @param this a DeserializedPokerRoomDoc
+ * @returns this.deserializedTable
+ */
+const virtualTableGetter = function (this: DeserializedPokerRoomDoc) {
+  return this.deserializedTable;
+};
+
+pokerRoomSchema
+  .virtual("table")
+  .set(virtualTableSetter)
+  .get(virtualTableGetter);
+
+/**
+ * Initializes the virtual table field after document has been returned
+ * from MongoDB.
+ * @param this a DeserializedPokerRoomDoc
+ */
+const postInitDeserializeTable = function (this: DeserializedPokerRoomDoc) {
+  virtualTableSetter.call(this, deserialize(this.serializedTable));
+};
+pokerRoomSchema.post("init", postInitDeserializeTable);
+
+/**
+ * Sets the virtual table field before writing to MongoDB.
+ *
+ * Note: This ensures that mutations to virtual table are also reflected
+ * in relevant SerializedPokerRoomDoc fields (i.e. serializedTable, playerIds)
+ * before it is written to DB
+ *
+ * @param this a DeserializedPokerRoomDoc
+ */
+const preSaveSerializeTable = function (this: DeserializedPokerRoomDoc) {
+  virtualTableSetter.call(this, this.deserializedTable);
+};
+pokerRoomSchema.pre("save", preSaveSerializeTable);
+
+/**
+ * The public interface for a PokerRoom
+ *
+ */
+interface PokerRoomDoc {
+  /** The mutable name of the room */
+  name: string;
+
+  /** The immutable id of the creator */
+  readonly creatorId: string;
+
+  /**
+   * The ids of players at the table.
+   *
+   * Not directly mutable via assignment or array mutation methods.
+   * Mutated implicitly via state of table field.
+   *
+   * Represented outside the table to alllow for index-based queries
+   */
+  readonly playerIds: readonly string[];
+
+  /** The table */
+  table: Table;
+}
+
+export const PokerRoom = model<PokerRoomDoc>(
   "PokerRoom",
-  PokerRoomSchema
+  (pokerRoomSchema as unknown) as Schema<PokerRoomDoc>
 );
