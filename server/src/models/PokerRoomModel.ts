@@ -1,7 +1,6 @@
 import { Table } from "@chevtek/poker-engine";
 import { Schema, model } from "mongoose";
 import { deserialize, serialize } from "../serializers/TableSerializer";
-import { WithkReadonlyProps } from "./TypeUtils";
 
 /**
  * The interface for a PokerRoom document stored in MongoDB
