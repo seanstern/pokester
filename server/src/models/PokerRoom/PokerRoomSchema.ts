@@ -1,5 +1,5 @@
 import { Table } from "@chevtek/poker-engine";
-import { Schema } from "mongoose";
+import { Model, Schema } from "mongoose";
 import { deserialize, serialize } from "../../serializers/TableSerializer";
 
 /**
@@ -21,7 +21,7 @@ import { deserialize, serialize } from "../../serializers/TableSerializer";
  * This interface is useful for private read and writes via middleware
  * (c.f. https://mongoosejs.com/docs/middleware.html)
  */
-interface SerializedPokerRoomDoc {
+export interface SerializedPokerRoomDoc {
   /** The name of the room */
   name: string;
 
@@ -40,7 +40,18 @@ interface SerializedPokerRoomDoc {
   playerIds: string[];
 }
 
-const PokerRoomSchema = new Schema<SerializedPokerRoomDoc>(
+export type SerializedPokerRoomModel = Model<
+  SerializedPokerRoomDoc,
+  {},
+  {},
+  { table: Table }
+>;
+const PokerRoomSchema = new Schema<
+  SerializedPokerRoomDoc,
+  SerializedPokerRoomModel,
+  {},
+  {}
+>(
   {
     name: {
       type: String,
@@ -86,6 +97,20 @@ export interface DeserializedPokerRoomDoc extends SerializedPokerRoomDoc {
 }
 
 /**
+ * Given a Table, returns the ids of each of the players at the Table.
+ * @param t a Table
+ * @returns an array containing the ids of each of the player sat the Table.
+ */
+export const getPlayerIds = (t: Table) =>
+  t.players.filter((p) => p !== null).map((p) => p!.id);
+
+type VirtualTableSetterThis = Partial<
+  Pick<
+    DeserializedPokerRoomDoc,
+    "playerIds" | "serializedTable" | "deserializedTable"
+  >
+>;
+/**
  * Given a Table,
  *  - sets the this.playerIds of the caller to be the players
  *    at the Table
@@ -95,25 +120,32 @@ export interface DeserializedPokerRoomDoc extends SerializedPokerRoomDoc {
  * Intended to be used as a setter for the virtual table field
  * (c.f. https://mongoosejs.com/docs/guide.html#virtuals)
  *
- * @param this a DeserializedPokerRoomDoc
+ * @param this a VirtualTableSetterThis
  * @param t a Table
  */
-const virtualTableSetter = function (this: DeserializedPokerRoomDoc, t: Table) {
-  this.playerIds = t.players.filter((p) => p !== null).map((p) => p!.id);
+export const virtualTableSetter = function (
+  this: VirtualTableSetterThis,
+  t: Table
+) {
+  this.playerIds = getPlayerIds(t);
   this.serializedTable = serialize(t);
   this.deserializedTable = t;
 };
 
+type VirtualTableGetterThis = Pick<
+  DeserializedPokerRoomDoc,
+  "deserializedTable"
+>;
 /**
  * Returns this.deserializedTable
  *
  * Intended to be used as a setter for the virtual table field
  * (c.f. https://mongoosejs.com/docs/guide.html#virtuals)
  *
- * @param this a DeserializedPokerRoomDoc
+ * @param this a VirtualTableGetterThis
  * @returns this.deserializedTable
  */
-const virtualTableGetter = function (this: DeserializedPokerRoomDoc) {
+export const virtualTableGetter = function (this: VirtualTableGetterThis) {
   return this.deserializedTable;
 };
 
@@ -121,16 +153,26 @@ PokerRoomSchema.virtual("table")
   .set(virtualTableSetter)
   .get(virtualTableGetter);
 
+type PostInitDeserializeTableThis = Pick<
+  SerializedPokerRoomDoc,
+  "serializedTable"
+>;
 /**
  * Initializes the virtual table field after document has been returned
  * from MongoDB.
- * @param this a DeserializedPokerRoomDoc
+ * @param this a PostInitDeserializeTableThis
  */
-const postInitDeserializeTable = function (this: DeserializedPokerRoomDoc) {
+export const postInitDeserializeTable = function (
+  this: PostInitDeserializeTableThis
+) {
   virtualTableSetter.call(this, deserialize(this.serializedTable));
 };
 PokerRoomSchema.post("init", postInitDeserializeTable);
 
+type PreValidateSerializeTableThis = Pick<
+  DeserializedPokerRoomDoc,
+  "deserializedTable"
+>;
 /**
  * Sets the virtual table field before writing to MongoDB.
  *
@@ -138,12 +180,14 @@ PokerRoomSchema.post("init", postInitDeserializeTable);
  * in relevant SerializedPokerRoomDoc fields (i.e. serializedTable, playerIds)
  * before it is written to DB
  *
- * @param this a DeserializedPokerRoomDoc
+ * @param this a VirtualTableSetterThis
  */
-const preSaveSerializeTable = function (this: DeserializedPokerRoomDoc) {
+export const preValidateSerializeTable = function (
+  this: PreValidateSerializeTableThis
+) {
   virtualTableSetter.call(this, this.deserializedTable);
 };
-PokerRoomSchema.pre("save", preSaveSerializeTable);
+PokerRoomSchema.pre("validate", preValidateSerializeTable);
 
 /**
  * The public interface for a PokerRoom
