@@ -8,4 +8,5 @@ module.exports = {
     "<rootDir>/.*__fixtures__",
     "<rootDir>/.*\\.fixture\\.ts$",
   ],
+  clearMocks: true,
 };
