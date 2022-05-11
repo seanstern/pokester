@@ -3,7 +3,8 @@
   "workspaces": [
     "client",
     "server",
-    "poker-engine"
+    "poker-engine",
+    "common-api"
   ],
   "packageManager": "yarn@3.2.0"
 }
