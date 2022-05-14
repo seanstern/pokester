@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {
     "@chevtek/poker-engine": "workspace:*",
+    "common-api": "workspace:*",
     "connect-mongo": "^4.4.1",
     "express": "^4.17.1",
     "express-session": "^1.17.1",

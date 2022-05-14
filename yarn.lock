@@ -5994,7 +5994,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"common-api@workspace:common-api":
+"common-api@workspace:*, common-api@workspace:common-api":
   version: 0.0.0-use.local
   resolution: "common-api@workspace:common-api"
   dependencies:
@@ -13625,6 +13625,7 @@ __metadata:
     "@types/node": ^17.0.21
     "@typescript-eslint/eslint-plugin": ^4.22.0
     "@typescript-eslint/parser": ^4.22.0
+    common-api: "workspace:*"
     connect-mongo: ^4.4.1
     eslint: ^7.24.0
     eslint-config-prettier: ^8.2.0
