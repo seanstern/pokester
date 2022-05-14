@@ -2,6 +2,7 @@
   "name": "common-api",
   "packageManager": "yarn@3.2.0",
   "private": true,
+  "main": "./build/index.js",
   "dependencies": {
     "@chevtek/poker-engine": "workspace:*"
   },
