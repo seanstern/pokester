@@ -12,7 +12,6 @@ type Table = Pick<
   | "dealerPosition"
   | "handNumber"
   | "smallBlindPosition"
-  | "winners"
   | "buyIn"
   | "smallBlind"
   | "bigBlind"
