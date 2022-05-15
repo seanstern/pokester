@@ -4,7 +4,9 @@ import Card from "./Card";
 type CommonPlayer = Pick<
   PokerEnginePlayer,
   "bet" | "folded" | "left" | "id" | "stackSize"
->;
+> & {
+  holeCards?: [Card, Card];
+};
 
 export enum PlayerAction {
   CHECK = "check",
@@ -16,7 +18,6 @@ export enum PlayerAction {
 
 type SelfPlayer = CommonPlayer & {
   isSelf: true;
-  holeCards?: [Card, Card];
   legalActions?: PlayerAction[];
 };
 
