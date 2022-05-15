@@ -4,12 +4,14 @@ import { Card as CommonAPICard } from "common-api";
 /**
  * Given a poker-engine (i.e. server-side runtime) representation of a Card,
  * returns a common-api (i.e. serializable, server-to-client) representaiton
- * of a Card.
+ * of a Card from the perspective of a player
  * @param c a poker-engine (i.e. server-side runtime) representatio of a Card
  * @returns a common-api (i.e. serializable, server-to-client) representation
  *   of a Card
  */
-export const playerView = (c: PokerEngineCard): CommonAPICard => {
+const viewOfCard = (c: PokerEngineCard): CommonAPICard => {
   const { rank, suit, color, suitChar } = c;
   return { rank, suit, color, suitChar };
 };
+
+export default viewOfCard;
