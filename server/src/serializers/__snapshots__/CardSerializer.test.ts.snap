@@ -1,0 +1,365 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`serialize produces valid JSON when given Card ace of clubs 1`] = `
+Object {
+  "_rank": "A",
+  "_suit": "c",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card ace of diamonds 1`] = `
+Object {
+  "_rank": "A",
+  "_suit": "d",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card ace of hearts 1`] = `
+Object {
+  "_rank": "A",
+  "_suit": "h",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card ace of spades 1`] = `
+Object {
+  "_rank": "A",
+  "_suit": "s",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card eight of clubs 1`] = `
+Object {
+  "_rank": "8",
+  "_suit": "c",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card eight of diamonds 1`] = `
+Object {
+  "_rank": "8",
+  "_suit": "d",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card eight of hearts 1`] = `
+Object {
+  "_rank": "8",
+  "_suit": "h",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card eight of spades 1`] = `
+Object {
+  "_rank": "8",
+  "_suit": "s",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card five of clubs 1`] = `
+Object {
+  "_rank": "5",
+  "_suit": "c",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card five of diamonds 1`] = `
+Object {
+  "_rank": "5",
+  "_suit": "d",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card five of hearts 1`] = `
+Object {
+  "_rank": "5",
+  "_suit": "h",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card five of spades 1`] = `
+Object {
+  "_rank": "5",
+  "_suit": "s",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card four of clubs 1`] = `
+Object {
+  "_rank": "4",
+  "_suit": "c",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card four of diamonds 1`] = `
+Object {
+  "_rank": "4",
+  "_suit": "d",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card four of hearts 1`] = `
+Object {
+  "_rank": "4",
+  "_suit": "h",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card four of spades 1`] = `
+Object {
+  "_rank": "4",
+  "_suit": "s",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card jack of clubs 1`] = `
+Object {
+  "_rank": "J",
+  "_suit": "c",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card jack of diamonds 1`] = `
+Object {
+  "_rank": "J",
+  "_suit": "d",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card jack of hearts 1`] = `
+Object {
+  "_rank": "J",
+  "_suit": "h",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card jack of spades 1`] = `
+Object {
+  "_rank": "J",
+  "_suit": "s",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card king of clubs 1`] = `
+Object {
+  "_rank": "K",
+  "_suit": "c",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card king of diamonds 1`] = `
+Object {
+  "_rank": "K",
+  "_suit": "d",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card king of hearts 1`] = `
+Object {
+  "_rank": "K",
+  "_suit": "h",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card king of spades 1`] = `
+Object {
+  "_rank": "K",
+  "_suit": "s",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card nine of clubs 1`] = `
+Object {
+  "_rank": "9",
+  "_suit": "c",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card nine of diamonds 1`] = `
+Object {
+  "_rank": "9",
+  "_suit": "d",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card nine of hearts 1`] = `
+Object {
+  "_rank": "9",
+  "_suit": "h",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card nine of spades 1`] = `
+Object {
+  "_rank": "9",
+  "_suit": "s",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card queen of clubs 1`] = `
+Object {
+  "_rank": "Q",
+  "_suit": "c",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card queen of diamonds 1`] = `
+Object {
+  "_rank": "Q",
+  "_suit": "d",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card queen of hearts 1`] = `
+Object {
+  "_rank": "Q",
+  "_suit": "h",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card queen of spades 1`] = `
+Object {
+  "_rank": "Q",
+  "_suit": "s",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card seven of clubs 1`] = `
+Object {
+  "_rank": "7",
+  "_suit": "c",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card seven of diamonds 1`] = `
+Object {
+  "_rank": "7",
+  "_suit": "d",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card seven of hearts 1`] = `
+Object {
+  "_rank": "7",
+  "_suit": "h",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card seven of spades 1`] = `
+Object {
+  "_rank": "7",
+  "_suit": "s",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card six of clubs 1`] = `
+Object {
+  "_rank": "6",
+  "_suit": "c",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card six of diamonds 1`] = `
+Object {
+  "_rank": "6",
+  "_suit": "d",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card six of hearts 1`] = `
+Object {
+  "_rank": "6",
+  "_suit": "h",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card six of spades 1`] = `
+Object {
+  "_rank": "6",
+  "_suit": "s",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card ten of clubs 1`] = `
+Object {
+  "_rank": "T",
+  "_suit": "c",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card ten of diamonds 1`] = `
+Object {
+  "_rank": "T",
+  "_suit": "d",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card ten of hearts 1`] = `
+Object {
+  "_rank": "T",
+  "_suit": "h",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card ten of spades 1`] = `
+Object {
+  "_rank": "T",
+  "_suit": "s",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card three of clubs 1`] = `
+Object {
+  "_rank": "3",
+  "_suit": "c",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card three of diamonds 1`] = `
+Object {
+  "_rank": "3",
+  "_suit": "d",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card three of hearts 1`] = `
+Object {
+  "_rank": "3",
+  "_suit": "h",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card three of spades 1`] = `
+Object {
+  "_rank": "3",
+  "_suit": "s",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card two of clubs 1`] = `
+Object {
+  "_rank": "2",
+  "_suit": "c",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card two of diamonds 1`] = `
+Object {
+  "_rank": "2",
+  "_suit": "d",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card two of hearts 1`] = `
+Object {
+  "_rank": "2",
+  "_suit": "h",
+}
+`;
+
+exports[`serialize produces valid JSON when given Card two of spades 1`] = `
+Object {
+  "_rank": "2",
+  "_suit": "s",
+}
+`;
