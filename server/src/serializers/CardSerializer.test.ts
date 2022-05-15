@@ -1,4 +1,4 @@
-import { CardSuit, CardRank, Card } from "@chevtek/poker-engine";
+import { CardSuit, CardRank } from "@chevtek/poker-engine";
 import CardFixtures from "../__fixtures__/poker-engine/Card.fixture";
 import { asJestCasesTable } from "../__fixtures__/TestCaseUtils";
 import { serialize, deserialize } from "./CardSerializer";
