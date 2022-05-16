@@ -16,15 +16,13 @@ export enum PlayerAction {
   FOLD = "fold",
 }
 
-type SelfPlayer = CommonPlayer & {
+export type SelfPlayer = CommonPlayer & {
   isSelf: true;
   legalActions?: PlayerAction[];
 };
 
-type OpponentPlayer = CommonPlayer & {
+export type OpponentPlayer = CommonPlayer & {
   isSelf: false;
 };
 
-type Player = SelfPlayer | OpponentPlayer;
-
-export default Player;
+export type Player = SelfPlayer | OpponentPlayer;

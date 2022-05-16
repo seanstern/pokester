@@ -1,5 +1,5 @@
 import { Pot as PokerEnginePot } from "@chevtek/poker-engine";
-import Player from "./Player";
+import { Player } from "./Player";
 
 type Pot = Pick<PokerEnginePot, "amount"> & {
   eligiblePlayers: Player[];

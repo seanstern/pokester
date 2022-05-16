@@ -1,6 +1,6 @@
 import { Table as PokerEngineTable } from "@chevtek/poker-engine";
 import Card from "./Card";
-import Player from "./Player";
+import { Player } from "./Player";
 import Pot from "./Pot";
 
 type Table = Pick<
