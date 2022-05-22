@@ -75,6 +75,7 @@ const viewOfPlayer = (
   } = p;
 
   const isSelf = p.id === viewerId;
+  const canViewHoleCards = !folded && (isSelf || showCards);
 
   return {
     bet,
@@ -83,8 +84,9 @@ const viewOfPlayer = (
     id,
     stackSize,
     isSelf,
-    holeCards:
-      isSelf || showCards ? viewOfHoleCards(pokerEngineHoleCards) : undefined,
+    holeCards: canViewHoleCards
+      ? viewOfHoleCards(pokerEngineHoleCards)
+      : undefined,
     legalActions: isSelf ? viewOfLegalActions(p) : undefined,
   };
 };
