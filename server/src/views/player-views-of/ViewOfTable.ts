@@ -4,10 +4,7 @@ import viewOfCard from "./ViewOfCard";
 import viewOfPlayer from "./ViewOfPlayer";
 import viewOfPot from "./ViewOfPot";
 
-export const viewOfTable = (
-  viewerId: string,
-  t: PokerEngineTable
-): CommonAPITable => {
+const viewOfTable = (viewerId: string, t: PokerEngineTable): CommonAPITable => {
   const {
     bigBlindPosition,
     currentBet,
