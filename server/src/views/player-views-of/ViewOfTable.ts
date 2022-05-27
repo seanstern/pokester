@@ -4,7 +4,7 @@ import viewOfCard from "./ViewOfCard";
 import viewOfPlayer from "./ViewOfPlayer";
 import viewOfPot from "./ViewOfPot";
 
-export const playerView = (
+export const viewOfTable = (
   viewerId: string,
   t: PokerEngineTable
 ): CommonAPITable => {
@@ -54,3 +54,5 @@ export const playerView = (
       : undefined,
   };
 };
+
+export default viewOfTable;
