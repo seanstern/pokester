@@ -69,10 +69,11 @@ export const get: RequestHandler<
     return;
   } catch (err) {
     next(err);
+    return;
   }
 };
 
-type ActReqParams = {
+export type ActReqParams = {
   id: string;
 };
 type BetActReqBody = {
@@ -92,7 +93,7 @@ type CheckActReqBody = {
 type FoldActReqBody = {
   action: PlayerAction.FOLD;
 };
-type ActReqBody =
+export type ActReqBody =
   | BetActReqBody
   | CallActReqBody
   | RaiseActReqBody
@@ -143,7 +144,7 @@ export const act: RequestHandler<
         currentActor.foldAction();
         break;
       default:
-        throw new Error("action is invalid");
+        throw new Error(`action "${(body as any).action}" is invalid`);
     }
 
     await pr.save();
