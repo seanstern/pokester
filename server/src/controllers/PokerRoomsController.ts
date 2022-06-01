@@ -10,6 +10,21 @@ export type CreateReqBody = {
   smallBlind?: number;
   bigBlind?: number;
 };
+/**
+ * Given an HTTP request to create a new PokerRoom, an HTTP response, and a
+ * callback, attempts to create a new PokerRoom. Responds with a status of
+ * 201 and a json string representing the id of the PokerRoom when successful;
+ * calls the callback with error information upon failure.
+ * @param req  an HTTP request
+ * @param req.sessionID the id of the requester's session
+ * @param req.body the body of the HTTP request
+ * @param req.body.name the name of the PokerRoom
+ * @param req.body.buyIn the (optional) minimum buy in for the table
+ * @param req.body.smallBlind the (optional) small blind for the table
+ * @param req.body.smallBlind the (optional) big blind for the table
+ * @param res the HTTP response
+ * @param next the callback
+ */
 export const create: RequestHandler<
   never,
   string,
@@ -44,9 +59,27 @@ export const create: RequestHandler<
 export type GetReqParams = {
   id: string;
 };
+export type GetResBody = {
+  id: string;
+  name: string;
+  table: CommonAPITable;
+};
+/**
+ * Given an HTTP request to get a PokerRoom, an HTTP response, and a
+ * callback, attempts to respond with a JSON representation of the
+ * PokerRoom. Responds with a status of 200 and JSON representation of
+ * the PokerRoom when successful; calls the callback with error information
+ * upon failure.
+ * @param req  an HTTP request
+ * @param req.sessionID the id of the requester's session
+ * @param req.params the route parametes
+ * @param req.params.id the id of the requested PokerRoom
+ * @param res the HTTP response
+ * @param next the callback
+ */
 export const get: RequestHandler<
   GetReqParams,
-  CommonAPITable,
+  GetResBody,
   never,
   never,
   never
@@ -54,18 +87,23 @@ export const get: RequestHandler<
   try {
     const {
       sessionID,
-      params: { id: roomId },
+      params: { id },
     } = req;
 
     const pr = await PokerRoom.findOne({
-      _id: roomId,
+      _id: id,
       playerIds: sessionID,
     }).exec();
     if (!pr) {
       throw new Error("PokerRoom does not exist");
     }
 
-    res.status(200).json(viewOfTable(sessionID, pr.table));
+    const { name, table } = pr;
+    res.status(200).json({
+      id,
+      name,
+      table: viewOfTable(sessionID, table),
+    });
     return;
   } catch (err) {
     next(err);
@@ -99,7 +137,19 @@ export type ActReqBody =
   | RaiseActReqBody
   | CheckActReqBody
   | FoldActReqBody;
-
+/**
+ * Given an HTTP request to take a PlayerAction in PokerRoom, an HTTP response,
+ * and a callback, attempts to take the action specified in the request.
+ * Responds with a status of 204 when successful; calls the callback with error
+ * information upon failure.
+ * @param req  an HTTP request
+ * @param req.sessionID the id of the requester's session
+ * @param req.params the route parametes
+ * @param req.params.id the id of the requested PokerRoom
+ * @param req.body the action to be taken
+ * @param res the HTTP response
+ * @param next the callback
+ */
 export const act: RequestHandler<
   ActReqParams,
   never,
