@@ -10,7 +10,7 @@ import viewOfPlayer from "./ViewOfPlayer";
 describe("viewOfPlayer produces vaild JSON when given a Player", () => {
   describe("that represents the viewer", () => {
     describe("with holeCards present", () => {
-      it("with legalActions present", () => {
+      test("with legalActions present", () => {
         const player = currentActorPostDealPreFlop.create();
         const { id: viewerId } = player;
         const view = viewOfPlayer(viewerId, player);
@@ -50,7 +50,7 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
         `);
       });
 
-      it("with legalActions absent", () => {
+      test("with legalActions absent", () => {
         const player = priorActorPostDealPreFlop.create();
         const { id: viewerId } = player;
         const view = viewOfPlayer(viewerId, player);
@@ -90,7 +90,7 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
     });
 
     describe("with holeCards, legalActions both absent", () => {
-      it("player has no holeCards", () => {
+      test("player has no holeCards", () => {
         const player = playerSeated.create();
         const { id: viewerId } = player;
         const view = viewOfPlayer(viewerId, player);
@@ -113,7 +113,7 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
         `);
       });
 
-      it("player folded", () => {
+      test("player folded", () => {
         const player = playerSeated.create();
         const { id: viewerId } = player;
         const view = viewOfPlayer(viewerId, player);
@@ -139,7 +139,7 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
   });
 
   describe("the represents an opponent", () => {
-    it("with holeCards present (because opponent is showing cards)", () => {
+    test("with holeCards present (because opponent is showing cards)", () => {
       const player = winner.create();
       const { id: playerId } = player;
       const notPlayerId = `diffThan${playerId}`;
@@ -181,7 +181,7 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
       `);
     });
 
-    it("with holeCards absent", () => {
+    test("with holeCards absent", () => {
       const player = currentActorPostDealPreFlop.create();
       const { id: playerId } = player;
       const notPlayerId = `diffThan${playerId}`;
