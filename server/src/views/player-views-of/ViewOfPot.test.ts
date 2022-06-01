@@ -6,7 +6,7 @@ import {
 import viewOfPot from "./ViewOfPot";
 
 describe("viewOfPot produces valid JSON when given", () => {
-  it(emptyPot.description, () => {
+  test(emptyPot.description, () => {
     const view = viewOfPot("anyId", emptyPot.create());
     expect(view.eligiblePlayers).toStrictEqual([]);
     expect(view.winners).toBeUndefined();
@@ -20,7 +20,7 @@ describe("viewOfPot produces valid JSON when given", () => {
   });
 
   describe(potWithEligiblePlayersNoWinners.description, () => {
-    it("and viewerId in eligiblePlayers", () => {
+    test("and viewerId in eligiblePlayers", () => {
       const pot = potWithEligiblePlayersNoWinners.create();
       if (pot.eligiblePlayers.length < 1) {
         throw new Error("eligiblePlayers is empty");
@@ -96,7 +96,7 @@ describe("viewOfPot produces valid JSON when given", () => {
       `);
     });
 
-    it("and viewerId not in eligiblePlayers", () => {
+    test("and viewerId not in eligiblePlayers", () => {
       const pot = potWithEligiblePlayersNoWinners.create();
       const nonEligiblePlayerId = "nonEligiblePlayerIdValue";
       if (
@@ -165,7 +165,7 @@ describe("viewOfPot produces valid JSON when given", () => {
   });
 
   describe(potWithWinners.description, () => {
-    it("and viewerId in winners", () => {
+    test("and viewerId in winners", () => {
       const pot = potWithWinners.create();
       const { id: viewierId } = pot.winners[0];
       const view = viewOfPot(viewierId, pot);
@@ -278,7 +278,7 @@ describe("viewOfPot produces valid JSON when given", () => {
       `);
     });
 
-    it("and viewerId not in winners", () => {
+    test("and viewerId not in winners", () => {
       const pot = potWithWinners.create();
       const nonWinnerPlayerId = "nonWinnerPlayerIdValue";
       if (
