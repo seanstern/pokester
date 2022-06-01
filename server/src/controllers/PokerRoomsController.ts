@@ -1,15 +1,10 @@
 import { RequestHandler } from "express";
 import { Table } from "@chevtek/poker-engine";
-import { Table as CommonAPITable, PlayerAction, Player } from "common-api";
+import { Routes } from "common-api";
 import PokerRoom from "../models/PokerRoom";
 import viewOfTable from "../views/player-views-of/ViewOfTable";
 
-export type CreateReqBody = {
-  name: string;
-  buyIn?: number;
-  smallBlind?: number;
-  bigBlind?: number;
-};
+export type CreateReqBody = Routes.PokerRooms.Create.ReqBody;
 /**
  * Given an HTTP request to create a new PokerRoom, an HTTP response, and a
  * callback, attempts to create a new PokerRoom. Responds with a status of
@@ -59,11 +54,7 @@ export const create: RequestHandler<
 export type GetReqParams = {
   id: string;
 };
-export type GetResBody = {
-  id: string;
-  name: string;
-  table: CommonAPITable;
-};
+export type GetResBody = Routes.PokerRooms.Get.ResBody;
 /**
  * Given an HTTP request to get a PokerRoom, an HTTP response, and a
  * callback, attempts to respond with a JSON representation of the
@@ -114,29 +105,7 @@ export const get: RequestHandler<
 export type ActReqParams = {
   id: string;
 };
-type BetActReqBody = {
-  action: PlayerAction.BET;
-  amount: number;
-};
-type CallActReqBody = {
-  action: PlayerAction.CALL;
-};
-type RaiseActReqBody = {
-  action: PlayerAction.RAISE;
-  amount: number;
-};
-type CheckActReqBody = {
-  action: PlayerAction.CHECK;
-};
-type FoldActReqBody = {
-  action: PlayerAction.FOLD;
-};
-export type ActReqBody =
-  | BetActReqBody
-  | CallActReqBody
-  | RaiseActReqBody
-  | CheckActReqBody
-  | FoldActReqBody;
+export type ActReqBody = Routes.PokerRooms.Act.ReqBody;
 /**
  * Given an HTTP request to take a PlayerAction in PokerRoom, an HTTP response,
  * and a callback, attempts to take the action specified in the request.
@@ -178,19 +147,19 @@ export const act: RequestHandler<
     }
 
     switch (body.action) {
-      case PlayerAction.BET:
+      case Routes.PokerRooms.Act.PlayerAction.BET:
         currentActor.betAction(body.amount);
         break;
-      case PlayerAction.CALL:
+      case Routes.PokerRooms.Act.PlayerAction.CALL:
         currentActor.callAction();
         break;
-      case PlayerAction.RAISE:
+      case Routes.PokerRooms.Act.PlayerAction.RAISE:
         currentActor.raiseAction(body.amount);
         break;
-      case PlayerAction.CHECK:
+      case Routes.PokerRooms.Act.PlayerAction.CHECK:
         currentActor.checkAction();
         break;
-      case PlayerAction.FOLD:
+      case Routes.PokerRooms.Act.PlayerAction.FOLD:
         currentActor.foldAction();
         break;
       default:

@@ -1,5 +1,5 @@
 import { Pot as PokerEnginePot } from "@chevtek/poker-engine";
-import { Pot as CommonAPIPot } from "common-api";
+import { Routes } from "common-api";
 import viewOfPlayer from "./ViewOfPlayer";
 
 /**
@@ -11,7 +11,10 @@ import viewOfPlayer from "./ViewOfPlayer";
  * @returns a common-api (i.e. serializable, server-to-client) representation
  *   of a Pot from the perspective of a player
  */
-const viewOfPot = (viewerId: string, p: PokerEnginePot): CommonAPIPot => {
+const viewOfPot = (
+  viewerId: string,
+  p: PokerEnginePot
+): Routes.PokerRooms.Get.Pot => {
   const {
     amount,
     eligiblePlayers: pokerEngineEligiblePlayers,

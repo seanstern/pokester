@@ -1,5 +1,8 @@
 import { NextFunction } from "express";
 import { getMockReq, getMockRes } from "@jest-mock/express";
+import { Routes } from "common-api";
+import PokerRoom from "../models/PokerRoom";
+import { flop } from "../__fixtures__/poker-engine/Table.fixture";
 import {
   create,
   CreateReqBody,
@@ -9,9 +12,6 @@ import {
   ActReqParams,
   ActReqBody,
 } from "./PokerRoomsController";
-import PokerRoom from "../models/PokerRoom";
-import { flop } from "../__fixtures__/poker-engine/Table.fixture";
-import { PlayerAction } from "common-api";
 
 // Common mocks
 const mockSave = jest
@@ -304,10 +304,16 @@ describe("get", () => {
 describe("act", () => {
   describe("succeeds", () => {
     const actionCaseTable: [string, ActReqBody][] = [
-      ["checks", { action: PlayerAction.CHECK }],
-      ["bets", { action: PlayerAction.BET, amount: bigBlind }],
-      ["raise", { action: PlayerAction.RAISE, amount: bigBlind }],
-      ["folds", { action: PlayerAction.FOLD }],
+      ["checks", { action: Routes.PokerRooms.Act.PlayerAction.CHECK }],
+      [
+        "bets",
+        { action: Routes.PokerRooms.Act.PlayerAction.BET, amount: bigBlind },
+      ],
+      [
+        "raise",
+        { action: Routes.PokerRooms.Act.PlayerAction.RAISE, amount: bigBlind },
+      ],
+      ["folds", { action: Routes.PokerRooms.Act.PlayerAction.FOLD }],
     ];
     test.each(actionCaseTable)("when player %s", async (_, body) => {
       const params: ActReqParams = roomIdParam;
@@ -343,7 +349,9 @@ describe("act", () => {
       mockExec.mockResolvedValueOnce(null);
 
       const params: ActReqParams = roomIdParam;
-      const body: ActReqBody = { action: PlayerAction.CHECK };
+      const body: ActReqBody = {
+        action: Routes.PokerRooms.Act.PlayerAction.CHECK,
+      };
       // Ignore getMockReq type parameter because typing is
       // overly restrictive (i.e. doesn't allow never in
       // ResponseBody)
@@ -371,7 +379,9 @@ describe("act", () => {
 
     test("when player is not currentActor", async () => {
       const params: ActReqParams = roomIdParam;
-      const body: ActReqBody = { action: PlayerAction.FOLD };
+      const body: ActReqBody = {
+        action: Routes.PokerRooms.Act.PlayerAction.FOLD,
+      };
       // Ignore getMockReq type parameter because typing is
       // overly restrictive (i.e. doesn't allow never in
       // ResponseBody)
@@ -399,7 +409,11 @@ describe("act", () => {
     test("when action is invalid", async () => {
       const params: ActReqParams = roomIdParam;
       const invalidActionValue = "invalidActionValue";
-      if (Object.values(PlayerAction).includes(invalidActionValue as any)) {
+      if (
+        Object.values(Routes.PokerRooms.Act.PlayerAction).includes(
+          invalidActionValue as any
+        )
+      ) {
         throw new Error(`${invalidActionValue} is a PlayerAction`);
       }
       const body = { action: invalidActionValue };
@@ -430,7 +444,9 @@ describe("act", () => {
 
     test("when player illegally calls", async () => {
       const params: ActReqParams = roomIdParam;
-      const body: ActReqBody = { action: PlayerAction.CALL };
+      const body: ActReqBody = {
+        action: Routes.PokerRooms.Act.PlayerAction.CALL,
+      };
       // Ignore getMockReq type parameter because typing is
       // overly restrictive (i.e. doesn't allow never in
       // ResponseBody)

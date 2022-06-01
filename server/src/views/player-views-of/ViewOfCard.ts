@@ -1,5 +1,5 @@
 import { Card as PokerEngineCard } from "@chevtek/poker-engine";
-import { Card as CommonAPICard } from "common-api";
+import { Routes } from "common-api";
 
 /**
  * Given a poker-engine (i.e. server-side runtime) representation of a Card,
@@ -9,7 +9,7 @@ import { Card as CommonAPICard } from "common-api";
  * @returns a common-api (i.e. serializable, server-to-client) representation
  *   of a Card from the perspective of a player
  */
-const viewOfCard = (c: PokerEngineCard): CommonAPICard => {
+const viewOfCard = (c: PokerEngineCard): Routes.PokerRooms.Get.Card => {
   const { rank, suit, color, suitChar } = c;
   return { rank, suit, color, suitChar };
 };

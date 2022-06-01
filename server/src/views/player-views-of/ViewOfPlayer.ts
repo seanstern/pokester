@@ -1,9 +1,5 @@
 import { Player as PokerEnginePlayer } from "@chevtek/poker-engine";
-import {
-  Player as CommonAPIPlayer,
-  Card as CommonAPICard,
-  PlayerAction,
-} from "common-api";
+import { Routes } from "common-api";
 import viewOfCard from "./ViewOfCard";
 
 /**
@@ -21,13 +17,13 @@ import viewOfCard from "./ViewOfCard";
  */
 const viewOfHoleCards = (
   pokerEngineHoleCards: PokerEnginePlayer["holeCards"]
-): [CommonAPICard, CommonAPICard] | undefined => {
+): [Routes.PokerRooms.Get.Card, Routes.PokerRooms.Get.Card] | undefined => {
   if (!pokerEngineHoleCards) {
     return pokerEngineHoleCards;
   }
   return pokerEngineHoleCards.map((pokerEngineHoleCard) =>
     viewOfCard(pokerEngineHoleCard)
-  ) as [CommonAPICard, CommonAPICard];
+  ) as [Routes.PokerRooms.Get.Card, Routes.PokerRooms.Get.Card];
 };
 
 /**
@@ -42,11 +38,11 @@ const viewOfHoleCards = (
  */
 const viewOfLegalActions = (
   p: PokerEnginePlayer
-): PlayerAction[] | undefined => {
+): Routes.PokerRooms.Get.PlayerAction[] | undefined => {
   if (p.table.currentActor !== p) {
     return undefined;
   }
-  return p.legalActions() as PlayerAction[];
+  return p.legalActions() as Routes.PokerRooms.Get.PlayerAction[];
 };
 
 /**
@@ -63,7 +59,7 @@ const viewOfLegalActions = (
 const viewOfPlayer = (
   viewerId: string,
   p: PokerEnginePlayer
-): CommonAPIPlayer => {
+): Routes.PokerRooms.Get.Player => {
   const {
     bet,
     folded,
