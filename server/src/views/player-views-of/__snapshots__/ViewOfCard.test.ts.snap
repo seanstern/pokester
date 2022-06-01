@@ -1,0 +1,469 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`viewOfCard produces valid JSON when given Card ace of clubs 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "A",
+  "suit": "c",
+  "suitChar": "♣",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card ace of diamonds 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "A",
+  "suit": "d",
+  "suitChar": "♦",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card ace of hearts 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "A",
+  "suit": "h",
+  "suitChar": "♥",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card ace of spades 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "A",
+  "suit": "s",
+  "suitChar": "♠",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card eight of clubs 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "8",
+  "suit": "c",
+  "suitChar": "♣",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card eight of diamonds 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "8",
+  "suit": "d",
+  "suitChar": "♦",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card eight of hearts 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "8",
+  "suit": "h",
+  "suitChar": "♥",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card eight of spades 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "8",
+  "suit": "s",
+  "suitChar": "♠",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card five of clubs 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "5",
+  "suit": "c",
+  "suitChar": "♣",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card five of diamonds 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "5",
+  "suit": "d",
+  "suitChar": "♦",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card five of hearts 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "5",
+  "suit": "h",
+  "suitChar": "♥",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card five of spades 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "5",
+  "suit": "s",
+  "suitChar": "♠",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card four of clubs 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "4",
+  "suit": "c",
+  "suitChar": "♣",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card four of diamonds 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "4",
+  "suit": "d",
+  "suitChar": "♦",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card four of hearts 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "4",
+  "suit": "h",
+  "suitChar": "♥",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card four of spades 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "4",
+  "suit": "s",
+  "suitChar": "♠",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card jack of clubs 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "J",
+  "suit": "c",
+  "suitChar": "♣",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card jack of diamonds 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "J",
+  "suit": "d",
+  "suitChar": "♦",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card jack of hearts 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "J",
+  "suit": "h",
+  "suitChar": "♥",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card jack of spades 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "J",
+  "suit": "s",
+  "suitChar": "♠",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card king of clubs 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "K",
+  "suit": "c",
+  "suitChar": "♣",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card king of diamonds 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "K",
+  "suit": "d",
+  "suitChar": "♦",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card king of hearts 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "K",
+  "suit": "h",
+  "suitChar": "♥",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card king of spades 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "K",
+  "suit": "s",
+  "suitChar": "♠",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card nine of clubs 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "9",
+  "suit": "c",
+  "suitChar": "♣",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card nine of diamonds 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "9",
+  "suit": "d",
+  "suitChar": "♦",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card nine of hearts 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "9",
+  "suit": "h",
+  "suitChar": "♥",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card nine of spades 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "9",
+  "suit": "s",
+  "suitChar": "♠",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card queen of clubs 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "Q",
+  "suit": "c",
+  "suitChar": "♣",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card queen of diamonds 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "Q",
+  "suit": "d",
+  "suitChar": "♦",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card queen of hearts 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "Q",
+  "suit": "h",
+  "suitChar": "♥",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card queen of spades 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "Q",
+  "suit": "s",
+  "suitChar": "♠",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card seven of clubs 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "7",
+  "suit": "c",
+  "suitChar": "♣",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card seven of diamonds 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "7",
+  "suit": "d",
+  "suitChar": "♦",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card seven of hearts 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "7",
+  "suit": "h",
+  "suitChar": "♥",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card seven of spades 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "7",
+  "suit": "s",
+  "suitChar": "♠",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card six of clubs 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "6",
+  "suit": "c",
+  "suitChar": "♣",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card six of diamonds 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "6",
+  "suit": "d",
+  "suitChar": "♦",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card six of hearts 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "6",
+  "suit": "h",
+  "suitChar": "♥",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card six of spades 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "6",
+  "suit": "s",
+  "suitChar": "♠",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card ten of clubs 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "T",
+  "suit": "c",
+  "suitChar": "♣",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card ten of diamonds 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "T",
+  "suit": "d",
+  "suitChar": "♦",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card ten of hearts 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "T",
+  "suit": "h",
+  "suitChar": "♥",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card ten of spades 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "T",
+  "suit": "s",
+  "suitChar": "♠",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card three of clubs 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "3",
+  "suit": "c",
+  "suitChar": "♣",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card three of diamonds 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "3",
+  "suit": "d",
+  "suitChar": "♦",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card three of hearts 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "3",
+  "suit": "h",
+  "suitChar": "♥",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card three of spades 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "3",
+  "suit": "s",
+  "suitChar": "♠",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card two of clubs 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "2",
+  "suit": "c",
+  "suitChar": "♣",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card two of diamonds 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "2",
+  "suit": "d",
+  "suitChar": "♦",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card two of hearts 1`] = `
+Object {
+  "color": "#ff0000",
+  "rank": "2",
+  "suit": "h",
+  "suitChar": "♥",
+}
+`;
+
+exports[`viewOfCard produces valid JSON when given Card two of spades 1`] = `
+Object {
+  "color": "#000000",
+  "rank": "2",
+  "suit": "s",
+  "suitChar": "♠",
+}
+`;

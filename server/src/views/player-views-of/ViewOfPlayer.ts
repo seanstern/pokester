@@ -1,0 +1,90 @@
+import { Player as PokerEnginePlayer } from "@chevtek/poker-engine";
+import { Routes } from "common-api";
+import viewOfCard from "./ViewOfCard";
+
+/**
+ * Given a poker-engine (i.e. server-side runtime) representation of the
+ * holeCards for a Player, returns a common-api (i.e. serializable,
+ * server-to-client) representaiton of holeCards from the perspective
+ * of a player. Should only be called when player is viewing
+ *   - themself (a player can always see their own hole cards)
+ *   - an opponent who is deliberately showing cards
+ * @param pokerEngineHoleCards a poker-engine (i.e. server-side runtime)
+ *   representation of the holeCards for a Player (assumed to be the
+ *   the same as the viewer).
+ * @returns a common-api (i.e. serializable, server-to-client) representation
+ *   of holeCards
+ */
+const viewOfHoleCards = (
+  pokerEngineHoleCards: PokerEnginePlayer["holeCards"]
+): [Routes.PokerRooms.Get.Card, Routes.PokerRooms.Get.Card] | undefined => {
+  if (!pokerEngineHoleCards) {
+    return pokerEngineHoleCards;
+  }
+  return pokerEngineHoleCards.map((pokerEngineHoleCard) =>
+    viewOfCard(pokerEngineHoleCard)
+  ) as [Routes.PokerRooms.Get.Card, Routes.PokerRooms.Get.Card];
+};
+
+/**
+ * Given a poker-engine (i.e. server-side runtime) representation of a Player,
+ * returns a common-api (i.e. serializable, server-to-client) representation
+ * of the legalActions from the perspective of a player. Should only be called
+ * when a player is viewing themself.
+ * @param p a poker-engine (i.e. server-side runtime) representation of a
+ *   Player
+ * @returns a common-api (i.e. serializable, server-to-client) representation
+ *   of the legalActions the Player can take
+ */
+const viewOfLegalActions = (
+  p: PokerEnginePlayer
+): Routes.PokerRooms.Get.PlayerAction[] | undefined => {
+  if (p.table.currentActor !== p) {
+    return undefined;
+  }
+  return p.legalActions() as Routes.PokerRooms.Get.PlayerAction[];
+};
+
+/**
+ * Given the id of the player requesting the view and a poker-engine (i.e.
+ * server-side runtime) representation of a Player, returns a common-api (i.e
+ * serializable, server-to-client) representation of a the Player from the
+ * perspective of a player
+ * @param viewerId the id of the player requesting the view
+ * @param p a poker-engine (i.e. server-side runtime) representation of a
+ *   Player
+ * @returns a common-api (i.e. serializable, server-to-client) representation
+ *   of a Player from the perspective of a player
+ */
+const viewOfPlayer = (
+  viewerId: string,
+  p: PokerEnginePlayer
+): Routes.PokerRooms.Get.Player => {
+  const {
+    bet,
+    folded,
+    left,
+    id,
+    stackSize,
+    showCards,
+    holeCards: pokerEngineHoleCards,
+  } = p;
+
+  const isSelf = p.id === viewerId;
+  const canViewHoleCards = !folded && (isSelf || showCards);
+
+  return {
+    bet,
+    folded,
+    left,
+    id,
+    stackSize,
+    isSelf,
+    holeCards: canViewHoleCards
+      ? viewOfHoleCards(pokerEngineHoleCards)
+      : undefined,
+    legalActions: isSelf ? viewOfLegalActions(p) : undefined,
+  };
+};
+
+export default viewOfPlayer;
