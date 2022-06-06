@@ -15,7 +15,7 @@ import apiRoutes from "./routes/apiRoutes";
       secret: "development-secret",
       store: MongoStore.create({
         mongoUrl: "mongodb://127.0.0.1:27017/game",
-      }),
+      }) as any,
       cookie: {
         httpOnly: true,
         sameSite: "lax",
