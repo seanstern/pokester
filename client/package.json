@@ -48,7 +48,9 @@
   },
   "proxy": "http://localhost:5000",
   "devDependencies": {
+    "@types/testing-library__jest-dom": "^5.14.3",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-config-react-app": "^7.0.1",
     "prettier": "2.6.2",
     "rimraf": "^3.0.2"
   }
