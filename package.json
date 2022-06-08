@@ -8,11 +8,16 @@
   ],
   "packageManager": "yarn@3.2.0",
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.27.0",
-    "@typescript-eslint/parser": "^5.27.0",
     "eslint": "^8.17.0",
-    "eslint-config-prettier": "^8.5.0",
+    "jest": "^27.5.1",
     "prettier": "^2.6.2",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.8.1",
     "typescript": "4.4.2"
+  },
+  "scripts": {
+    "g:clean": "cd $INIT_CWD && rimraf ./build",
+    "g:build": "cd $INIT_CWD && run g:clean && tsc",
+    "g:test": "cd $INIT_CWD && jest"
   }
 }
