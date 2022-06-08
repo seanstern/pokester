@@ -5860,11 +5860,9 @@ __metadata:
     "@types/node": ^17.0.33
     "@typescript-eslint/eslint-plugin": ^5.27.0
     "@typescript-eslint/parser": ^5.27.0
-    eslint: ^8.17.0
     eslint-config-prettier: ^8.5.0
-    prettier: ^2.6.2
-    rimraf: ^3.0.2
-    typescript: 4.4.2
+  peerDependencies:
+    eslint: "*"
   languageName: unknown
   linkType: soft
 
