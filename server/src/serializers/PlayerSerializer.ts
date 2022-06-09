@@ -76,13 +76,13 @@ const deserializeFields = createDeserializeFieldsFn(fieldDeserializationSpec);
  * @returns a function that will deserialize a JSON representation of a Player;
  *   function take JSONValue and returns a Player
  */
-export const createDeserializeFn = (t: Table): Deserialize<Player> => (
-  json: JSONValue
-) =>
-  assignDeserializedFieldsTo(
-    new Player(...deserializeInitialConstructorArgs(json), t),
-    deserializeFields(json)
-  );
+export const createDeserializeFn =
+  (t: Table): Deserialize<Player> =>
+  (json: JSONValue) =>
+    assignDeserializedFieldsTo(
+      new Player(...deserializeInitialConstructorArgs(json), t),
+      deserializeFields(json)
+    );
 
 const firstConstructorArgumentDeserializationSpec = [
   initialConstructorArgumentsDeserializationSpec[0],
@@ -102,13 +102,13 @@ const deserializeFirstConstructorArgs = createDeserializeArgumentsFn(
  *   function takes a JSONValue and returns one of the deserialized
  *   Players that matches the JSONValue
  */
-export const createDeserializeReferenceFn = (
-  players: (Player | null)[]
-): Deserialize<Player> => (json: JSONValue) => {
-  const [id] = deserializeFirstConstructorArgs(json);
-  const player = players.find((player) => player?.id === id);
-  if (!player) {
-    throw new Error(`Cannot find reference to Player with id "${id}"`);
-  }
-  return player;
-};
+export const createDeserializeReferenceFn =
+  (players: (Player | null)[]): Deserialize<Player> =>
+  (json: JSONValue) => {
+    const [id] = deserializeFirstConstructorArgs(json);
+    const player = players.find((player) => player?.id === id);
+    if (!player) {
+      throw new Error(`Cannot find reference to Player with id "${id}"`);
+    }
+    return player;
+  };

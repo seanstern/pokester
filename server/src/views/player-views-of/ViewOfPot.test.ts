@@ -100,7 +100,7 @@ describe("viewOfPot produces valid JSON when given", () => {
       const pot = potWithEligiblePlayersNoWinners.create();
       const nonEligiblePlayerId = "nonEligiblePlayerIdValue";
       if (
-        !!pot.eligiblePlayers.find(
+        pot.eligiblePlayers.find(
           ({ id: eligiblePlayerId }) => nonEligiblePlayerId === eligiblePlayerId
         )
       ) {
@@ -282,7 +282,7 @@ describe("viewOfPot produces valid JSON when given", () => {
       const pot = potWithWinners.create();
       const nonWinnerPlayerId = "nonWinnerPlayerIdValue";
       if (
-        !!pot.winners.find(
+        pot.winners.find(
           ({ id: winnerPlayerId }) => nonWinnerPlayerId === winnerPlayerId
         )
       ) {

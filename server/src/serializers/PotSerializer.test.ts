@@ -22,7 +22,7 @@ test("serialize produces valid JSON when given Pot", () => {
   expect(serialize(p)).toStrictEqual({
     amount: 50,
     eligiblePlayers: p.eligiblePlayers.map((player) => serializePlayer(player)),
-    winners: p.winners!.map((player) => serializePlayer(player)),
+    winners: p.winners.map((player) => serializePlayer(player)),
   });
 });
 

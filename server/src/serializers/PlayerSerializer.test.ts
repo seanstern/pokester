@@ -32,7 +32,7 @@ test("serialize produces valid JSON when given Player", () => {
     showCards: false,
     left: false,
     raise: 13,
-    holeCards: p.holeCards!.map((card) => serializeCard(card)),
+    holeCards: p.holeCards.map((card) => serializeCard(card)),
   });
 });
 

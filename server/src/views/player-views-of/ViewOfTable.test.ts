@@ -57,14 +57,18 @@ describe("viewOfTable produces valid JSON when given", () => {
   describe.each(tableCases)("$description", ({ create }) => {
     const table = create();
     test("and viewerId in players", () => {
-      const { id: viewerId } = table.players.find((player) => player !== null)!;
+      const player = table.players.find((player) => player !== null);
+      if (!player) {
+        throw new Error("table doesn't contain non-null players");
+      }
+      const { id: viewerId } = player;
       const view = viewOfTable(viewerId, table);
       expect(view).toMatchSnapshot();
     });
 
     test("and viewerId not in players", () => {
       const nonPlayerId = "nonPlayerIdValue";
-      if (!!table.players.find((player) => nonPlayerId === player?.id)) {
+      if (table.players.find((player) => nonPlayerId === player?.id)) {
         throw new Error(`${nonPlayerId} is id in table.players`);
       }
       const view = viewOfTable(nonPlayerId, table);
@@ -75,7 +79,10 @@ describe("viewOfTable produces valid JSON when given", () => {
   describe(completeRound.description, () => {
     const table = completeRound.create();
     test("and viewerId in winners", () => {
-      const { id: viewerId } = table.winners![0];
+      if (!table.winners) {
+        throw new Error("table does not contain winners");
+      }
+      const { id: viewerId } = table.winners[0];
       const view = viewOfTable(viewerId, table);
       expect(view).toMatchInlineSnapshot(`
         Object {
@@ -350,7 +357,10 @@ describe("viewOfTable produces valid JSON when given", () => {
 
     test("and viewerId not in winners", () => {
       const nonWinnerId = "nonWinnerIdValue";
-      if (!!table.winners!.find((winner) => nonWinnerId === winner?.id)) {
+      if (!table.winners) {
+        throw new Error("table does not contain winners");
+      }
+      if (table.winners.find((winner) => nonWinnerId === winner?.id)) {
         throw new Error(`${nonWinnerId} is id in table.winners`);
       }
       const view = viewOfTable(nonWinnerId, table);
