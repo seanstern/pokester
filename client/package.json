@@ -22,8 +22,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "clean": "rimraf ./build",
-    "build": "npm run clean && react-scripts build",
+    "clean": "run g:clean",
+    "build": "run g:clean && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -58,7 +58,6 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.1",
     "postcss": "^8.4.7",
-    "prettier": "2.6.2",
-    "rimraf": "^3.0.2"
+    "prettier": "2.6.2"
   }
 }
