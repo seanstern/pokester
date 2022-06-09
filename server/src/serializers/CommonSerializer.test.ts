@@ -286,9 +286,10 @@ const undefinedValuesTableEntry = {
 };
 
 const unserializableValuesTable: { type: string; value: Unserializable }[] = [
+  // eslint-disable-next-line @typescript-eslint/ban-types
   { type: "function", value: (() => 5) as Function },
-  { type: "symbol", value: Symbol("sym") as Symbol },
-  { type: "bigint", value: 1n as BigInt },
+  { type: "symbol", value: Symbol("sym") as symbol },
+  { type: "bigint", value: 1n as bigint },
   undefinedValuesTableEntry,
 ];
 
@@ -316,7 +317,7 @@ describe("deseserialize*", () => {
 
       test.each(throwableValuesTable)(
         "throws when given a $type",
-        ({ type, value }) => {
+        ({ value }) => {
           expect(() => deserialize(value as any)).toThrow(
             new RegExp(describeName)
           );
@@ -366,13 +367,14 @@ describe("createDeserialize*ArrayFn", () => {
         ({ type }) => type !== "array"
       );
 
-      const deserializeArray = createDeserializeArrayFn<
-        ReturnType<typeof deserializeElement>
-      >(deserializeElement);
+      const deserializeArray =
+        createDeserializeArrayFn<ReturnType<typeof deserializeElement>>(
+          deserializeElement
+        );
 
       test.each(deserializableJSONValueArraysTable)(
         `created deserialize ${describeName}[] fn produces a ${describeName}[] when given $type[]`,
-        ({ type, value }) => {
+        ({ value }) => {
           expect(deserializeArray(value)).toStrictEqual(value);
         }
       );
@@ -552,12 +554,12 @@ describe("createDeserializeFieldsFn", () => {
 describe("assignDeserializedFieldsTo", () => {
   test("assigns fields to mutable deserialized object", () => {
     class TestClass {
-      public strToReplace: string = "replace me";
-      public strToLeave: string = "leave me";
+      public strToReplace = "replace me";
+      public strToLeave = "leave me";
       public optStrToReplace?: string;
       public optStrToLeave?: string;
-      public boolToReplace: boolean = true;
-      public boolToLeave: boolean = false;
+      public boolToReplace = true;
+      public boolToLeave = false;
       public optBoolToReplace?: boolean;
       public optBoolToLeave?: boolean;
     }
@@ -594,17 +596,19 @@ describe("createDeserializeOptional*Fn", () => {
       const throwableJSONValuesTable = jsonValuesTable.filter(
         ({ type: testName }) => testName !== describeName
       );
-      const unserializableValuesTableSansUndefined = unserializableValuesTable.filter(
-        ({ type: testName }) => testName !== undefinedValuesTableEntry.type
-      );
+      const unserializableValuesTableSansUndefined =
+        unserializableValuesTable.filter(
+          ({ type: testName }) => testName !== undefinedValuesTableEntry.type
+        );
       const throwableValuesTable = [
         ...throwableJSONValuesTable,
         ...unserializableValuesTableSansUndefined,
       ];
 
-      const deserializeOptional = createDeserializeOptionalFn<
-        ReturnType<typeof deserialize>
-      >(deserialize);
+      const deserializeOptional =
+        createDeserializeOptionalFn<ReturnType<typeof deserialize>>(
+          deserialize
+        );
 
       test.each(deserializableValuesTable)(
         `created deserializeOptional ${describeName} produces a $type when given a $type`,
@@ -615,7 +619,7 @@ describe("createDeserializeOptional*Fn", () => {
 
       test.each(throwableValuesTable)(
         `created deserializeOptional ${describeName} throws when given a $type`,
-        ({ type, value }) => {
+        ({ value }) => {
           expect(() => deserializeOptional(value as any)).toThrow(
             new RegExp(describeName)
           );
@@ -643,9 +647,10 @@ describe("createDeserializeNullable*Fn", () => {
         ...unserializableValuesTable,
       ];
 
-      const deserializNullable = createDeserializeNullableFn<
-        ReturnType<typeof deserialize>
-      >(deserialize);
+      const deserializNullable =
+        createDeserializeNullableFn<ReturnType<typeof deserialize>>(
+          deserialize
+        );
 
       test.each(deserializableValuesTable)(
         `created deserializeNullable ${describeName} produces a $type when given a $type`,
@@ -656,7 +661,7 @@ describe("createDeserializeNullable*Fn", () => {
 
       test.each(throwableValuesTable)(
         `created deserializeNullable ${describeName} throws when given a $type`,
-        ({ type, value }) => {
+        ({ value }) => {
           expect(() => deserializNullable(value as any)).toThrow(
             new RegExp(describeName)
           );

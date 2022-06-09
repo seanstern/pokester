@@ -59,10 +59,15 @@ export const flop: Fixture<Table> = {
   description: "Table at start of flop; players have: called, checked",
   create: () => {
     const t = preFlop.create();
-    t.currentActor!.callAction();
-    t.currentActor!.callAction();
-    t.currentActor!.callAction();
-    t.currentActor!.checkAction();
+    if (!t.currentActor) {
+      throw new Error(
+        "t.currentActor in preFlop Table.fixture expected to be non-nullish"
+      );
+    }
+    t.currentActor.callAction();
+    t.currentActor.callAction();
+    t.currentActor.callAction();
+    t.currentActor.checkAction();
     return t;
   },
 };
@@ -72,10 +77,15 @@ export const turn: Fixture<Table> = {
     "Table at start of turn; players have: called, checked, stoodUp, bet, folded",
   create: () => {
     const t = flop.create();
+    if (!t.currentActor) {
+      throw new Error(
+        "t.currentActor in flop Table.fixture expected to be non-nullish"
+      );
+    }
     t.standUp("Jay");
-    t.currentActor!.betAction(50);
-    t.currentActor!.foldAction();
-    t.currentActor!.callAction();
+    t.currentActor.betAction(50);
+    t.currentActor.foldAction();
+    t.currentActor.callAction();
     return t;
   },
 };
@@ -85,10 +95,15 @@ export const river: Fixture<Table> = {
     "Table at start of river; players have called, checked, stoodUp, bet, folded, raised",
   create: () => {
     const t = turn.create();
-    t.currentActor!.checkAction();
-    t.currentActor!.betAction(50);
-    t.currentActor!.raiseAction(100);
-    t.currentActor!.callAction();
+    if (!t.currentActor) {
+      throw new Error(
+        "t.currentActor in turn Table.fixture expected to be non-nullish"
+      );
+    }
+    t.currentActor.checkAction();
+    t.currentActor.betAction(50);
+    t.currentActor.raiseAction(100);
+    t.currentActor.callAction();
     return t;
   },
 };
@@ -98,8 +113,13 @@ export const completeRound: Fixture<Table> = {
     "Table at completion of round; players have called, checked, stoodUp, bet, folded, raised",
   create: () => {
     const t = river.create();
-    t.currentActor!.checkAction();
-    t.currentActor!.checkAction();
+    if (!t.currentActor) {
+      throw new Error(
+        "t.currentActor in river Table.fixture expected to be non-nullish"
+      );
+    }
+    t.currentActor.checkAction();
+    t.currentActor.checkAction();
     return t;
   },
 };

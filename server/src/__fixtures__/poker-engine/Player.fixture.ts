@@ -4,7 +4,15 @@ import { playersSeated, preFlop, completeRound, turn } from "./Table.fixture";
 
 export const playerSeated: Fixture<Player> = {
   description: "Player seated at table, pre-game",
-  create: () => playersSeated.create().players[0]!,
+  create: () => {
+    const player = playersSeated.create().players[0];
+    if (!player) {
+      throw new Error(
+        "players[0] in playersSeated Table.fixture expected to be non-null"
+      );
+    }
+    return player;
+  },
 };
 
 export const priorActorPostDealPreFlop: Fixture<Player> = {
@@ -26,7 +34,7 @@ export const currentActorPostDealPreFlop: Fixture<Player> = {
     if (!currentActor) {
       throw new Error("No currentActor in preFlop Table.fixture");
     }
-    return currentActor!;
+    return currentActor;
   },
 };
 

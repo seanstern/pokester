@@ -1,3 +1,4 @@
+import { Player } from "@chevtek/poker-engine";
 import { model } from "mongoose";
 import { serialize } from "../../serializers/TableSerializer";
 import * as TableFixtures from "../../__fixtures__/poker-engine/Table.fixture";
@@ -16,7 +17,7 @@ describe("getPlayerIds returns playerIds when given", () => {
   test.each(tableCases)("$description", ({ create }) => {
     const table = create();
     expect(PokerRoomSchemaModule.getPlayerIds(table)).toStrictEqual(
-      table.players.filter((p) => p !== null).map((p) => p!.id)
+      (table.players.filter((p) => p !== null) as Player[]).map((p) => p.id)
     );
   });
 });
@@ -88,13 +89,8 @@ describe("constructor properly sets document fields when given", () => {
       name: "casion royale",
       table: create(),
     };
-    const {
-      name,
-      creatorId,
-      table,
-      serializedTable,
-      playerIds,
-    } = new TestPokerRoomModel(constructorArg);
+    const { name, creatorId, table, serializedTable, playerIds } =
+      new TestPokerRoomModel(constructorArg);
     expect(name).toStrictEqual(constructorArg.name);
     expect(creatorId).toStrictEqual(constructorArg.creatorId);
     expect(table).toStrictEqual(table);

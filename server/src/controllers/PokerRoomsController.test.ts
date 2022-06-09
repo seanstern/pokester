@@ -328,7 +328,7 @@ describe("act", () => {
       // Ignore getMockRes type parameter because typing is
       // overly restrictive (i.e. doesn't allow never in
       // ResponseBody)
-      const { res, next } = (getMockRes() as unknown) as {
+      const { res, next } = getMockRes() as unknown as {
         res: Parameters<typeof act>[1];
         next: NextFunction;
       };
@@ -363,7 +363,7 @@ describe("act", () => {
       // Ignore getMockRes type parameter because typing is
       // overly restrictive (i.e. doesn't allow never in
       // ResponseBody)
-      const { res, next } = (getMockRes() as unknown) as {
+      const { res, next } = getMockRes() as unknown as {
         res: Parameters<typeof act>[1];
         next: NextFunction;
       };
@@ -393,7 +393,7 @@ describe("act", () => {
       // Ignore getMockRes type parameter because typing is
       // overly restrictive (i.e. doesn't allow never in
       // ResponseBody)
-      const { res, next } = (getMockRes() as unknown) as {
+      const { res, next } = getMockRes() as unknown as {
         res: Parameters<typeof act>[1];
         next: NextFunction;
       };
@@ -429,7 +429,7 @@ describe("act", () => {
       // Ignore getMockRes type parameter because typing is
       // overly restrictive (i.e. doesn't allow never in
       // ResponseBody)
-      const { res, next } = (getMockRes() as unknown) as {
+      const { res, next } = getMockRes() as unknown as {
         res: Parameters<typeof act>[1];
         next: NextFunction;
       };
@@ -458,7 +458,7 @@ describe("act", () => {
       // Ignore getMockRes type parameter because typing is
       // overly restrictive (i.e. doesn't allow never in
       // ResponseBody)
-      const { res, next } = (getMockRes() as unknown) as {
+      const { res, next } = getMockRes() as unknown as {
         res: Parameters<typeof act>[1];
         next: NextFunction;
       };

@@ -1,4 +1,4 @@
-import { Table } from "@chevtek/poker-engine";
+import { Player, Table } from "@chevtek/poker-engine";
 import { Model, Schema } from "mongoose";
 import { deserialize, serialize } from "../../serializers/TableSerializer";
 
@@ -42,15 +42,15 @@ export interface SerializedPokerRoomDoc {
 
 export type SerializedPokerRoomModel = Model<
   SerializedPokerRoomDoc,
-  {},
-  {},
+  Record<string, never>,
+  Record<string, never>,
   { table: Table }
 >;
 const PokerRoomSchema = new Schema<
   SerializedPokerRoomDoc,
   SerializedPokerRoomModel,
-  {},
-  {}
+  Record<string, never>,
+  Record<string, never>
 >(
   {
     name: {
@@ -102,7 +102,7 @@ export interface DeserializedPokerRoomDoc extends SerializedPokerRoomDoc {
  * @returns an array containing the ids of each of the player sat the Table.
  */
 export const getPlayerIds = (t: Table) =>
-  t.players.filter((p) => p !== null).map((p) => p!.id);
+  (t.players.filter((p) => p !== null) as Player[]).map((p) => p.id);
 
 type VirtualTableSetterThis = Partial<
   Pick<

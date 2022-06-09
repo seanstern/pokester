@@ -40,7 +40,7 @@ const Game: FC<IGameProps> = () => {
       const {
         data: { hasStarted, isMyTurn, board, mySymbol, isOver },
       } = gameQ;
-      const squaresProps = (board.map((value, squareIdx) => ({
+      const squaresProps = board.map((value, squareIdx) => ({
         value,
         hightlight: false,
         handleClick: () =>
@@ -48,7 +48,7 @@ const Game: FC<IGameProps> = () => {
           isMyTurn &&
           value === ESquareValue.BLANK &&
           takeTurn({ gameID, squareIdx }),
-      })) as unknown) as TBoardProps["squaresProps"];
+      })) as unknown as TBoardProps["squaresProps"];
       let status: string = "Waiting for another player to join...";
       if (hasStarted) {
         if (isOver) {

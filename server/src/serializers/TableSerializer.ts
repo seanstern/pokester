@@ -82,9 +82,8 @@ type DeserializableFields =
  */
 export const deserialize: Deserialize<Table> = (json: JSONValue) => {
   const t = new Table(...deserializeArgs(json));
-  const deserializeOptionalNumber = createDeserializeOptionalFn(
-    deserializeNumber
-  );
+  const deserializeOptionalNumber =
+    createDeserializeOptionalFn(deserializeNumber);
   const deserializeArrayOfNullablePlayers = createDeserializeArrayFn(
     createDeserializeNullableFn(createPlayerDeserializeFn(t))
   );

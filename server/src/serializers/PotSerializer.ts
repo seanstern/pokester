@@ -27,20 +27,22 @@ type DeserializableFields = "amount" | "eligiblePlayers" | "winners";
  * @returns a function that will deserialize a JSON representation of a Pot;
  *   function takes a JSONValue and returns a Pot
  */
-export const createDeserializeFn = (
-  players: (Player | null)[]
-): Deserialize<Pot> => (json: JSONValue) => {
-  const deserializeArrayOfPlayerRefs = createDeserializeArrayFn(
-    createDeserializePlayerReferenceFn(players)
-  );
-  const fieldDeserializationSpec: FieldDeserializationSpec<
-    Pot,
-    DeserializableFields
-  > = {
-    amount: deserializeNumber,
-    eligiblePlayers: deserializeArrayOfPlayerRefs,
-    winners: createDeserializeOptionalFn(deserializeArrayOfPlayerRefs),
+export const createDeserializeFn =
+  (players: (Player | null)[]): Deserialize<Pot> =>
+  (json: JSONValue) => {
+    const deserializeArrayOfPlayerRefs = createDeserializeArrayFn(
+      createDeserializePlayerReferenceFn(players)
+    );
+    const fieldDeserializationSpec: FieldDeserializationSpec<
+      Pot,
+      DeserializableFields
+    > = {
+      amount: deserializeNumber,
+      eligiblePlayers: deserializeArrayOfPlayerRefs,
+      winners: createDeserializeOptionalFn(deserializeArrayOfPlayerRefs),
+    };
+    const deserializeFields = createDeserializeFieldsFn(
+      fieldDeserializationSpec
+    );
+    return assignDeserializedFieldsTo(new Pot(), deserializeFields(json));
   };
-  const deserializeFields = createDeserializeFieldsFn(fieldDeserializationSpec);
-  return assignDeserializedFieldsTo(new Pot(), deserializeFields(json));
-};

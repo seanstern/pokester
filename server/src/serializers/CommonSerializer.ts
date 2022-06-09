@@ -1,4 +1,5 @@
-export type Unserializable = Function | Symbol | BigInt | undefined;
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type Unserializable = Function | symbol | bigint | undefined;
 const UNSERIALIZABLE_TYPES_TYPE_OF_VALUES = [
   "function",
   "symbol",
@@ -13,7 +14,8 @@ const UNSERIALIZABLE_TYPES_TYPE_OF_VALUES = [
  * @returns a JSON conformant version of the object
  */
 export const serialize = <T>(
-  v: Exclude<T, Function | Symbol | BigInt | undefined>,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  v: Exclude<T, Function | symbol | bigint | undefined>,
   ...keysToOmit: string[]
 ): JSONValue => {
   if (UNSERIALIZABLE_TYPES_TYPE_OF_VALUES.includes(typeof v)) {
@@ -121,26 +123,26 @@ const isJSONArray = (json: JSONValue): json is JSONArray => Array.isArray(json);
  * @returns a function that will deserialize an array; function
  *   takes a JSONValue and returns a list of deserialized elements
  */
-export const createDeserializeArrayFn = <T>(
-  deserializeElement: Deserialize<T>
-): Deserialize<T[]> => (json: JSONValue) => {
-  if (!isJSONArray(json)) {
-    throw new Error("Cannot deserialize JSON that is not array");
-  }
-  return json.map((value, index) => {
-    try {
-      return deserializeElement(value);
-    } catch (err) {
-      if (err instanceof Error) {
-        throw new Error(
-          `${err.message}
-          Cannot deserialize element ${index} in array`
-        );
-      }
-      throw err;
+export const createDeserializeArrayFn =
+  <T>(deserializeElement: Deserialize<T>): Deserialize<T[]> =>
+  (json: JSONValue) => {
+    if (!isJSONArray(json)) {
+      throw new Error("Cannot deserialize JSON that is not array");
     }
-  });
-};
+    return json.map((value, index) => {
+      try {
+        return deserializeElement(value);
+      } catch (err) {
+        if (err instanceof Error) {
+          throw new Error(
+            `${err.message}
+          Cannot deserialize element ${index} in array`
+          );
+        }
+        throw err;
+      }
+    });
+  };
 
 /**
  * Given a JSONValue, returns true when it represent an object and
@@ -168,31 +170,29 @@ export type ArgumentsDeserializationSpec<T extends any[]> = {
  *   the specificaiton; function takes a JSONValue and returns
  *   a list of deserialized values
  */
-export const createDeserializeArgumentsFn = <T extends any[]>(
-  ads: ArgumentsDeserializationSpec<T>
-): Deserialize<T> => (json: JSONValue) =>
-  ads.map(({ serializedKeyName, deserialize }) => {
-    if (!isJSONObject(json)) {
-      throw new Error("Cannot deserialize JSON that is not object");
-    }
-    try {
-      return deserialize(json[serializedKeyName]);
-    } catch (err) {
-      if (err instanceof Error) {
-        throw new Error(
-          `${err.message}
-          Cannot deserialize key "${serializedKeyName}" in JSONObject`
-        );
+export const createDeserializeArgumentsFn =
+  <T extends any[]>(ads: ArgumentsDeserializationSpec<T>): Deserialize<T> =>
+  (json: JSONValue) =>
+    ads.map(({ serializedKeyName, deserialize }) => {
+      if (!isJSONObject(json)) {
+        throw new Error("Cannot deserialize JSON that is not object");
       }
-      throw err;
-    }
-  }) as T;
+      try {
+        return deserialize(json[serializedKeyName]);
+      } catch (err) {
+        if (err instanceof Error) {
+          throw new Error(
+            `${err.message}
+          Cannot deserialize key "${serializedKeyName}" in JSONObject`
+          );
+        }
+        throw err;
+      }
+    }) as T;
 
-export type FieldDeserializationSpec<T, K extends keyof T> = Required<
-  {
-    [P in K]: Deserialize<T[P]>;
-  }
->;
+export type FieldDeserializationSpec<T, K extends keyof T> = Required<{
+  [P in K]: Deserialize<T[P]>;
+}>;
 /**
  * Given a field deserialization specification (a map of type
  * {[key: string]: deserialize}), returns a function
@@ -204,30 +204,32 @@ export type FieldDeserializationSpec<T, K extends keyof T> = Required<
  *   the specification; function takes a JSONValue and returns a
  *   a map of the type {[key: string]: deserialize}
  */
-export const createDeserializeFieldsFn = <T, K extends keyof T>(
-  fds: FieldDeserializationSpec<T, K>
-): Deserialize<Pick<T, K>> => (json: JSONValue) => {
-  if (!isJSONObject(json)) {
-    throw new Error("Cannot deserialize field from JSON that is not object");
-  }
-  return Object.entries<Deserialize<any>>(fds).reduce(
-    (obj, [key, deserialize]) => {
-      try {
-        obj[key] = deserialize(json[key]);
-      } catch (err) {
-        if (err instanceof Error) {
-          throw new Error(
-            `${err.message}
+export const createDeserializeFieldsFn =
+  <T, K extends keyof T>(
+    fds: FieldDeserializationSpec<T, K>
+  ): Deserialize<Pick<T, K>> =>
+  (json: JSONValue) => {
+    if (!isJSONObject(json)) {
+      throw new Error("Cannot deserialize field from JSON that is not object");
+    }
+    return Object.entries<Deserialize<any>>(fds).reduce(
+      (obj, [key, deserialize]) => {
+        try {
+          obj[key] = deserialize(json[key]);
+        } catch (err) {
+          if (err instanceof Error) {
+            throw new Error(
+              `${err.message}
           Cannot deserialize key "${key}" in JSONObject`
-          );
+            );
+          }
+          throw err;
         }
-        throw err;
-      }
-      return obj;
-    },
-    {} as { [key: string]: any }
-  ) as T;
-};
+        return obj;
+      },
+      {} as { [key: string]: any }
+    ) as T;
+  };
 
 /**
  * Given a deserialized object and fields that should be assigned to the
@@ -270,14 +272,14 @@ Object.assign;
  * @returns a deserialization function that allows for the
  *   deserialization of an undefined JSONValue
  */
-export const createDeserializeOptionalFn = <T>(deserialize: Deserialize<T>) => (
-  json?: JSONValue
-) => {
-  if (json === undefined) {
-    return undefined;
-  }
-  return deserialize(json);
-};
+export const createDeserializeOptionalFn =
+  <T>(deserialize: Deserialize<T>) =>
+  (json?: JSONValue) => {
+    if (json === undefined) {
+      return undefined;
+    }
+    return deserialize(json);
+  };
 
 /**
  * Given a deserialization function, returns a version of the
@@ -289,11 +291,11 @@ export const createDeserializeOptionalFn = <T>(deserialize: Deserialize<T>) => (
  * @returns a deserialization function that allows for the
  *   deserialization of a null JSONValue
  */
-export const createDeserializeNullableFn = <T>(
-  deserialize: Deserialize<T>
-): Deserialize<T | null> => (json: JSONValue) => {
-  if (json === null) {
-    return null;
-  }
-  return deserialize(json);
-};
+export const createDeserializeNullableFn =
+  <T>(deserialize: Deserialize<T>): Deserialize<T | null> =>
+  (json: JSONValue) => {
+    if (json === null) {
+      return null;
+    }
+    return deserialize(json);
+  };

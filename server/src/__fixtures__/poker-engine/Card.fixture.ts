@@ -12,22 +12,23 @@ const allCardRankSuitEntryTuples = cardSuits.flatMap((cardSuitEntry) =>
   )
 );
 
-const cardFixtureModule: FixtureModule<Card> = allCardRankSuitEntryTuples.reduce(
-  (cardsFixtureModule, [cardRankEntry, cardSuitEntry]) => {
-    const [cardRankName, cardRankValue] = cardRankEntry;
-    const camelCaseCardRankName = cardRankName.toLowerCase();
-    const [cardSuitName, cardSuitValue] = cardSuitEntry;
-    const camelCaseCardSuitName = `${cardSuitName
-      .substring(0, 1)
-      .toUpperCase()}${cardSuitName.substring(1).toLowerCase()}s`;
-    const fixtureName = `${camelCaseCardRankName}Of${camelCaseCardSuitName}`;
-    cardsFixtureModule[fixtureName] = {
-      description: `${cardRankName.toLowerCase()} of ${cardSuitName.toLowerCase()}s`,
-      create: () => new Card(cardRankValue, cardSuitValue),
-    };
-    return cardsFixtureModule;
-  },
-  {} as FixtureModule<Card>
-);
+const cardFixtureModule: FixtureModule<Card> =
+  allCardRankSuitEntryTuples.reduce(
+    (cardsFixtureModule, [cardRankEntry, cardSuitEntry]) => {
+      const [cardRankName, cardRankValue] = cardRankEntry;
+      const camelCaseCardRankName = cardRankName.toLowerCase();
+      const [cardSuitName, cardSuitValue] = cardSuitEntry;
+      const camelCaseCardSuitName = `${cardSuitName
+        .substring(0, 1)
+        .toUpperCase()}${cardSuitName.substring(1).toLowerCase()}s`;
+      const fixtureName = `${camelCaseCardRankName}Of${camelCaseCardSuitName}`;
+      cardsFixtureModule[fixtureName] = {
+        description: `${cardRankName.toLowerCase()} of ${cardSuitName.toLowerCase()}s`,
+        create: () => new Card(cardRankValue, cardSuitValue),
+      };
+      return cardsFixtureModule;
+    },
+    {} as FixtureModule<Card>
+  );
 
 export default cardFixtureModule;
