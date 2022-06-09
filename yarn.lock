@@ -12144,7 +12144,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:2.6.2, prettier@npm:^2.6.2":
+"prettier@npm:^2.6.2":
   version: 2.6.2
   resolution: "prettier@npm:2.6.2"
   bin:
@@ -14173,7 +14173,7 @@ __metadata:
     eslint-config-prettier: ^8.5.0
     eslint-config-react-app: ^7.0.1
     postcss: ^8.4.7
-    prettier: 2.6.2
+    prettier: ^2.6.2
     react: ^17.0.2
     react-dom: ^17.0.2
     react-query: ^3.13.4
