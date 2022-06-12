@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import { Table } from "@chevtek/poker-engine";
-import { Routes } from "common-api";
+import { Routes } from "@pokester/common-api";
 import PokerRoom from "../models/PokerRoom";
 import viewOfTable from "../views/player-views-of/ViewOfTable";
 

@@ -3135,6 +3135,84 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@pokester/client@workspace:client":
+  version: 0.0.0-use.local
+  resolution: "@pokester/client@workspace:client"
+  dependencies:
+    "@babel/core": ^7.16.0
+    "@babel/plugin-syntax-flow": ^7.16.7
+    "@babel/plugin-transform-react-jsx": ^7.16.7
+    "@testing-library/dom": 8.0.0
+    "@testing-library/jest-dom": ^5.14.1
+    "@testing-library/react": ^12.0.0
+    "@testing-library/user-event": ^13.2.1
+    "@types/jest": ^27.5.1
+    "@types/node": ^17.0.21
+    "@types/react": ^17.0.20
+    "@types/react-dom": ^17.0.9
+    "@types/react-router-dom": ^5.1.7
+    "@types/testing-library__jest-dom": ^5.14.3
+    autoprefixer: 10.4.2
+    axios: ^0.26.1
+    eslint: ^8.3.0
+    eslint-config-prettier: ^8.5.0
+    eslint-config-react-app: ^7.0.1
+    postcss: ^8.4.7
+    prettier: ^2.6.2
+    react: ^17.0.2
+    react-dom: ^17.0.2
+    react-query: ^3.13.4
+    react-router-dom: ^5.2.0
+    react-scripts: 5.0.1
+    typescript: 4.4.2
+    web-vitals: ^2.1.0
+  languageName: unknown
+  linkType: soft
+
+"@pokester/common-api@workspace:*, @pokester/common-api@workspace:common-api":
+  version: 0.0.0-use.local
+  resolution: "@pokester/common-api@workspace:common-api"
+  dependencies:
+    "@chevtek/poker-engine": "workspace:*"
+    "@tsconfig/node14": ^1.0.0
+    "@types/node": ^17.0.33
+    "@typescript-eslint/eslint-plugin": ^5.27.0
+    "@typescript-eslint/parser": ^5.27.0
+    eslint-config-prettier: ^8.5.0
+  peerDependencies:
+    eslint: "*"
+  languageName: unknown
+  linkType: soft
+
+"@pokester/server@workspace:server":
+  version: 0.0.0-use.local
+  resolution: "@pokester/server@workspace:server"
+  dependencies:
+    "@chevtek/poker-engine": "workspace:*"
+    "@jest-mock/express": ^1.4.5
+    "@pokester/common-api": "workspace:*"
+    "@tsconfig/node14": ^1.0.0
+    "@types/express": ^4.17.13
+    "@types/express-session": ^1.17.4
+    "@types/jest": ^27.5.1
+    "@types/mongoose": ^5.11.97
+    "@types/node": ^17.0.21
+    "@typescript-eslint/eslint-plugin": ^5.27.0
+    "@typescript-eslint/parser": ^5.27.0
+    connect-mongo: ^4.4.1
+    eslint-config-prettier: ^8.5.0
+    express: ^4.17.1
+    express-session: ^1.17.1
+    mongoose: ^6.2.9
+    ts-jest: ^27.1.4
+    ts-node-dev: ^2.0.0
+  peerDependencies:
+    eslint: "*"
+    jest: "*"
+    typescript: "*"
+  languageName: unknown
+  linkType: soft
+
 "@rollup/plugin-babel@npm:^5.2.0":
   version: 5.3.1
   resolution: "@rollup/plugin-babel@npm:5.3.1"
@@ -5857,21 +5935,6 @@ __metadata:
   checksum: 0f82321821fc27b83bd409510bb9deeebcfa799ff0bf5d102128b500b7af22872c0c92cb6a0ebc5a4cf19c6b550fba9cedfa7329d18c6442a625f851377bacf0
   languageName: node
   linkType: hard
-
-"common-api@workspace:*, common-api@workspace:common-api":
-  version: 0.0.0-use.local
-  resolution: "common-api@workspace:common-api"
-  dependencies:
-    "@chevtek/poker-engine": "workspace:*"
-    "@tsconfig/node14": ^1.0.0
-    "@types/node": ^17.0.33
-    "@typescript-eslint/eslint-plugin": ^5.27.0
-    "@typescript-eslint/parser": ^5.27.0
-    eslint-config-prettier: ^8.5.0
-  peerDependencies:
-    eslint: "*"
-  languageName: unknown
-  linkType: soft
 
 "common-path-prefix@npm:^3.0.0":
   version: 3.0.0
@@ -13338,35 +13401,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"server@workspace:server":
-  version: 0.0.0-use.local
-  resolution: "server@workspace:server"
-  dependencies:
-    "@chevtek/poker-engine": "workspace:*"
-    "@jest-mock/express": ^1.4.5
-    "@tsconfig/node14": ^1.0.0
-    "@types/express": ^4.17.13
-    "@types/express-session": ^1.17.4
-    "@types/jest": ^27.5.1
-    "@types/mongoose": ^5.11.97
-    "@types/node": ^17.0.21
-    "@typescript-eslint/eslint-plugin": ^5.27.0
-    "@typescript-eslint/parser": ^5.27.0
-    common-api: "workspace:*"
-    connect-mongo: ^4.4.1
-    eslint-config-prettier: ^8.5.0
-    express: ^4.17.1
-    express-session: ^1.17.1
-    mongoose: ^6.2.9
-    ts-jest: ^27.1.4
-    ts-node-dev: ^2.0.0
-  peerDependencies:
-    eslint: "*"
-    jest: "*"
-    typescript: "*"
-  languageName: unknown
-  linkType: soft
-
 "set-blocking@npm:^2.0.0":
   version: 2.0.0
   resolution: "set-blocking@npm:2.0.0"
@@ -14149,40 +14183,6 @@ __metadata:
   checksum: 993096c472b6b8f30e29dc777a8d17720e4cab448375041f20c0cb802a09a7fb2217f2a3e8cdc11851faa71c957e2db309357367fc9d7af3cb7a4d00f4b66034
   languageName: node
   linkType: hard
-
-"tic-tac-toe-client@workspace:client":
-  version: 0.0.0-use.local
-  resolution: "tic-tac-toe-client@workspace:client"
-  dependencies:
-    "@babel/core": ^7.16.0
-    "@babel/plugin-syntax-flow": ^7.16.7
-    "@babel/plugin-transform-react-jsx": ^7.16.7
-    "@testing-library/dom": 8.0.0
-    "@testing-library/jest-dom": ^5.14.1
-    "@testing-library/react": ^12.0.0
-    "@testing-library/user-event": ^13.2.1
-    "@types/jest": ^27.5.1
-    "@types/node": ^17.0.21
-    "@types/react": ^17.0.20
-    "@types/react-dom": ^17.0.9
-    "@types/react-router-dom": ^5.1.7
-    "@types/testing-library__jest-dom": ^5.14.3
-    autoprefixer: 10.4.2
-    axios: ^0.26.1
-    eslint: ^8.3.0
-    eslint-config-prettier: ^8.5.0
-    eslint-config-react-app: ^7.0.1
-    postcss: ^8.4.7
-    prettier: ^2.6.2
-    react: ^17.0.2
-    react-dom: ^17.0.2
-    react-query: ^3.13.4
-    react-router-dom: ^5.2.0
-    react-scripts: 5.0.1
-    typescript: 4.4.2
-    web-vitals: ^2.1.0
-  languageName: unknown
-  linkType: soft
 
 "timsort@npm:^0.3.0":
   version: 0.3.0
