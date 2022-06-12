@@ -1,7 +1,9 @@
 {
-  "name": "common-api",
+  "name": "@pokester/common-api",
   "packageManager": "yarn@3.2.0",
   "private": true,
+  "description": "shared libraries for use across @pokester/client and @pokester/server",
+  "author": "seanstern",
   "main": "./build/index.js",
   "dependencies": {
     "@chevtek/poker-engine": "workspace:*"

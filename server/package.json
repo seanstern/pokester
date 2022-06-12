@@ -1,12 +1,12 @@
 {
-  "name": "server",
+  "name": "@pokester/server",
   "version": "1.0.0",
-  "description": "server for interactive tic-tac-toe games",
+  "description": "pokester's back-end server",
   "author": "seanstern",
   "private": true,
   "dependencies": {
     "@chevtek/poker-engine": "workspace:*",
-    "common-api": "workspace:*",
+    "@pokester/common-api": "workspace:*",
     "connect-mongo": "^4.4.1",
     "express": "^4.17.1",
     "express-session": "^1.17.1",

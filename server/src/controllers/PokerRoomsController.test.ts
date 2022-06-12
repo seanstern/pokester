@@ -1,6 +1,6 @@
 import { NextFunction } from "express";
 import { getMockReq, getMockRes } from "@jest-mock/express";
-import { Routes } from "common-api";
+import { Routes } from "@pokester/common-api";
 import PokerRoom from "../models/PokerRoom";
 import { flop } from "../__fixtures__/poker-engine/Table.fixture";
 import {

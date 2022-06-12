@@ -1,5 +1,5 @@
 import { Table } from "@chevtek/poker-engine";
-import { Routes } from "common-api";
+import { Routes } from "@pokester/common-api";
 import viewOfCard from "./ViewOfCard";
 import viewOfPlayer from "./ViewOfPlayer";
 import viewOfPot from "./ViewOfPot";

@@ -4,7 +4,7 @@ import {
   priorActorPostDealPreFlop,
   winner,
 } from "../../__fixtures__/poker-engine/Player.fixture";
-import { Routes } from "common-api";
+import { Routes } from "@pokester/common-api";
 import viewOfPlayer from "./ViewOfPlayer";
 
 describe("viewOfPlayer produces vaild JSON when given a Player", () => {
