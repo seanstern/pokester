@@ -40,7 +40,7 @@ const findOneMock = jest.spyOn(PokerRoom, "findOne").mockReturnValue({
 
 // Common params
 const roomIdParam = {
-  id: "roomId",
+  roomId: "roomId",
 };
 
 describe("create", () => {

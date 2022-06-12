@@ -52,7 +52,7 @@ export const create: RequestHandler<
 };
 
 export type GetReqParams = {
-  id: string;
+  roomId: string;
 };
 export type GetResBody = Routes.PokerRooms.Get.ResBody;
 /**
@@ -78,11 +78,11 @@ export const get: RequestHandler<
   try {
     const {
       sessionID,
-      params: { id },
+      params: { roomId },
     } = req;
 
     const pr = await PokerRoom.findOne({
-      _id: id,
+      _id: roomId,
       playerIds: sessionID,
     }).exec();
     if (!pr) {
@@ -91,7 +91,7 @@ export const get: RequestHandler<
 
     const { name, table } = pr;
     res.status(200).json({
-      id,
+      id: roomId,
       name,
       table: viewOfTable(sessionID, table),
     });
@@ -103,7 +103,7 @@ export const get: RequestHandler<
 };
 
 export type ActReqParams = {
-  id: string;
+  roomId: string;
 };
 export type ActReqBody = Routes.PokerRooms.Act.ReqBody;
 /**
@@ -129,7 +129,7 @@ export const act: RequestHandler<
   try {
     const {
       sessionID,
-      params: { id: roomId },
+      params: { roomId },
       body,
     } = req;
 
