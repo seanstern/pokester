@@ -9,5 +9,4 @@ jest.mock("./PokerRoomsRouter", () =>
 test("'/' route uses PokerRoomsRouter", async () => {
   await request(APIRouter).get("/rooms");
   expect(PokerRoomsRouter).toHaveBeenCalledTimes(1);
-  APIRouter.
 });
