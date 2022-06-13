@@ -39,7 +39,7 @@ export const create: RequestHandler<
     const pr = new PokerRoom({
       name,
       creatorId: sessionID,
-      table: new Table(),
+      table,
     });
     await pr.save();
 
