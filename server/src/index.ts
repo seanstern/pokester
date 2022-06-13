@@ -3,7 +3,7 @@ import express from "express";
 import session from "express-session";
 import { connect, connection } from "mongoose";
 import path from "path";
-import apiRoutes from "./routes/apiRoutes";
+import APIRouter from "./routers/APIRouter";
 
 (async () => {
   const app = express();
@@ -27,7 +27,7 @@ import apiRoutes from "./routes/apiRoutes";
 
   app.use(express.static(path.join(__dirname, "../../client/build")));
 
-  app.use("/api", apiRoutes);
+  app.use("/api", APIRouter);
 
   try {
     await connect("mongodb://127.0.0.1:27017/game");
