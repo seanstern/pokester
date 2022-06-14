@@ -33,6 +33,10 @@ type StandActReqBody = {
   action: PlayerAction.STAND;
 };
 
+type DealActReqBody = {
+  action: PlayerAction.DEAL;
+};
+
 export type ReqBody =
   | BetActReqBody
   | CallActReqBody
@@ -40,4 +44,5 @@ export type ReqBody =
   | CheckActReqBody
   | FoldActReqBody
   | SitActReqBody
-  | StandActReqBody;
+  | StandActReqBody
+  | DealActReqBody;
