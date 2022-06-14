@@ -160,6 +160,9 @@ export const act: RequestHandler<
       case Routes.PokerRooms.Act.PlayerAction.SIT:
         pr.table.sitDown(sessionID, pr.table.buyIn);
         break;
+      case Routes.PokerRooms.Act.PlayerAction.STAND:
+        pr.table.standUp(sessionID);
+        break;
       case Routes.PokerRooms.Act.PlayerAction.BET:
         findPlayer(sessionID, pr.table.players).betAction(body.amount);
         break;

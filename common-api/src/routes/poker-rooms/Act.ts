@@ -29,10 +29,15 @@ type SitActReqBody = {
   action: PlayerAction.SIT;
 };
 
+type StandActReqBody = {
+  action: PlayerAction.STAND;
+};
+
 export type ReqBody =
   | BetActReqBody
   | CallActReqBody
   | RaiseActReqBody
   | CheckActReqBody
   | FoldActReqBody
-  | SitActReqBody;
+  | SitActReqBody
+  | StandActReqBody;
