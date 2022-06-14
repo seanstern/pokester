@@ -310,10 +310,11 @@ describe("act", () => {
         { action: Routes.PokerRooms.Act.PlayerAction.BET, amount: bigBlind },
       ],
       [
-        "raise",
+        "raises",
         { action: Routes.PokerRooms.Act.PlayerAction.RAISE, amount: bigBlind },
       ],
       ["folds", { action: Routes.PokerRooms.Act.PlayerAction.FOLD }],
+      ["stands", { action: Routes.PokerRooms.Act.PlayerAction.STAND }],
     ];
     test.each(actionCaseTable)("when existing player %s", async (_, body) => {
       const params: ActReqParams = roomIdParam;
@@ -418,6 +419,40 @@ describe("act", () => {
       const body: ActReqBody = {
         action: Routes.PokerRooms.Act.PlayerAction.SIT,
       };
+
+      // Ignore getMockReq type parameter because typing is
+      // overly restrictive (i.e. doesn't allow never in
+      // ResponseBody)
+      const req = getMockReq({
+        sessionID,
+        params,
+        body,
+      }) as Parameters<typeof act>[0];
+      // Ignore getMockRes type parameter because typing is
+      // overly restrictive (i.e. doesn't allow never in
+      // ResponseBody)
+      const { res, next } = getMockRes() as unknown as {
+        res: Parameters<typeof act>[1];
+        next: NextFunction;
+      };
+
+      await act(req, res, next);
+
+      expect(res.status).not.toHaveBeenCalled();
+      expect(res.end).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalledTimes(1);
+      expect(next).toHaveBeenLastCalledWith(expect.any(Error));
+    });
+
+    test("when new player stands", async () => {
+      const params: ActReqParams = roomIdParam;
+      const body: ActReqBody = {
+        action: Routes.PokerRooms.Act.PlayerAction.STAND,
+      };
+      const sessionID = "newPlayerId";
+      if (players.find((player) => player?.id === sessionID)) {
+        throw new Error(`table should not have ${sessionID} seated`);
+      }
 
       // Ignore getMockReq type parameter because typing is
       // overly restrictive (i.e. doesn't allow never in
