@@ -25,9 +25,14 @@ type FoldActReqBody = {
   action: PlayerAction.FOLD;
 };
 
+type SitActReqBody = {
+  action: PlayerAction.SIT;
+};
+
 export type ReqBody =
   | BetActReqBody
   | CallActReqBody
   | RaiseActReqBody
   | CheckActReqBody
-  | FoldActReqBody;
+  | FoldActReqBody
+  | SitActReqBody;
