@@ -21,7 +21,7 @@ const mockSave = jest
   });
 
 const name = "tableName";
-const { currentActor, bigBlind } = flop.create();
+const { currentActor, bigBlind, players } = flop.create();
 if (!currentActor) {
   throw new Error("table needs currentActor");
 }
@@ -315,8 +315,44 @@ describe("act", () => {
       ],
       ["folds", { action: Routes.PokerRooms.Act.PlayerAction.FOLD }],
     ];
-    test.each(actionCaseTable)("when player %s", async (_, body) => {
+    test.each(actionCaseTable)("when existing player %s", async (_, body) => {
       const params: ActReqParams = roomIdParam;
+      // Ignore getMockReq type parameter because typing is
+      // overly restrictive (i.e. doesn't allow never in
+      // ResponseBody)
+      const req = getMockReq({
+        sessionID,
+        params,
+        body,
+      }) as Parameters<typeof act>[0];
+      // Ignore getMockRes type parameter because typing is
+      // overly restrictive (i.e. doesn't allow never in
+      // ResponseBody)
+      const { res, next } = getMockRes() as unknown as {
+        res: Parameters<typeof act>[1];
+        next: NextFunction;
+      };
+
+      await act(req, res, next);
+
+      expect(next).not.toHaveBeenCalled();
+      expect(findOneMock).toHaveBeenCalledTimes(1);
+      expect(res.status).toHaveBeenCalledTimes(1);
+      expect(res.status).toHaveBeenCalledWith(204);
+      expect(res.end).toHaveBeenCalledTimes(1);
+      expect(res.end).toHaveBeenCalledWith();
+    });
+
+    test("when new player sits", async () => {
+      const params: ActReqParams = roomIdParam;
+      const body: ActReqBody = {
+        action: Routes.PokerRooms.Act.PlayerAction.SIT,
+      };
+      const sessionID = "newPlayerId";
+      if (players.find((player) => player?.id === sessionID)) {
+        throw new Error(`table should not have ${sessionID} seated`);
+      }
+
       // Ignore getMockReq type parameter because typing is
       // overly restrictive (i.e. doesn't allow never in
       // ResponseBody)
@@ -377,7 +413,37 @@ describe("act", () => {
       expect(next).toHaveBeenCalledWith(expect.any(Error));
     });
 
-    test("when player is not currentActor", async () => {
+    test("when existing player sits", async () => {
+      const params: ActReqParams = roomIdParam;
+      const body: ActReqBody = {
+        action: Routes.PokerRooms.Act.PlayerAction.SIT,
+      };
+
+      // Ignore getMockReq type parameter because typing is
+      // overly restrictive (i.e. doesn't allow never in
+      // ResponseBody)
+      const req = getMockReq({
+        sessionID,
+        params,
+        body,
+      }) as Parameters<typeof act>[0];
+      // Ignore getMockRes type parameter because typing is
+      // overly restrictive (i.e. doesn't allow never in
+      // ResponseBody)
+      const { res, next } = getMockRes() as unknown as {
+        res: Parameters<typeof act>[1];
+        next: NextFunction;
+      };
+
+      await act(req, res, next);
+
+      expect(res.status).not.toHaveBeenCalled();
+      expect(res.end).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalledTimes(1);
+      expect(next).toHaveBeenLastCalledWith(expect.any(Error));
+    });
+
+    test("when player is not currentActor folds", async () => {
       const params: ActReqParams = roomIdParam;
       const body: ActReqBody = {
         action: Routes.PokerRooms.Act.PlayerAction.FOLD,

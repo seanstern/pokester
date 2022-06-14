@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { Table } from "@chevtek/poker-engine";
+import { Table, Player } from "@chevtek/poker-engine";
 import { Routes } from "@pokester/common-api";
 import PokerRoom from "../models/PokerRoom";
 import viewOfTable from "../views/player-views-of/ViewOfTable";
@@ -102,6 +102,22 @@ export const get: RequestHandler<
   }
 };
 
+/**
+ * Given an id and an array of nullable players, returns the player from
+ * the array with the corresponding id. Throws if no element in the array
+ * has the corresponding id.
+ * @param id id of player to find
+ * @param players array of nullable players
+ * @returns the player from the array with the corresponding id
+ */
+const findPlayer = (id: string, players: Table["players"]): Player => {
+  const player = players.find((player) => player?.id === id);
+  if (!player) {
+    throw new Error(`No player with id ${id}`);
+  }
+  return player as Player;
+};
+
 export type ActReqParams = {
   roomId: string;
 };
@@ -135,32 +151,29 @@ export const act: RequestHandler<
 
     const pr = await PokerRoom.findOne({
       _id: roomId,
-      playerIds: sessionID,
     }).exec();
     if (!pr) {
       throw new Error("PokerRoom does not exist");
     }
 
-    const currentActor = pr.table.currentActor;
-    if (currentActor?.id !== sessionID) {
-      throw new Error("No action can be taken at this time");
-    }
-
     switch (body.action) {
+      case Routes.PokerRooms.Act.PlayerAction.SIT:
+        pr.table.sitDown(sessionID, pr.table.buyIn);
+        break;
       case Routes.PokerRooms.Act.PlayerAction.BET:
-        currentActor.betAction(body.amount);
+        findPlayer(sessionID, pr.table.players).betAction(body.amount);
         break;
       case Routes.PokerRooms.Act.PlayerAction.CALL:
-        currentActor.callAction();
+        findPlayer(sessionID, pr.table.players).callAction();
         break;
       case Routes.PokerRooms.Act.PlayerAction.RAISE:
-        currentActor.raiseAction(body.amount);
+        findPlayer(sessionID, pr.table.players).raiseAction(body.amount);
         break;
       case Routes.PokerRooms.Act.PlayerAction.CHECK:
-        currentActor.checkAction();
+        findPlayer(sessionID, pr.table.players).checkAction();
         break;
       case Routes.PokerRooms.Act.PlayerAction.FOLD:
-        currentActor.foldAction();
+        findPlayer(sessionID, pr.table.players).foldAction();
         break;
       default:
         throw new Error(`action "${(body as any).action}" is invalid`);
