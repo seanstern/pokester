@@ -5,6 +5,7 @@ enum PlayerAction {
   CALL = "call",
   FOLD = "fold",
   SIT = "sit",
+  STAND = "stand",
 }
 
 export default PlayerAction;
