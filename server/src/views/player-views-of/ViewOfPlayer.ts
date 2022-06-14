@@ -1,29 +1,30 @@
-import { Player as PokerEnginePlayer } from "@chevtek/poker-engine";
+import { Player } from "@chevtek/poker-engine";
 import { Routes } from "@pokester/common-api";
 import viewOfCard from "./ViewOfCard";
 
 /**
  * Given a poker-engine (i.e. server-side runtime) representation of the
- * holeCards for a Player, returns a @pokester/common-api (i.e. serializable,
+ * holeCards for a Player, returns a @pokester/common-api (iIt's I.e. serializable,
  * server-to-client) representaiton of holeCards from the perspective
  * of a player. Should only be called when player is viewing
  *   - themself (a player can always see their own hole cards)
  *   - an opponent who is deliberately showing cards
- * @param pokerEngineHoleCards a poker-engine (i.e. server-side runtime)
+ * @param holeCards a poker-engine (i.e. server-side runtime)
  *   representation of the holeCards for a Player (assumed to be the
  *   the same as the viewer).
  * @returns a @pokester/common-api (i.e. serializable, server-to-client) representation
  *   of holeCards
  */
 const viewOfHoleCards = (
-  pokerEngineHoleCards: PokerEnginePlayer["holeCards"]
+  holeCards: Player["holeCards"]
 ): [Routes.PokerRooms.Get.Card, Routes.PokerRooms.Get.Card] | undefined => {
-  if (!pokerEngineHoleCards) {
-    return pokerEngineHoleCards;
+  if (!holeCards) {
+    return holeCards;
   }
-  return pokerEngineHoleCards.map((pokerEngineHoleCard) =>
-    viewOfCard(pokerEngineHoleCard)
-  ) as [Routes.PokerRooms.Get.Card, Routes.PokerRooms.Get.Card];
+  return holeCards.map((holeCard) => viewOfCard(holeCard)) as [
+    Routes.PokerRooms.Get.Card,
+    Routes.PokerRooms.Get.Card
+  ];
 };
 
 /**
@@ -37,7 +38,7 @@ const viewOfHoleCards = (
  *   of the legalActions the Player can take
  */
 const viewOfLegalActions = (
-  p: PokerEnginePlayer
+  p: Player
 ): Routes.PokerRooms.Get.PlayerAction[] | undefined => {
   if (p.table.currentActor !== p) {
     return undefined;
@@ -58,7 +59,7 @@ const viewOfLegalActions = (
  */
 const viewOfPlayer = (
   viewerId: string,
-  p: PokerEnginePlayer
+  p: Player
 ): Routes.PokerRooms.Get.Player => {
   const {
     bet,
