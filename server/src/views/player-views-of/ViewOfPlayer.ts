@@ -1,5 +1,6 @@
 import { Player } from "@chevtek/poker-engine";
 import { Routes } from "@pokester/common-api";
+import { canDealCards } from "../../poker-engine/Utils";
 import viewOfCard from "./ViewOfCard";
 
 /**
@@ -29,9 +30,16 @@ const viewOfHoleCards = (
 
 /**
  * Given a poker-engine (i.e. server-side runtime) representation of a Player,
- * returns a @pokester/common-api (i.e. serializable, server-to-client) representation
- * of the legalActions from the perspective of a player. Should only be called
- * when a player is viewing themself.
+ * returns a @pokester/common-api (i.e. serializable, server-to-client)
+ * representation of the legalActions from the perspective of a player.
+ *
+ * These elements of the returned array may differ subtly from
+ * {@link Player.legalActions} (i.e. may include
+ * {@link Routes.PokerRooms.Get.PlayerAction} values which have no corresponding
+ * representation in {@link Player.legalActions}.
+ *
+ * Should only be called when a player is viewing themself.
+ *
  * @param p a poker-engine (i.e. server-side runtime) representation of a
  *   Player
  * @returns a @pokester/common-api (i.e. serializable, server-to-client) representation
@@ -40,10 +48,19 @@ const viewOfHoleCards = (
 const viewOfLegalActions = (
   p: Player
 ): Routes.PokerRooms.Get.PlayerAction[] | undefined => {
-  if (p.table.currentActor !== p) {
-    return undefined;
+  const legalActions: Routes.PokerRooms.Get.PlayerAction[] = [];
+
+  if (canDealCards(p)) {
+    legalActions.push(Routes.PokerRooms.Get.PlayerAction.DEAL);
   }
-  return p.legalActions() as Routes.PokerRooms.Get.PlayerAction[];
+
+  if (p.table.currentActor === p) {
+    legalActions.push(
+      ...(p.legalActions() as Routes.PokerRooms.Get.PlayerAction[])
+    );
+  }
+
+  return legalActions.length > 0 ? legalActions : undefined;
 };
 
 /**
