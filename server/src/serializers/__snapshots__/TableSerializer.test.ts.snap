@@ -1961,6 +1961,47 @@ Object {
 }
 `;
 
+exports[`serialize produces JSON when given Table Table with one seated player 1`] = `
+Object {
+  "autoMoveDealer": true,
+  "bigBlind": 10,
+  "bigBlindPosition": 3,
+  "buyIn": 1000,
+  "communityCards": Array [],
+  "dealerPosition": 3,
+  "debug": false,
+  "deck": Array [],
+  "handNumber": 0,
+  "players": Array [
+    null,
+    null,
+    null,
+    Object {
+      "bet": 0,
+      "folded": false,
+      "id": "John",
+      "left": false,
+      "showCards": false,
+      "stackSize": 2000,
+    },
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+  ],
+  "pots": Array [
+    Object {
+      "amount": 0,
+      "eligiblePlayers": Array [],
+    },
+  ],
+  "smallBlind": 5,
+  "smallBlindPosition": 3,
+}
+`;
+
 exports[`serialize produces JSON when given Table Table with seated players 1`] = `
 Object {
   "autoMoveDealer": true,
