@@ -3,6 +3,7 @@ import { Table, Player } from "@chevtek/poker-engine";
 import { Routes } from "@pokester/common-api";
 import PokerRoom from "../models/PokerRoom";
 import viewOfTable from "../views/player-views-of/ViewOfTable";
+import { canDealCards } from "../poker-engine/Utils";
 
 export type CreateReqBody = Routes.PokerRooms.Create.ReqBody;
 /**
@@ -156,27 +157,33 @@ export const act: RequestHandler<
       throw new Error("PokerRoom does not exist");
     }
 
+    const { table } = pr;
     switch (body.action) {
       case Routes.PokerRooms.Act.PlayerAction.SIT:
-        pr.table.sitDown(sessionID, pr.table.buyIn);
+        pr.table.sitDown(sessionID, table.buyIn);
         break;
       case Routes.PokerRooms.Act.PlayerAction.STAND:
         pr.table.standUp(sessionID);
         break;
+      case Routes.PokerRooms.Act.PlayerAction.DEAL:
+        if (canDealCards(findPlayer(sessionID, table.players))) {
+          pr.table.dealCards();
+        }
+        break;
       case Routes.PokerRooms.Act.PlayerAction.BET:
-        findPlayer(sessionID, pr.table.players).betAction(body.amount);
+        findPlayer(sessionID, table.players).betAction(body.amount);
         break;
       case Routes.PokerRooms.Act.PlayerAction.CALL:
-        findPlayer(sessionID, pr.table.players).callAction();
+        findPlayer(sessionID, table.players).callAction();
         break;
       case Routes.PokerRooms.Act.PlayerAction.RAISE:
-        findPlayer(sessionID, pr.table.players).raiseAction(body.amount);
+        findPlayer(sessionID, table.players).raiseAction(body.amount);
         break;
       case Routes.PokerRooms.Act.PlayerAction.CHECK:
-        findPlayer(sessionID, pr.table.players).checkAction();
+        findPlayer(sessionID, table.players).checkAction();
         break;
       case Routes.PokerRooms.Act.PlayerAction.FOLD:
-        findPlayer(sessionID, pr.table.players).foldAction();
+        findPlayer(sessionID, table.players).foldAction();
         break;
       default:
         throw new Error(`action "${(body as any).action}" is invalid`);

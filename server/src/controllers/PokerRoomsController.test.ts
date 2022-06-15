@@ -2,7 +2,10 @@ import { NextFunction } from "express";
 import { getMockReq, getMockRes } from "@jest-mock/express";
 import { Routes } from "@pokester/common-api";
 import PokerRoom from "../models/PokerRoom";
-import { flop } from "../__fixtures__/poker-engine/Table.fixture";
+import {
+  flop,
+  playersSeated,
+} from "../__fixtures__/poker-engine/Table.fixture";
 import {
   create,
   CreateReqBody,
@@ -303,6 +306,47 @@ describe("get", () => {
 
 describe("act", () => {
   describe("succeeds", () => {
+    test("when dealer deals", async () => {
+      const dealerId = playersSeated.create().dealer?.id;
+      const mockExec = jest.fn().mockImplementation(() => {
+        const table = playersSeated.create();
+        return new PokerRoom({
+          name,
+          creatorId: sessionID,
+          table,
+        });
+      });
+      findOneMock.mockReturnValueOnce({
+        exec: mockExec,
+      } as any);
+
+      // Ignore getMockReq type parameter because typing is
+      // overly restrictive (i.e. doesn't allow never in
+      // ResponseBody)
+      const req = getMockReq({
+        sessionID: dealerId,
+        params: roomIdParam,
+        body: { action: Routes.PokerRooms.Act.PlayerAction.DEAL },
+      }) as Parameters<typeof act>[0];
+
+      // Ignore getMockRes type parameter because typing is
+      // overly restrictive (i.e. doesn't allow never in
+      // ResponseBody)
+      const { res, next } = getMockRes() as unknown as {
+        res: Parameters<typeof act>[1];
+        next: NextFunction;
+      };
+
+      await act(req, res, next);
+
+      expect(next).not.toHaveBeenCalled();
+      expect(findOneMock).toHaveBeenCalledTimes(1);
+      expect(res.status).toHaveBeenCalledTimes(1);
+      expect(res.status).toHaveBeenCalledWith(204);
+      expect(res.end).toHaveBeenCalledTimes(1);
+      expect(res.end).toHaveBeenCalledWith();
+    });
+
     const actionCaseTable: [string, ActReqBody][] = [
       ["checks", { action: Routes.PokerRooms.Act.PlayerAction.CHECK }],
       [
