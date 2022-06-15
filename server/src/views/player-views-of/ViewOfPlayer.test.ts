@@ -1,7 +1,8 @@
 import {
-  playerSeated,
+  dealerAmongSeatedPlayers,
   currentActorPostDealPreFlop,
   priorActorPostDealPreFlop,
+  folded,
   winner,
 } from "../../__fixtures__/poker-engine/Player.fixture";
 import { Routes } from "@pokester/common-api";
@@ -89,32 +90,34 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
       });
     });
 
-    describe("with holeCards, legalActions both absent", () => {
-      test("player has no holeCards", () => {
-        const player = playerSeated.create();
+    describe("with holeCards absent", () => {
+      test("with legalActions present", () => {
+        const player = dealerAmongSeatedPlayers.create();
         const { id: viewerId } = player;
         const view = viewOfPlayer(viewerId, player);
-        expect(view.isSelf).toBe(true);
+        expect(view).toMatchObject({
+          isSelf: true,
+          legalActions: expect.any(Array),
+        });
         expect(view.holeCards).toBeUndefined();
-        expect(
-          (view as Routes.PokerRooms.Get.SelfPlayer).legalActions
-        ).toBeUndefined();
         expect(view).toMatchInlineSnapshot(`
           Object {
             "bet": 0,
             "folded": false,
             "holeCards": undefined,
-            "id": "Jane",
+            "id": "John",
             "isSelf": true,
             "left": false,
-            "legalActions": undefined,
-            "stackSize": 3000,
+            "legalActions": Array [
+              "deal",
+            ],
+            "stackSize": 2000,
           }
         `);
       });
 
-      test("player folded", () => {
-        const player = playerSeated.create();
+      test("with legalActions absent", () => {
+        const player = folded.create();
         const { id: viewerId } = player;
         const view = viewOfPlayer(viewerId, player);
         expect(view.isSelf).toBe(true);
@@ -125,13 +128,13 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
         expect(view).toMatchInlineSnapshot(`
           Object {
             "bet": 0,
-            "folded": false,
+            "folded": true,
             "holeCards": undefined,
-            "id": "Jane",
+            "id": "Juan",
             "isSelf": true,
             "left": false,
             "legalActions": undefined,
-            "stackSize": 3000,
+            "stackSize": 9189,
           }
         `);
       });

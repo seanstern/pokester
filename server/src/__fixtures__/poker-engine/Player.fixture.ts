@@ -1,15 +1,52 @@
 import { Player } from "@chevtek/poker-engine";
 import { Fixture } from "../TypeUtils";
-import { playersSeated, preFlop, completeRound, turn } from "./Table.fixture";
+import {
+  onePlayerSeated,
+  playersSeated,
+  preFlop,
+  completeRound,
+  turn,
+} from "./Table.fixture";
 
-export const playerSeated: Fixture<Player> = {
-  description: "Player seated at table, pre-game",
+export const onlyDealerSeated: Fixture<Player> = {
+  description: "Dealer seated alone at table, pre-game",
   create: () => {
-    const player = playersSeated.create().players[0];
+    const player = onePlayerSeated.create().dealer;
     if (!player) {
-      throw new Error(
-        "players[0] in playersSeated Table.fixture expected to be non-null"
-      );
+      throw new Error("No dealer in onePlayerSeated Table.fixture");
+    }
+    return player;
+  },
+};
+
+export const dealerAmongSeatedPlayers: Fixture<Player> = {
+  description: "Dealer seated at table with players, pre-game",
+  create: () => {
+    const player = playersSeated.create().dealer;
+    if (!player) {
+      throw new Error("No dealer in playersSeated Table.fixture");
+    }
+    return player;
+  },
+};
+
+export const smallBlindAmongSeatedPlayers: Fixture<Player> = {
+  description: "Small blind player seated at table with players, pre-game",
+  create: () => {
+    const player = playersSeated.create().smallBlindPlayer;
+    if (!player) {
+      throw new Error("No smallBlindPlayer in playersSeated Table.fixture");
+    }
+    return player;
+  },
+};
+
+export const dealerAtTurn: Fixture<Player> = {
+  description: "Dealer at turn",
+  create: () => {
+    const player = turn.create().dealer;
+    if (!player) {
+      throw new Error("No dealer in playersSeated Table.fixture");
     }
     return player;
   },
@@ -38,7 +75,7 @@ export const currentActorPostDealPreFlop: Fixture<Player> = {
   },
 };
 
-export const foledPlayer: Fixture<Player> = {
+export const folded: Fixture<Player> = {
   description:
     "Player who has folded during flop, immediately at start of turn",
   create: () => {
@@ -48,6 +85,17 @@ export const foledPlayer: Fixture<Player> = {
       throw new Error("No foldedPlayer in turn Table.fixture");
     }
     return foldedPlayer;
+  },
+};
+
+export const dealerAfterFirstRound: Fixture<Player> = {
+  description: "Dealer, immediately after completion of round",
+  create: () => {
+    const player = completeRound.create().dealer;
+    if (!player) {
+      throw new Error("No dea array in completeRound Table.fixture");
+    }
+    return player;
   },
 };
 
