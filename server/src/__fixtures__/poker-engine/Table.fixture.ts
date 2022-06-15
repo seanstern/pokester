@@ -29,11 +29,19 @@ export const emptyTable: Fixture<Table> = {
   create: () => new Table(),
 };
 
-export const playersSeated: Fixture<Table> = {
-  description: "Table with seated players",
+export const onePlayerSeated: Fixture<Table> = {
+  description: "Table with one seated player",
   create: () => {
     const t = emptyTable.create();
     t.sitDown("John", 2000, 3);
+    return t;
+  },
+};
+
+export const playersSeated: Fixture<Table> = {
+  description: "Table with seated players",
+  create: () => {
+    const t = onePlayerSeated.create();
     t.sitDown("Jane", 3000, 0);
     t.sitDown("Juan", 9199);
     t.sitDown("Jay", 31415, 7);
