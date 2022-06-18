@@ -615,5 +615,34 @@ describe("act", () => {
       expect(next).toHaveBeenCalledTimes(1);
       expect(next).toHaveBeenLastCalledWith(expect.any(Error));
     });
+
+    test("when player illegally deals", async () => {
+      const params: ActReqParams = roomIdParam;
+      const body: ActReqBody = {
+        action: Routes.PokerRooms.Act.PlayerAction.DEAL,
+      };
+      // Ignore getMockReq type parameter because typing is
+      // overly restrictive (i.e. doesn't allow never in
+      // ResponseBody)
+      const req = getMockReq({
+        sessionID,
+        params,
+        body,
+      }) as Parameters<typeof act>[0];
+      // Ignore getMockRes type parameter because typing is
+      // overly restrictive (i.e. doesn't allow never in
+      // ResponseBody)
+      const { res, next } = getMockRes() as unknown as {
+        res: Parameters<typeof act>[1];
+        next: NextFunction;
+      };
+
+      await act(req, res, next);
+
+      expect(res.status).not.toHaveBeenCalled();
+      expect(res.end).not.toHaveBeenCalled();
+      expect(next).toHaveBeenCalledTimes(1);
+      expect(next).toHaveBeenLastCalledWith(expect.any(Error));
+    });
   });
 });
