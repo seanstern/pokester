@@ -166,9 +166,10 @@ export const act: RequestHandler<
         pr.table.standUp(sessionID);
         break;
       case Routes.PokerRooms.Act.PlayerAction.DEAL:
-        if (canDealCards(findPlayer(sessionID, table.players))) {
-          pr.table.dealCards();
+        if (!canDealCards(findPlayer(sessionID, table.players))) {
+          throw new Error("Action invoked on player out of turn!");
         }
+        pr.table.dealCards();
         break;
       case Routes.PokerRooms.Act.PlayerAction.BET:
         findPlayer(sessionID, table.players).betAction(body.amount);
