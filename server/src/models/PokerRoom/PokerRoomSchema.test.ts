@@ -23,7 +23,7 @@ describe("getPlayerIds returns playerIds when given", () => {
 });
 
 describe("virtuals", () => {
-  describe("virtualTableSetter sets this.playerIds, this.serializedTable, this.deserializedTable when given", () => {
+  describe("virtualTableSetter sets this.playerIds, this.playersCount, this.serializedTable, this.deserializedTable when given", () => {
     test.each(tableCases)("$description", ({ create }) => {
       const table = create();
       const obj: ThisParameterType<
@@ -35,6 +35,7 @@ describe("virtuals", () => {
 
       expect({ ...rest }).toStrictEqual({
         playerIds: PokerRoomSchemaModule.getPlayerIds(table),
+        playersCount: PokerRoomSchemaModule.getPlayerIds(table).length,
         serializedTable: serialize(table),
       });
       expect(deserializedTable).toBe(table);
@@ -89,14 +90,15 @@ describe("constructor properly sets document fields when given", () => {
       name: "casion royale",
       table: create(),
     };
-    const { name, creatorId, table, serializedTable, playerIds } =
+    const { name, creatorId, table, serializedTable, playerIds, playersCount } =
       new TestPokerRoomModel(constructorArg);
-    expect(name).toStrictEqual(constructorArg.name);
-    expect(creatorId).toStrictEqual(constructorArg.creatorId);
-    expect(table).toStrictEqual(table);
+    expect(name).toBe(constructorArg.name);
+    expect(creatorId).toBe(constructorArg.creatorId);
+    expect(table).toBe(constructorArg.table);
     expect(serializedTable).toStrictEqual(serialize(constructorArg.table));
     expect(playerIds).toStrictEqual(
       PokerRoomSchemaModule.getPlayerIds(constructorArg.table)
     );
+    expect(playersCount).toBe(playerIds.length);
   });
 });

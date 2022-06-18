@@ -38,6 +38,11 @@ export interface SerializedPokerRoomDoc {
    * based queries
    */
   playerIds: string[];
+
+  /**
+   * The count of players in the room
+   */
+  playersCount: number;
 }
 
 export type SerializedPokerRoomModel = Model<
@@ -60,6 +65,11 @@ const PokerRoomSchema = new Schema<
     },
     playerIds: {
       type: [String],
+      required: true,
+      index: true,
+    },
+    playersCount: {
+      type: Number,
       required: true,
       index: true,
     },
@@ -107,13 +117,15 @@ export const getPlayerIds = (t: Table) =>
 type VirtualTableSetterThis = Partial<
   Pick<
     DeserializedPokerRoomDoc,
-    "playerIds" | "serializedTable" | "deserializedTable"
+    "playerIds" | "serializedTable" | "deserializedTable" | "playersCount"
   >
 >;
 /**
  * Given a Table,
  *  - sets the this.playerIds of the caller to be the players
  *    at the Table
+ *  - set the this.playersCount of the caller to be the number
+ *    of players at the Table
  *  - sets this.serializedTable to a serialied version of the Table
  *  - sets this.deserializedTable to the Table
  *
@@ -128,6 +140,7 @@ export const virtualTableSetter = function (
   t: Table
 ) {
   this.playerIds = getPlayerIds(t);
+  this.playersCount = this.playerIds.length;
   this.serializedTable = serialize(t);
   this.deserializedTable = t;
 };
@@ -209,6 +222,15 @@ export interface PokerRoomDoc {
    * Represented outside the table to alllow for index-based queries
    */
   readonly playerIds: readonly string[];
+
+  /**
+   * The number of players at the table.
+   *
+   * Not directly mutable. Mutated implictly via state of table field.
+   *
+   * Respresented outside of table to allow for queries of playerIds.length
+   */
+  readonly playersCount: number;
 
   /** The table */
   table: Table;
