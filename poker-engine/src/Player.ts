@@ -31,7 +31,7 @@ export class Player {
     if (!this.legalActions().includes("bet")) {
       throw new Error("Illegal action.");
     }
-    if (isNaN(amount)) {
+    if (isNaN(amount) || amount <= 0) {
       throw new Error("Amount was not a valid number.");
     }
     const currentBet = this.table.currentBet;
@@ -77,7 +77,7 @@ export class Player {
     if (!legalActions.includes("raise") && !legalActions.includes("bet")) {
       throw new Error("Illegal action.");
     }
-    if (amount === undefined || isNaN(amount)) {
+    if (isNaN(amount) || amount <= 0) {
       throw new Error("Amount was not a valid number.");
     }
     if (amount > this.stackSize) {
@@ -85,31 +85,34 @@ export class Player {
     }
     const currentBet = this.table.currentBet;
     const lastRaise = this.table.lastRaise;
-    const minRaise = lastRaise ?? this.table.bigBlind;
-    const raiseAmount = currentBet ? amount - currentBet : amount;
+    const minRaiseByAmount = lastRaise ?? this.table.bigBlind;
+    const raiseByAmount = currentBet ? amount + this.bet - currentBet : amount;
     // Do not allow the raise if it's less than the minimum and they aren't going all-in.
-    if (raiseAmount < minRaise && amount < this.stackSize) {
+    if (raiseByAmount < minRaiseByAmount && amount < this.stackSize) {
       if (currentBet) {
         throw new Error(
-          `You must raise by at least \`$${minRaise}\`, making the bet \`$${
-            minRaise + currentBet
-          }\`.`
+          `You must raise the table bet by at least \`$${minRaiseByAmount}\` (making the table bet \`$${
+            minRaiseByAmount + currentBet
+          }\`), or you can go all-in.`
         );
       } else {
-        throw new Error(`You must bet at least \`$${minRaise}\`.`);
+        throw new Error(
+          `You must bet at least \`$${minRaiseByAmount}\`, or you can go all-in.`
+        );
       }
-    } else if (raiseAmount < minRaise && amount >= this.stackSize) {
+    } else if (raiseByAmount < minRaiseByAmount && amount == this.stackSize) {
       // When the all-in player is raising for less than the minimum raise then increase the bet amount but do not change last raise value.
       this.bet += this.stackSize;
       this.stackSize = 0;
       this.table.currentBet = this.bet;
-    } else if (amount >= minRaise) {
+    } else {
+      // this condition means (raiseByAmount >= minRaiseByAmount)
       this.stackSize -= amount;
       this.bet += amount;
       this.table.currentBet = this.bet;
       // Only mark raise values if there is a current bet.
       if (currentBet) {
-        this.raise = this.table.lastRaise = amount - currentBet;
+        this.raise = this.table.lastRaise = this.bet - currentBet;
       }
       // Set last action to the player behind this one.
       this.table.lastPosition = this.table.currentPosition! - 1;
@@ -158,17 +161,14 @@ export class Player {
     } else {
       if (this.bet === currentBet) {
         actions.push("check");
-        if (
-          this.stackSize > currentBet &&
-          this.table.actingPlayers.length > 0
-        ) {
+        if (this.table.actingPlayers.length > 0 && this.stackSize > 0) {
           actions.push("raise");
         }
       }
       if (this.bet < currentBet) {
         actions.push("call");
         if (
-          this.stackSize > currentBet &&
+          this.stackSize > currentBet - this.bet &&
           this.table.actingPlayers.length > 0 &&
           (!lastRaise || !this.raise || lastRaise >= this.raise)
         ) {
