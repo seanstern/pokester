@@ -14,7 +14,7 @@ import APIRouter from "./routers/APIRouter";
     session({
       secret: "development-secret",
       store: MongoStore.create({
-        mongoUrl: "mongodb://127.0.0.1:27017/game",
+        mongoUrl: "mongodb://127.0.0.1:27017/pokester",
       }) as any,
       cookie: {
         httpOnly: true,
@@ -30,7 +30,7 @@ import APIRouter from "./routers/APIRouter";
   app.use("/api", APIRouter);
 
   try {
-    await connect("mongodb://127.0.0.1:27017/game");
+    await connect("mongodb://127.0.0.1:27017/pokester");
     console.log("mongoose connected");
     connection.on("error", () => console.log("mongoose conneciton error"));
 
