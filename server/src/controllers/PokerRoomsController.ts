@@ -52,6 +52,67 @@ export const create: RequestHandler<
   }
 };
 
+export type GetAllResBody = Routes.PokerRooms.GetAll.ResBody;
+export type GetAllReqQuery = Routes.PokerRooms.GetAll.ReqQuery;
+/**
+ * Given an HTTP request to get PokerRooms (including optional filters),
+ * an HTTP response, and a callback, attempts to respond with a JSON
+ * representation of the PokerRooms. Responds with a status of 200 and
+ * JSON representation of the PokerRooms when successful; calls the callback
+ * with error information upon failure.
+ *
+ * @param req  an HTTP request
+ * @param req.sessionID the id of the requester's session
+ * @param req.query the query string parameters, representing the filters
+ * @param req.query.creatorId optionally filters for PokerRooms with this
+ *   creatorId
+ * @param req.query.name optionally filters for PokerRooms with this name
+ * @param req.query.openSeat optionally filters for PokerRooms with an open
+ *   seat (i.e. a new Player can sit) when true; without an open seat (i.e
+ *   a new Player cannot sit) when false
+ * @param res the HTTP response
+ * @param next the callback
+ */
+export const getAll: RequestHandler<
+  never,
+  GetAllResBody,
+  never,
+  GetAllReqQuery,
+  never
+> = async (req, res, next) => {
+  try {
+    const {
+      query: { creatorId, name, openSeat },
+    } = req;
+
+    const creatorIdFilter = creatorId ? { creatorId } : {};
+    const nameFilter = name ? { name } : {};
+    const openSeatFilter =
+      openSeat !== undefined
+        ? { playersCount: openSeat ? { $lt: 10 } : { $gte: 10 } }
+        : {};
+
+    const pokerRooms = await PokerRoom.find({
+      ...creatorIdFilter,
+      ...nameFilter,
+      ...openSeatFilter,
+    }).exec();
+
+    const pokerRoomsResponse: GetAllResBody = pokerRooms.map(
+      ({ id, name, playersCount }) => ({
+        id,
+        name,
+        playersCount,
+      })
+    );
+
+    res.status(200).json(pokerRoomsResponse);
+    return;
+  } catch (err) {
+    return next(err);
+  }
+};
+
 export type GetReqParams = {
   roomId: string;
 };
