@@ -1,5 +1,5 @@
 import PokerRoomsRouter from "./PokerRoomsRouter";
-import { create, get, act } from "../controllers/PokerRoomsController";
+import { create, get, act, getAll } from "../controllers/PokerRoomsController";
 import request from "supertest";
 
 jest.mock("../controllers/PokerRoomsController");
@@ -8,6 +8,11 @@ describe("'/' route", () => {
   test("via POST calls PokerRoomsController.create", async () => {
     await request(PokerRoomsRouter).post("/");
     expect(create).toHaveBeenCalledTimes(1);
+  });
+
+  test("via GET calls PokerRoomsController.getAll", async () => {
+    await request(PokerRoomsRouter).get("/");
+    expect(getAll).toHaveBeenCalledTimes(1);
   });
 });
 
