@@ -7,3 +7,5 @@ export const create: RequestHandler = jest.fn(emptyResponse);
 export const get: RequestHandler = jest.fn(emptyResponse);
 
 export const act: RequestHandler = jest.fn(emptyResponse);
+
+export const getAll: RequestHandler = jest.fn(emptyResponse);

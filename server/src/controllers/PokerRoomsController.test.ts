@@ -1,6 +1,7 @@
-import { NextFunction } from "express";
 import { getMockReq, getMockRes } from "@jest-mock/express";
 import { Routes } from "@pokester/common-api";
+import { NextFunction } from "express";
+import { Types } from "mongoose";
 import PokerRoom from "../models/PokerRoom";
 import {
   flop,
@@ -14,6 +15,8 @@ import {
   act,
   ActReqParams,
   ActReqBody,
+  getAll,
+  GetAllReqQuery,
 } from "./PokerRoomsController";
 
 // Common mocks
@@ -29,17 +32,43 @@ if (!currentActor) {
   throw new Error("table needs currentActor");
 }
 const sessionID = currentActor.id;
-const mockExec = jest.fn().mockImplementation(() => {
+const mockFindOneExec = jest.fn().mockImplementation(() => {
   const table = flop.create();
-  return new PokerRoom({
-    name,
-    creatorId: sessionID,
-    table,
-  });
+  return Promise.resolve(
+    new PokerRoom({
+      name,
+      creatorId: sessionID,
+      table,
+    })
+  );
 });
-const findOneMock = jest.spyOn(PokerRoom, "findOne").mockReturnValue({
-  exec: mockExec,
+const mockFindOne = jest.spyOn(PokerRoom, "findOne").mockReturnValue({
+  exec: mockFindOneExec,
 } as any);
+
+const mockFindExecResolution = [
+  new PokerRoom({
+    // For consistent snapshot testing
+    _id: new Types.ObjectId("62af64bf997b2897074abe6c"),
+    name: flop.description,
+    creatorId: "creatorIdVal0",
+    table: flop.create(),
+  }),
+  new PokerRoom({
+    // For consistent snapshot testing
+    _id: new Types.ObjectId("62af64bf997b2897074abe6d"),
+    name: playersSeated.description,
+    creatorId: "creatorIdVal1",
+    table: playersSeated.create(),
+  }),
+];
+const mockFindExec = jest.fn(() => Promise.resolve(mockFindExecResolution));
+const mockFind = jest.spyOn(PokerRoom, "find").mockImplementation(
+  () =>
+    ({
+      exec: mockFindExec,
+    } as any)
+);
 
 // Common params
 const roomIdParam = {
@@ -95,6 +124,53 @@ describe("create", () => {
   });
 });
 
+describe("getAll", () => {
+  describe("succeeds", () => {
+    const queryParamsTable: [
+      GetAllReqQuery,
+      Parameters<typeof PokerRoom["find"]>[0]
+    ][] = [
+      [{}, {}],
+      [{ creatorId: "creatorVal" }, { creatorId: "creatorVal" }],
+      [{ name: "nameVal" }, { name: "nameVal" }],
+      [{ openSeat: true }, { playersCount: { $lt: 10 } }],
+      [{ openSeat: false }, { playersCount: { $gte: 10 } }],
+      [
+        { creatorId: "creatorVal", name: "nameVal", openSeat: true },
+        { creatorId: "creatorVal", name: "nameVal", playersCount: { $lt: 10 } },
+      ],
+    ];
+    test.each(queryParamsTable)(
+      "when given query %O, uses find filter %O",
+      async (query, findParam) => {
+        const req = getMockReq<Parameters<typeof getAll>[0]>({
+          // anyone can use getAll endpoint
+          sessionID: "nonCreatorId",
+          query,
+        });
+        const { res, next } = getMockRes<Parameters<typeof getAll>[1]>();
+
+        await getAll(req, res, next);
+
+        expect(next).not.toHaveBeenCalled();
+        expect(mockFind).toHaveBeenCalledTimes(1);
+        expect(mockFind).toHaveBeenCalledWith(findParam);
+        expect(mockFindExec).toHaveBeenCalledTimes(1);
+        expect(res.status).toHaveBeenCalledTimes(1);
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledTimes(1);
+        expect(res.json).toHaveBeenCalledWith(
+          mockFindExecResolution.map(({ id, name, playersCount }) => ({
+            id,
+            name,
+            playersCount,
+          }))
+        );
+      }
+    );
+  });
+});
+
 describe("get", () => {
   test("succeeds", async () => {
     const params: GetReqParams = roomIdParam;
@@ -107,7 +183,8 @@ describe("get", () => {
     await get(req, res, next);
 
     expect(next).not.toHaveBeenCalled();
-    expect(findOneMock).toHaveBeenCalledTimes(1);
+    expect(mockFindOne).toHaveBeenCalledTimes(1);
+    expect(mockFindOneExec).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledTimes(1);
@@ -285,7 +362,7 @@ describe("get", () => {
   });
 
   test("fails", async () => {
-    mockExec.mockResolvedValueOnce(null);
+    mockFindOneExec.mockResolvedValueOnce(null);
 
     const params: GetReqParams = roomIdParam;
     const req = getMockReq<Parameters<typeof get>[0]>({
@@ -298,7 +375,7 @@ describe("get", () => {
 
     expect(res.status).not.toHaveBeenCalled();
     expect(res.json).not.toHaveBeenCalled();
-    expect(findOneMock).toHaveBeenCalledTimes(1);
+    expect(mockFindOne).toHaveBeenCalledTimes(1);
     expect(next).toHaveBeenCalledTimes(1);
     expect(next).toHaveBeenCalledWith(expect.any(Error));
   });
@@ -316,7 +393,7 @@ describe("act", () => {
           table,
         });
       });
-      findOneMock.mockReturnValueOnce({
+      mockFindOne.mockReturnValueOnce({
         exec: mockExec,
       } as any);
 
@@ -340,7 +417,8 @@ describe("act", () => {
       await act(req, res, next);
 
       expect(next).not.toHaveBeenCalled();
-      expect(findOneMock).toHaveBeenCalledTimes(1);
+      expect(mockFindOne).toHaveBeenCalledTimes(1);
+      expect(mockSave).toHaveBeenCalledTimes(1);
       expect(res.status).toHaveBeenCalledTimes(1);
       expect(res.status).toHaveBeenCalledWith(204);
       expect(res.end).toHaveBeenCalledTimes(1);
@@ -381,7 +459,8 @@ describe("act", () => {
       await act(req, res, next);
 
       expect(next).not.toHaveBeenCalled();
-      expect(findOneMock).toHaveBeenCalledTimes(1);
+      expect(mockFindOne).toHaveBeenCalledTimes(1);
+      expect(mockSave).toHaveBeenCalledTimes(1);
       expect(res.status).toHaveBeenCalledTimes(1);
       expect(res.status).toHaveBeenCalledWith(204);
       expect(res.end).toHaveBeenCalledTimes(1);
@@ -417,7 +496,8 @@ describe("act", () => {
       await act(req, res, next);
 
       expect(next).not.toHaveBeenCalled();
-      expect(findOneMock).toHaveBeenCalledTimes(1);
+      expect(mockFindOne).toHaveBeenCalledTimes(1);
+      expect(mockSave).toHaveBeenCalledTimes(1);
       expect(res.status).toHaveBeenCalledTimes(1);
       expect(res.status).toHaveBeenCalledWith(204);
       expect(res.end).toHaveBeenCalledTimes(1);
@@ -427,7 +507,7 @@ describe("act", () => {
 
   describe("fails", () => {
     test("when PokerRoom not found", async () => {
-      mockExec.mockResolvedValueOnce(null);
+      mockFindOneExec.mockResolvedValueOnce(null);
 
       const params: ActReqParams = roomIdParam;
       const body: ActReqBody = {
@@ -451,9 +531,10 @@ describe("act", () => {
 
       await act(req, res, next);
 
+      expect(mockSave).not.toHaveBeenCalled();
       expect(res.status).not.toHaveBeenCalled();
       expect(res.json).not.toHaveBeenCalled();
-      expect(findOneMock).toHaveBeenCalledTimes(1);
+      expect(mockFindOne).toHaveBeenCalledTimes(1);
       expect(next).toHaveBeenCalledTimes(1);
       expect(next).toHaveBeenCalledWith(expect.any(Error));
     });
@@ -482,6 +563,7 @@ describe("act", () => {
 
       await act(req, res, next);
 
+      expect(mockSave).not.toHaveBeenCalled();
       expect(res.status).not.toHaveBeenCalled();
       expect(res.end).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalledTimes(1);
@@ -516,6 +598,7 @@ describe("act", () => {
 
       await act(req, res, next);
 
+      expect(mockSave).not.toHaveBeenCalled();
       expect(res.status).not.toHaveBeenCalled();
       expect(res.end).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalledTimes(1);
@@ -545,6 +628,7 @@ describe("act", () => {
 
       await act(req, res, next);
 
+      expect(mockSave).not.toHaveBeenCalled();
       expect(res.status).not.toHaveBeenCalled();
       expect(res.end).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalledTimes(1);
@@ -581,6 +665,7 @@ describe("act", () => {
 
       await act(req, res, next);
 
+      expect(mockSave).not.toHaveBeenCalled();
       expect(res.status).not.toHaveBeenCalled();
       expect(res.end).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalledTimes(1);
@@ -610,6 +695,7 @@ describe("act", () => {
 
       await act(req, res, next);
 
+      expect(mockSave).not.toHaveBeenCalled();
       expect(res.status).not.toHaveBeenCalled();
       expect(res.end).not.toHaveBeenCalled();
       expect(next).toHaveBeenCalledTimes(1);
