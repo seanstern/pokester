@@ -88,8 +88,8 @@ export const getAll: RequestHandler<
     const creatorIdFilter = creatorId ? { creatorId } : {};
     const nameFilter = name ? { name } : {};
     const openSeatFilter =
-      openSeat !== undefined
-        ? { playersCount: openSeat ? { $lt: 10 } : { $gte: 10 } }
+      openSeat !== undefined && ["true", "false"].includes(openSeat)
+        ? { playersCount: openSeat === "true" ? { $lt: 10 } : { $gte: 10 } }
         : {};
 
     const pokerRooms = await PokerRoom.find({
