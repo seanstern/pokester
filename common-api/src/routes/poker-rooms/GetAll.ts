@@ -6,5 +6,5 @@ export type ResBody = {
 export type ReqQuery = {
   name?: string;
   creatorId?: string;
-  openSeat?: boolean;
+  openSeat?: "true" | "false";
 };

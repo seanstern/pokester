@@ -133,10 +133,13 @@ describe("getAll", () => {
       [{}, {}],
       [{ creatorId: "creatorVal" }, { creatorId: "creatorVal" }],
       [{ name: "nameVal" }, { name: "nameVal" }],
-      [{ openSeat: true }, { playersCount: { $lt: 10 } }],
-      [{ openSeat: false }, { playersCount: { $gte: 10 } }],
+      [{ openSeat: "true" }, { playersCount: { $lt: 10 } }],
+      [{ openSeat: "false" }, { playersCount: { $gte: 10 } }],
+      // query parameters are determined by client callers and so
+      // technically can be *anything*, including "randomString"
+      [{ openSeat: "randomString" } as any, {}],
       [
-        { creatorId: "creatorVal", name: "nameVal", openSeat: true },
+        { creatorId: "creatorVal", name: "nameVal", openSeat: "true" },
         { creatorId: "creatorVal", name: "nameVal", playersCount: { $lt: 10 } },
       ],
     ];
