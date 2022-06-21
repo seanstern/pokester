@@ -5,6 +5,7 @@
   "description": "pokester's front-end/client",
   "author": "seanstern",
   "dependencies": {
+    "@pokester/common-api": "workspace:*",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -14,6 +15,7 @@
     "@types/react-dom": "^17.0.9",
     "@types/react-router-dom": "^5.1.7",
     "axios": "^0.26.1",
+    "qs": "^6.10.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-query": "^3.13.4",
@@ -54,6 +56,7 @@
     "@babel/plugin-syntax-flow": "^7.16.7",
     "@babel/plugin-transform-react-jsx": "^7.16.7",
     "@testing-library/dom": "8.0.0",
+    "@types/qs": "^6.9.7",
     "@types/testing-library__jest-dom": "^5.14.3",
     "autoprefixer": "10.4.2",
     "eslint": "^8.3.0",

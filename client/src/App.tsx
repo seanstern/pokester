@@ -5,10 +5,9 @@ import {
   Switch,
   Route,
   Redirect,
-  Link,
 } from "react-router-dom";
-import Game from "./Game";
-import GamesLists from "./GamesLists";
+import Room from "./Room";
+import Rooms from "./Rooms";
 
 const qc = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false } },
@@ -18,14 +17,13 @@ const App: FC = () => (
   <QueryClientProvider client={qc}>
     <Router>
       <Switch>
-        <Route path="/game/:gameID">
-          <Game />
-          <Link to="/lists/current">Home</Link>
+        <Route path="/rooms/:roomId">
+          <Room />
         </Route>
-        <Route path="/lists">
-          <GamesLists />
+        <Route path="/rooms">
+          <Rooms />
         </Route>
-        <Redirect to="/lists/join" />
+        <Redirect to="/rooms" />
       </Switch>
     </Router>
   </QueryClientProvider>

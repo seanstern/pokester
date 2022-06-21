@@ -145,7 +145,6 @@ export const get: RequestHandler<
 
     const pr = await PokerRoom.findOne({
       _id: roomId,
-      playerIds: sessionID,
     }).exec();
     if (!pr) {
       throw new Error("PokerRoom does not exist");

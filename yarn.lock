@@ -3142,12 +3142,14 @@ __metadata:
     "@babel/core": ^7.16.0
     "@babel/plugin-syntax-flow": ^7.16.7
     "@babel/plugin-transform-react-jsx": ^7.16.7
+    "@pokester/common-api": "workspace:*"
     "@testing-library/dom": 8.0.0
     "@testing-library/jest-dom": ^5.14.1
     "@testing-library/react": ^12.0.0
     "@testing-library/user-event": ^13.2.1
     "@types/jest": ^27.5.1
     "@types/node": ^17.0.21
+    "@types/qs": ^6.9.7
     "@types/react": ^17.0.20
     "@types/react-dom": ^17.0.9
     "@types/react-router-dom": ^5.1.7
@@ -3159,6 +3161,7 @@ __metadata:
     eslint-config-react-app: ^7.0.1
     postcss: ^8.4.7
     prettier: ^2.6.2
+    qs: ^6.10.5
     react: ^17.0.2
     react-dom: ^17.0.2
     react-query: ^3.13.4
@@ -3939,6 +3942,13 @@ __metadata:
   version: 6.9.6
   resolution: "@types/qs@npm:6.9.6"
   checksum: 01871b1cf7062717ec76fcb9b29ddae1e04fcfadc1c76d86ec2571e72f27bf09ff31b094b295be8d4ca664aeec9b8965563680b31fcab7aba1ed93afac5181cd
+  languageName: node
+  linkType: hard
+
+"@types/qs@npm:^6.9.7":
+  version: 6.9.7
+  resolution: "@types/qs@npm:6.9.7"
+  checksum: 7fd6f9c25053e9b5bb6bc9f9f76c1d89e6c04f7707a7ba0e44cc01f17ef5284adb82f230f542c2d5557d69407c9a40f0f3515e8319afd14e1e16b5543ac6cdba
   languageName: node
   linkType: hard
 
@@ -12474,7 +12484,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:^6.10.3":
+"qs@npm:^6.10.3, qs@npm:^6.10.5":
   version: 6.10.5
   resolution: "qs@npm:6.10.5"
   dependencies:
