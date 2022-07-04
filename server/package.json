@@ -10,7 +10,7 @@
     "connect-mongo": "^4.4.1",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
-    "mongoose": "^6.2.9"
+    "mongoose": "^6.4.1"
   },
   "devDependencies": {
     "@jest-mock/express": "^1.4.5",
