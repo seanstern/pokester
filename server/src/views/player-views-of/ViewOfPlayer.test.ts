@@ -11,7 +11,7 @@ import viewOfPlayer from "./ViewOfPlayer";
 describe("viewOfPlayer produces vaild JSON when given a Player", () => {
   describe("that represents the viewer", () => {
     describe("with holeCards present", () => {
-      test("with legalActions present", () => {
+      test("with playing legal actions present", () => {
         const player = currentActorPostDealPreFlop.create();
         const { id: viewerId } = player;
         const view = viewOfPlayer(viewerId, player);
@@ -42,6 +42,7 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
             "isSelf": true,
             "left": false,
             "legalActions": Array [
+              "stand",
               "call",
               "raise",
               "fold",
@@ -51,17 +52,15 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
         `);
       });
 
-      test("with legalActions absent", () => {
+      test("with playing legal actions absent", () => {
         const player = priorActorPostDealPreFlop.create();
         const { id: viewerId } = player;
         const view = viewOfPlayer(viewerId, player);
         expect(view).toMatchObject({
           isSelf: true,
           holeCards: expect.any(Array),
+          legalActions: expect.any(Array),
         });
-        expect(
-          (view as Routes.PokerRooms.Get.SelfPlayer).legalActions
-        ).toBeUndefined();
         expect(view).toMatchInlineSnapshot(`
           Object {
             "bet": 10,
@@ -83,7 +82,9 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
             "id": "Jane",
             "isSelf": true,
             "left": false,
-            "legalActions": undefined,
+            "legalActions": Array [
+              "stand",
+            ],
             "stackSize": 2990,
           }
         `);
@@ -91,7 +92,7 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
     });
 
     describe("with holeCards absent", () => {
-      test("with legalActions present", () => {
+      test("with playing legal actions present", () => {
         const player = dealerAmongSeatedPlayers.create();
         const { id: viewerId } = player;
         const view = viewOfPlayer(viewerId, player);
@@ -109,6 +110,7 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
             "isSelf": true,
             "left": false,
             "legalActions": Array [
+              "stand",
               "deal",
             ],
             "stackSize": 2000,
@@ -116,15 +118,15 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
         `);
       });
 
-      test("with legalActions absent", () => {
+      test("with playing legal actions absent", () => {
         const player = folded.create();
         const { id: viewerId } = player;
         const view = viewOfPlayer(viewerId, player);
-        expect(view.isSelf).toBe(true);
+        expect(view).toMatchObject({
+          isSelf: true,
+          legalActions: expect.any(Array),
+        });
         expect(view.holeCards).toBeUndefined();
-        expect(
-          (view as Routes.PokerRooms.Get.SelfPlayer).legalActions
-        ).toBeUndefined();
         expect(view).toMatchInlineSnapshot(`
           Object {
             "bet": 0,
@@ -133,7 +135,9 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
             "id": "Juan",
             "isSelf": true,
             "left": false,
-            "legalActions": undefined,
+            "legalActions": Array [
+              "stand",
+            ],
             "stackSize": 9189,
           }
         `);

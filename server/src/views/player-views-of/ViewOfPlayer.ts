@@ -50,6 +50,10 @@ const viewOfLegalActions = (
 ): Routes.PokerRooms.Get.PlayerAction[] | undefined => {
   const legalActions: Routes.PokerRooms.Get.PlayerAction[] = [];
 
+  if (!p.left) {
+    legalActions.push(Routes.PokerRooms.Get.PlayerAction.STAND);
+  }
+
   if (canDealCards(p)) {
     legalActions.push(Routes.PokerRooms.Get.PlayerAction.DEAL);
   }

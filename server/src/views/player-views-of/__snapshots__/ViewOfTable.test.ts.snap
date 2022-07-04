@@ -51,7 +51,9 @@ Object {
       "id": "Jane",
       "isSelf": true,
       "left": false,
-      "legalActions": undefined,
+      "legalActions": Array [
+        "stand",
+      ],
       "stackSize": 2990,
     },
     Object {
@@ -115,7 +117,9 @@ Object {
           "id": "Jane",
           "isSelf": true,
           "left": false,
-          "legalActions": undefined,
+          "legalActions": Array [
+            "stand",
+          ],
           "stackSize": 2990,
         },
         Object {
@@ -322,7 +326,9 @@ Object {
       "id": "Jane",
       "isSelf": true,
       "left": false,
-      "legalActions": undefined,
+      "legalActions": Array [
+        "stand",
+      ],
       "stackSize": 2990,
     },
     Object {
@@ -511,6 +517,7 @@ Object {
       "isSelf": true,
       "left": false,
       "legalActions": Array [
+        "stand",
         "check",
         "bet",
         "fold",
@@ -579,6 +586,7 @@ Object {
           "isSelf": true,
           "left": false,
           "legalActions": Array [
+            "stand",
             "check",
             "bet",
             "fold",
@@ -761,7 +769,9 @@ Object {
       "id": "Jane",
       "isSelf": true,
       "left": false,
-      "legalActions": undefined,
+      "legalActions": Array [
+        "stand",
+      ],
       "stackSize": 3005,
     },
     Object {
@@ -944,6 +954,7 @@ Object {
       "isSelf": true,
       "left": false,
       "legalActions": Array [
+        "stand",
         "check",
         "bet",
         "fold",
@@ -1012,6 +1023,7 @@ Object {
           "isSelf": true,
           "left": false,
           "legalActions": Array [
+            "stand",
             "check",
             "bet",
             "fold",
@@ -1175,7 +1187,9 @@ Object {
       "id": "Jane",
       "isSelf": true,
       "left": false,
-      "legalActions": undefined,
+      "legalActions": Array [
+        "stand",
+      ],
       "stackSize": 3000,
     },
     Object {

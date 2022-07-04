@@ -147,7 +147,9 @@ describe("viewOfTable produces valid JSON when given", () => {
               "id": "Jane",
               "isSelf": true,
               "left": false,
-              "legalActions": undefined,
+              "legalActions": Array [
+                "stand",
+              ],
               "stackSize": 3010,
             },
             Object {
@@ -224,7 +226,9 @@ describe("viewOfTable produces valid JSON when given", () => {
                   "id": "Jane",
                   "isSelf": true,
                   "left": false,
-                  "legalActions": undefined,
+                  "legalActions": Array [
+                    "stand",
+                  ],
                   "stackSize": 3010,
                 },
                 Object {
@@ -272,7 +276,9 @@ describe("viewOfTable produces valid JSON when given", () => {
                   "id": "Jane",
                   "isSelf": true,
                   "left": false,
-                  "legalActions": undefined,
+                  "legalActions": Array [
+                    "stand",
+                  ],
                   "stackSize": 3010,
                 },
                 Object {
@@ -324,7 +330,9 @@ describe("viewOfTable produces valid JSON when given", () => {
               "id": "Jane",
               "isSelf": true,
               "left": false,
-              "legalActions": undefined,
+              "legalActions": Array [
+                "stand",
+              ],
               "stackSize": 3010,
             },
             Object {
