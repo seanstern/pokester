@@ -1,9 +1,12 @@
-import { model, Schema } from "mongoose";
-import PokerRoomSchema, { PokerRoomDoc } from "./PokerRoomSchema";
+import { model } from "mongoose";
+import PokerRoomSchema, {
+  PublicPokerRoomDoc as PokerRoomDoc,
+  PublicPokerRoomModel as PokerRoomModel,
+} from "./PokerRoomSchema";
 
-const PokerRoomModel = model(
+const PokerRoom = model<PokerRoomDoc, PokerRoomModel>(
   "PokerRoom",
-  PokerRoomSchema as unknown as Schema<PokerRoomDoc>
+  PokerRoomSchema as any
 );
 
-export default PokerRoomModel;
+export default PokerRoom;

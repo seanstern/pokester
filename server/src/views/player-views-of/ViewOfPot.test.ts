@@ -57,7 +57,9 @@ describe("viewOfPot produces valid JSON when given", () => {
               "id": "Jane",
               "isSelf": true,
               "left": false,
-              "legalActions": undefined,
+              "legalActions": Array [
+                "stand",
+              ],
               "stackSize": 2990,
             },
             Object {
@@ -199,7 +201,9 @@ describe("viewOfPot produces valid JSON when given", () => {
               "id": "Jane",
               "isSelf": true,
               "left": false,
-              "legalActions": undefined,
+              "legalActions": Array [
+                "stand",
+              ],
               "stackSize": 3010,
             },
             Object {
@@ -247,7 +251,9 @@ describe("viewOfPot produces valid JSON when given", () => {
               "id": "Jane",
               "isSelf": true,
               "left": false,
-              "legalActions": undefined,
+              "legalActions": Array [
+                "stand",
+              ],
               "stackSize": 3010,
             },
             Object {

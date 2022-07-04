@@ -63,10 +63,18 @@ const mockFindExecResolution = [
   }),
 ];
 const mockFindExec = jest.fn(() => Promise.resolve(mockFindExecResolution));
+const mockFindWhere = jest.fn().mockReturnThis();
+const mockFindByCanPlayerSit = jest.fn().mockReturnThis();
+const mockFindByIsPlayerSeated = jest.fn().mockReturnThis();
+const mockFindSelect = jest.fn().mockReturnThis();
 const mockFind = jest.spyOn(PokerRoom, "find").mockImplementation(
   () =>
     ({
       exec: mockFindExec,
+      where: mockFindWhere,
+      byCanPlayerSit: mockFindByCanPlayerSit,
+      byIsPlayerSeated: mockFindByIsPlayerSeated,
+      select: mockFindSelect,
     } as any)
 );
 
@@ -126,51 +134,132 @@ describe("create", () => {
 
 describe("getAll", () => {
   describe("succeeds", () => {
-    const queryParamsTable: [
-      GetAllReqQuery,
-      Parameters<typeof PokerRoom["find"]>[0]
-    ][] = [
-      [{}, {}],
-      [{ creatorId: "creatorVal" }, { creatorId: "creatorVal" }],
-      [{ name: "nameVal" }, { name: "nameVal" }],
-      [{ openSeat: "true" }, { playersCount: { $lt: 10 } }],
-      [{ openSeat: "false" }, { playersCount: { $gte: 10 } }],
-      // query parameters are determined by client callers and so
-      // technically can be *anything*, including "randomString"
-      [{ openSeat: "randomString" } as any, {}],
-      [
-        { creatorId: "creatorVal", name: "nameVal", openSeat: "true" },
-        { creatorId: "creatorVal", name: "nameVal", playersCount: { $lt: 10 } },
-      ],
-    ];
-    test.each(queryParamsTable)(
-      "when given query %O, uses find filter %O",
-      async (query, findParam) => {
-        const req = getMockReq<Parameters<typeof getAll>[0]>({
-          // anyone can use getAll endpoint
-          sessionID: "nonCreatorId",
-          query,
-        });
-        const { res, next } = getMockRes<Parameters<typeof getAll>[1]>();
+    const resJsonCalledWith = mockFindExecResolution.map((pr) => ({
+      id: pr.id,
+      name: pr.name,
+      canSit: pr.canSit(sessionID),
+      isSeated: pr.isSeated(sessionID),
+    }));
 
-        await getAll(req, res, next);
+    test("with creatorId query param", async () => {
+      const query = { creatorId: "creatorVal" };
+      const req = getMockReq<Parameters<typeof getAll>[0]>({
+        sessionID,
+        query,
+      });
+      const { res, next } = getMockRes<Parameters<typeof getAll>[1]>();
 
-        expect(next).not.toHaveBeenCalled();
-        expect(mockFind).toHaveBeenCalledTimes(1);
-        expect(mockFind).toHaveBeenCalledWith(findParam);
-        expect(mockFindExec).toHaveBeenCalledTimes(1);
-        expect(res.status).toHaveBeenCalledTimes(1);
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledTimes(1);
-        expect(res.json).toHaveBeenCalledWith(
-          mockFindExecResolution.map(({ id, name, playersCount }) => ({
-            id,
-            name,
-            playersCount,
-          }))
-        );
-      }
-    );
+      await getAll(req, res, next);
+
+      expect(next).not.toHaveBeenCalled();
+      expect(mockFindByCanPlayerSit).not.toHaveBeenCalled();
+      expect(mockFindByIsPlayerSeated).not.toHaveBeenCalled();
+      expect(mockFind).toHaveBeenCalledTimes(1);
+      expect(mockFind).toHaveBeenCalledWith();
+      expect(mockFindWhere).toHaveBeenCalledTimes(1);
+      expect(mockFindWhere).toHaveBeenCalledWith(query);
+      expect(mockFindSelect).toHaveBeenCalledTimes(1);
+      expect(mockFindSelect).toHaveBeenCalledWith({
+        name: 1,
+        playerIds: 1,
+      });
+      expect(mockFindExec).toHaveBeenCalledTimes(1);
+      expect(mockFindExec).toHaveBeenCalledWith();
+      expect(res.status).toHaveBeenCalledTimes(1);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledTimes(1);
+      expect(res.json).toHaveBeenCalledWith(resJsonCalledWith);
+    });
+
+    test("with name query param", async () => {
+      const query = { name: "nameVal" };
+      const req = getMockReq<Parameters<typeof getAll>[0]>({
+        sessionID,
+        query,
+      });
+      const { res, next } = getMockRes<Parameters<typeof getAll>[1]>();
+
+      await getAll(req, res, next);
+
+      expect(next).not.toHaveBeenCalled();
+      expect(mockFindByCanPlayerSit).not.toHaveBeenCalled();
+      expect(mockFindByIsPlayerSeated).not.toHaveBeenCalled();
+      expect(mockFind).toHaveBeenCalledTimes(1);
+      expect(mockFind).toHaveBeenCalledWith();
+      expect(mockFindWhere).toHaveBeenCalledTimes(1);
+      expect(mockFindWhere).toHaveBeenCalledWith(query);
+      expect(mockFindSelect).toHaveBeenCalledTimes(1);
+      expect(mockFindSelect).toHaveBeenCalledWith({
+        name: 1,
+        playerIds: 1,
+      });
+      expect(mockFindExec).toHaveBeenCalledTimes(1);
+      expect(mockFindExec).toHaveBeenCalledWith();
+      expect(res.status).toHaveBeenCalledTimes(1);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledTimes(1);
+      expect(res.json).toHaveBeenCalledWith(resJsonCalledWith);
+    });
+
+    test("with canSit query param", async () => {
+      const query = { canSit: "true" };
+      const req = getMockReq<Parameters<typeof getAll>[0]>({
+        sessionID,
+        query,
+      });
+      const { res, next } = getMockRes<Parameters<typeof getAll>[1]>();
+
+      await getAll(req, res, next);
+
+      expect(next).not.toHaveBeenCalled();
+      expect(mockFindWhere).not.toHaveBeenCalled();
+      expect(mockFindByIsPlayerSeated).not.toHaveBeenCalled();
+      expect(mockFind).toHaveBeenCalledTimes(1);
+      expect(mockFind).toHaveBeenCalledWith();
+      expect(mockFindByCanPlayerSit).toHaveBeenCalledTimes(1);
+      expect(mockFindByCanPlayerSit).toHaveBeenCalledWith(sessionID, true);
+      expect(mockFindSelect).toHaveBeenCalledTimes(1);
+      expect(mockFindSelect).toHaveBeenCalledWith({
+        name: 1,
+        playerIds: 1,
+      });
+      expect(mockFindExec).toHaveBeenCalledTimes(1);
+      expect(mockFindExec).toHaveBeenCalledWith();
+      expect(res.status).toHaveBeenCalledTimes(1);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledTimes(1);
+      expect(res.json).toHaveBeenCalledWith(resJsonCalledWith);
+    });
+
+    test("with isSeated query param", async () => {
+      const query = { isSeated: "false" };
+      const req = getMockReq<Parameters<typeof getAll>[0]>({
+        sessionID,
+        query,
+      });
+      const { res, next } = getMockRes<Parameters<typeof getAll>[1]>();
+
+      await getAll(req, res, next);
+
+      expect(next).not.toHaveBeenCalled();
+      expect(mockFindWhere).not.toHaveBeenCalled();
+      expect(mockFindByCanPlayerSit).not.toHaveBeenCalled();
+      expect(mockFind).toHaveBeenCalledTimes(1);
+      expect(mockFind).toHaveBeenCalledWith();
+      expect(mockFindByIsPlayerSeated).toHaveBeenCalledTimes(1);
+      expect(mockFindByIsPlayerSeated).toHaveBeenCalledWith(sessionID, false);
+      expect(mockFindSelect).toHaveBeenCalledTimes(1);
+      expect(mockFindSelect).toHaveBeenCalledWith({
+        name: 1,
+        playerIds: 1,
+      });
+      expect(mockFindExec).toHaveBeenCalledTimes(1);
+      expect(mockFindExec).toHaveBeenCalledWith();
+      expect(res.status).toHaveBeenCalledTimes(1);
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledTimes(1);
+      expect(res.json).toHaveBeenCalledWith(resJsonCalledWith);
+    });
   });
 });
 
@@ -281,6 +370,7 @@ describe("get", () => {
                 "isSelf": true,
                 "left": false,
                 "legalActions": Array [
+                  "stand",
                   "check",
                   "bet",
                   "fold",
@@ -345,6 +435,7 @@ describe("get", () => {
                     "isSelf": true,
                     "left": false,
                     "legalActions": Array [
+                      "stand",
                       "check",
                       "bet",
                       "fold",

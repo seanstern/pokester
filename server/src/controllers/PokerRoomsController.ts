@@ -82,29 +82,42 @@ export const getAll: RequestHandler<
 > = async (req, res, next) => {
   try {
     const {
-      query: { creatorId, name, openSeat },
+      query: { creatorId, name, canSit, isSeated },
+      sessionID,
     } = req;
 
-    const creatorIdFilter = creatorId ? { creatorId } : {};
-    const nameFilter = name ? { name } : {};
-    const openSeatFilter =
-      openSeat !== undefined && ["true", "false"].includes(openSeat)
-        ? { playersCount: openSeat === "true" ? { $lt: 10 } : { $gte: 10 } }
-        : {};
+    const mutablePokerRoomsQuery = PokerRoom.find();
+    if (name) {
+      mutablePokerRoomsQuery.where({ name });
+    }
+    if (creatorId) {
+      mutablePokerRoomsQuery.where({ creatorId });
+    }
+    if (canSit && ["false", "true"].includes(canSit)) {
+      mutablePokerRoomsQuery.byCanPlayerSit(sessionID, canSit === "true");
+    }
+    if (isSeated && ["false", "true"].includes(isSeated)) {
+      mutablePokerRoomsQuery.byIsPlayerSeated(sessionID, isSeated === "true");
+    }
+    mutablePokerRoomsQuery.select({
+      name: 1,
+      playerIds: 1,
+    });
 
-    const pokerRooms = await PokerRoom.find({
-      ...creatorIdFilter,
-      ...nameFilter,
-      ...openSeatFilter,
-    }).exec();
+    const pokerRooms = await mutablePokerRoomsQuery.exec();
 
-    const pokerRoomsResponse: GetAllResBody = pokerRooms.map(
-      ({ id, name, playersCount }) => ({
+    const pokerRoomsResponse: GetAllResBody = pokerRooms.map((pr) => {
+      const { id, name } = pr;
+      if (!name) {
+        throw new Error(`PokerRoom ${id} missing name property`);
+      }
+      return {
         id,
         name,
-        playersCount,
-      })
-    );
+        canSit: pr.canSit(sessionID),
+        isSeated: pr.isSeated(sessionID),
+      };
+    });
 
     res.status(200).json(pokerRoomsResponse);
     return;
@@ -146,7 +159,7 @@ export const get: RequestHandler<
     const pr = await PokerRoom.findOne({
       _id: roomId,
     }).exec();
-    if (!pr) {
+    if (!pr?.name || !pr?.table) {
       throw new Error("PokerRoom does not exist");
     }
 
@@ -213,7 +226,7 @@ export const act: RequestHandler<
     const pr = await PokerRoom.findOne({
       _id: roomId,
     }).exec();
-    if (!pr) {
+    if (!pr?.table) {
       throw new Error("PokerRoom does not exist");
     }
 
