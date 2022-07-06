@@ -1,10 +1,6 @@
 import { Card, CardRank, CardSuit, Player, Table } from "@chevtek/poker-engine";
 import { serialize as serializeCard } from "./CardSerializer";
-import {
-  serialize,
-  createDeserializeFn,
-  createDeserializeReferenceFn,
-} from "./PlayerSerializer";
+import { serialize, createDeserializeFn } from "./PlayerSerializer";
 
 const t = new Table();
 test("serialize produces valid JSON when given Player", () => {
@@ -39,22 +35,60 @@ test("serialize produces valid JSON when given Player", () => {
 describe("createDeserializeFn's created deserialize fn", () => {
   const deserialize = createDeserializeFn(t);
 
-  test("produces valid Player when given serialized version of Player", () => {
-    const player = new Player("playerId", 2360, t);
+  describe("succeeds", () => {
+    describe("by constructing new Player", () => {
+      test("when given serialized version of Player with no mutableContext", () => {
+        const player = new Player("playerId", 2360, t);
 
-    const deserializedPlayer0 = deserialize(serialize(player));
-    expect(deserializedPlayer0).not.toBe(player);
-    expect(deserializedPlayer0).toStrictEqual(player);
+        const deserializedPlayer0 = deserialize(serialize(player));
 
-    player.raise = 13;
-    player.holeCards = [
-      new Card(CardRank.KING, CardSuit.DIAMOND),
-      new Card(CardRank.QUEEN, CardSuit.HEART),
-    ];
+        expect(deserializedPlayer0).not.toBe(player);
+        expect(deserializedPlayer0).toStrictEqual(player);
 
-    const deserializedPlayer1 = deserialize(serialize(player));
-    expect(deserializedPlayer1).not.toBe(player);
-    expect(deserializedPlayer1).toStrictEqual(player);
+        player.raise = 13;
+        player.holeCards = [
+          new Card(CardRank.KING, CardSuit.DIAMOND),
+          new Card(CardRank.QUEEN, CardSuit.HEART),
+        ];
+
+        const deserializedPlayer1 = deserialize(serialize(player));
+        expect(deserializedPlayer1).not.toBe(player);
+        expect(deserializedPlayer1).toStrictEqual(player);
+      });
+
+      test("when given serialized version of Player with no corresponding entry in mutableContext", () => {
+        const player = new Player("playerId", 2360, t);
+        const mutableContext = new Map<string, Player>();
+
+        const deserializedPlayer0 = deserialize(
+          serialize(player),
+          mutableContext
+        );
+
+        expect(deserializedPlayer0).not.toBe(player);
+        expect(deserializedPlayer0).toStrictEqual(player);
+        expect(mutableContext.size).toBe(1);
+        expect([...mutableContext.entries()]).toStrictEqual([
+          [deserializedPlayer0.id, deserializedPlayer0],
+        ]);
+      });
+    });
+
+    test("by returning existing Player reference when corresponding entry in mutableContext exists", () => {
+      const player = new Player("playerId", 2360, t);
+      const mutableContext = new Map<string, Player>();
+      mutableContext.set(player.id, player);
+
+      const deserializedPlayer0 = deserialize(
+        serialize(player),
+        mutableContext
+      );
+      expect(deserializedPlayer0).toBe(player);
+      expect(mutableContext.size).toBe(1);
+      expect([...mutableContext.entries()]).toStrictEqual([
+        [player.id, player],
+      ]);
+    });
   });
 
   test("throws when given serialized Player with invalid number of hole cards", () => {
@@ -66,33 +100,5 @@ describe("createDeserializeFn's created deserialize fn", () => {
     expect(() => deserialize(serializedPlayer)).toThrow(
       /tuple.*length 2[^]*holeCards/
     );
-  });
-});
-
-describe("createDeserializeReferenceFn's created deserializeReference fn", () => {
-  const players = [
-    new Player("player id 0", 1000, t),
-    new Player("player id 1", 2000, t),
-    new Player("player id 2", 3000, t),
-  ];
-  const deserializeReference = createDeserializeReferenceFn(players);
-
-  describe("produces reference to deserialized Player object when given serialized reference", () => {
-    const validSerializedPlayerReferencesTable = players.map((player) => ({
-      serializedPlayerReference: { id: player.id },
-      player,
-    }));
-    test.each(validSerializedPlayerReferencesTable)(
-      '{ id: "$id" }',
-      ({ serializedPlayerReference, player }) => {
-        expect(deserializeReference(serializedPlayerReference)).toBe(player);
-      }
-    );
-  });
-
-  test("throws when given serialized reference to Player that doesn't exist", () => {
-    expect(() =>
-      deserializeReference({ id: "non-existent player id" })
-    ).toThrow(/reference/);
   });
 });

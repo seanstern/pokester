@@ -32,7 +32,7 @@ describe("createDeserializeFn's created deserialize fn", () => {
     new Player("player id 1", 2500, t),
     new Player("player id 2", 3500, t),
   ];
-  const deserializePot = createDeserializeFn(players);
+  const deserializePot = createDeserializeFn(t);
 
   const createPotsTable: [string, () => Pot][] = [
     ["with no eligible players, no winners", () => new Pot()],
@@ -55,12 +55,43 @@ describe("createDeserializeFn's created deserialize fn", () => {
     ],
   ];
 
-  describe("produces valid Pot object when given serialized version of Pot", () => {
-    test.each(createPotsTable)("%s", (_, createPot) => {
-      const p = createPot();
-      const deserializedPot = deserializePot(serialize(p));
-      expect(deserializedPot).not.toBe(p);
-      expect(deserializedPot).toStrictEqual(p);
+  describe("succeeds by constructing new Pot", () => {
+    describe("and new Players when given serialized version of Pot with no mutableContext", () => {
+      test.each(createPotsTable)("%s", (_, createPot) => {
+        const p = createPot();
+        const deserializedPot = deserializePot(serialize(p));
+        expect(deserializedPot).not.toBe(p);
+        expect(deserializedPot).toStrictEqual(p);
+      });
+    });
+
+    describe("and new Players when given serialized version of Pot with no corresponding player entries in mutableContext", () => {
+      test.each(createPotsTable)("%s", (_, createPot) => {
+        const p = createPot();
+        const mutableContext = new Map<string, Player>();
+        const deserializedPot = deserializePot(serialize(p), mutableContext);
+        expect(deserializedPot).not.toBe(p);
+        expect(deserializedPot).toStrictEqual(p);
+        expect(mutableContext.size).toBe(p.eligiblePlayers.length);
+        expect([...mutableContext.entries()]).toStrictEqual(
+          p.eligiblePlayers.map((p) => [p.id, p])
+        );
+      });
+    });
+
+    describe("with existing Player references when given serialized version of Pot with corresponding player entries in mutableContext", () => {
+      test.each(createPotsTable)("%s", (_, createPot) => {
+        const p = createPot();
+        const mutableContext = new Map<string, Player>();
+        p.eligiblePlayers.forEach((p) => mutableContext.set(p.id, p));
+        const deserializedPot = deserializePot(serialize(p), mutableContext);
+        expect(deserializedPot).not.toBe(p);
+        expect(deserializedPot).toStrictEqual(p);
+        expect(mutableContext.size).toBe(p.eligiblePlayers.length);
+        expect([...mutableContext.entries()]).toStrictEqual(
+          p.eligiblePlayers.map((p) => [p.id, p])
+        );
+      });
     });
   });
 });
