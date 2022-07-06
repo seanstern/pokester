@@ -1,6 +1,24 @@
 import { Player } from "@chevtek/poker-engine";
 
 /**
+ * Given a nullable player, returns true when the player exists and has
+ * chips to play.
+ *
+ * @param player a nullable player
+ * @returns true when the player has chips to play, false otherwise.
+ */
+const hasChips = (player: Player | null) => player && player.stackSize > 0;
+
+/**
+ * Given a nullable player, returns true when the player exists and
+ * hasn't left.
+ *
+ * @param player a nullable player
+ * @returns true when the player hasn't left, false otherwise.
+ */
+const isStaying = (player: Player | null) => player?.left === false;
+
+/**
  * Given a Player, returns true when Player is Player.table.dealer
  * and Player.table.dealCards can be called without throwing an
  * exception; false otherwise.
@@ -15,7 +33,11 @@ import { Player } from "@chevtek/poker-engine";
  */
 export const canDealCards = (p: Player) => {
   const {
-    table: { dealer, activePlayers, currentRound },
+    table: { dealer, currentRound, players },
   } = p;
-  return dealer === p && activePlayers.length >= 2 && !currentRound;
+  return (
+    dealer === p &&
+    !currentRound &&
+    players.filter(isStaying).filter(hasChips).length >= 2
+  );
 };

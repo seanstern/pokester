@@ -132,6 +132,21 @@ export const completeRound: Fixture<Table> = {
   },
 };
 
+export const completeRoundWinnerStoodUp: Fixture<Table> = {
+  description:
+    "Table at completion of round; players have called, checked, stoodUp, bet, folded, raised; winner has stood up",
+  create: () => {
+    const t = completeRound.create();
+    if (!t.winners || !t.winners[0]) {
+      throw new Error(
+        "t.winners in completeRound Table.fixture expeted to be non-nullish and have at least 1 element"
+      );
+    }
+    t.standUp(t.winners[0]);
+    return t;
+  },
+};
+
 export const roundTwo: Fixture<Table> = {
   description: "Table at start of second round",
   create: () => {

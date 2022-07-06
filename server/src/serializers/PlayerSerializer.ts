@@ -6,7 +6,6 @@ import {
   deserializeString,
   deserializeNumber,
   JSONValue,
-  FieldDeserializationSpec,
   createDeserializeArrayFn,
   deserializeBoolean,
   createDeserializeFieldsFn,
@@ -18,15 +17,14 @@ import { deserialize as deseralizeCard } from "./CardSerializer";
 
 /**
  * Given a Player, returns a JSON conformant version of the Player
+ *
  * @param p a Player
  * @returns a JSON conformant version of the Player
  */
 export const serialize = (p: Player) => serializeCommon(p, "table");
 
 type OmitLast<T> = T extends [...infer S, any] ? S : never;
-const initialConstructorArgumentsDeserializationSpec: ArgumentsDeserializationSpec<
-  OmitLast<ConstructorParameters<typeof Player>>
-> = [
+const deserializeInitialConstructorArgs = createDeserializeArgumentsFn([
   {
     serializedKeyName: "id",
     deserialize: deserializeString,
@@ -35,24 +33,14 @@ const initialConstructorArgumentsDeserializationSpec: ArgumentsDeserializationSp
     serializedKeyName: "stackSize",
     deserialize: deserializeNumber,
   },
-];
-const deserializeInitialConstructorArgs = createDeserializeArgumentsFn(
-  initialConstructorArgumentsDeserializationSpec
-);
+] as ArgumentsDeserializationSpec<OmitLast<ConstructorParameters<typeof Player>>>);
 
 const deserializeCardArray = createDeserializeArrayFn(deseralizeCard);
 
-type DeserializableFields =
-  | "bet"
-  | "raise"
-  | "holeCards"
-  | "folded"
-  | "showCards"
-  | "left";
-const fieldDeserializationSpec: FieldDeserializationSpec<
+const deserializeFields = createDeserializeFieldsFn<
   Player,
-  DeserializableFields
-> = {
+  "bet" | "raise" | "holeCards" | "folded" | "showCards" | "left"
+>({
   bet: deserializeNumber,
   raise: createDeserializeOptionalFn(deserializeNumber),
   holeCards: createDeserializeOptionalFn((json: JSONValue) => {
@@ -65,50 +53,41 @@ const fieldDeserializationSpec: FieldDeserializationSpec<
   folded: deserializeBoolean,
   showCards: deserializeBoolean,
   left: deserializeBoolean,
+});
+
+export type MutableContext = {
+  get(id: string): Player | undefined;
+  set(id: string, p: Player): void;
 };
-
-const deserializeFields = createDeserializeFieldsFn(fieldDeserializationSpec);
-
 /**
  * Given a Table, return a function that will deserialize a JSON representation
  * of a Player.
+ *
  * @param t the deserialized Table the Players are sitting at
  * @returns a function that will deserialize a JSON representation of a Player;
- *   function take JSONValue and returns a Player
+ *   function take JSONValue and an optional mutableContext and returns a
+ *   Player
  */
 export const createDeserializeFn =
-  (t: Table): Deserialize<Player> =>
-  (json: JSONValue) =>
-    assignDeserializedFieldsTo(
+  (t: Table): Deserialize<Player, MutableContext> =>
+  (json: JSONValue, mutableContext?: MutableContext) => {
+    const constructorArgs = deserializeInitialConstructorArgs(json);
+    if (mutableContext) {
+      const [id] = constructorArgs;
+      const playerFromContext = mutableContext.get(id);
+      if (playerFromContext) {
+        return playerFromContext;
+      }
+    }
+
+    const player = assignDeserializedFieldsTo(
       new Player(...deserializeInitialConstructorArgs(json), t),
       deserializeFields(json)
     );
 
-const firstConstructorArgumentDeserializationSpec = [
-  initialConstructorArgumentsDeserializationSpec[0],
-];
-const deserializeFirstConstructorArgs = createDeserializeArgumentsFn(
-  firstConstructorArgumentDeserializationSpec
-);
-/**
- * Given a list of deserialized Players, return a function that will
- * deserialize a JSON representation of a reference to one of the
- * provided deserialized Players. Alternatively, returns a function
- * that will return one of the deserialied Players that matches
- * the JSON.
- * @param players a list of deserialized Players
- * @returns a function that will deserialize a JSON representation
- *   of a reference to one of the provided deserialized Players;
- *   function takes a JSONValue and returns one of the deserialized
- *   Players that matches the JSONValue
- */
-export const createDeserializeReferenceFn =
-  (players: (Player | null)[]): Deserialize<Player> =>
-  (json: JSONValue) => {
-    const [id] = deserializeFirstConstructorArgs(json);
-    const player = players.find((player) => player?.id === id);
-    if (!player) {
-      throw new Error(`Cannot find reference to Player with id "${id}"`);
+    if (mutableContext) {
+      mutableContext.set(player.id, player);
     }
+
     return player;
   };

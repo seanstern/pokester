@@ -1,6 +1,5 @@
-import { Pot, Player } from "@chevtek/poker-engine";
+import { Pot, Table } from "@chevtek/poker-engine";
 import {
-  FieldDeserializationSpec,
   createDeserializeFieldsFn,
   deserializeNumber,
   Deserialize,
@@ -10,39 +9,47 @@ import {
   serialize as serializeCommon,
   assignDeserializedFieldsTo,
 } from "./CommonSerializer";
-import { createDeserializeReferenceFn as createDeserializePlayerReferenceFn } from "./PlayerSerializer";
+import {
+  createDeserializeFn as createDeserializePlayerFn,
+  MutableContext as PlayerMutableContext,
+} from "./PlayerSerializer";
 
 /**
  * Given a Pot, returns a JSON conformant version of the Pot
+ *
  * @param p a Pot
  * @returns a JSON conformant version of the Pot
  */
 export const serialize = (p: Pot) => serializeCommon(p, "table");
 
-type DeserializableFields = "amount" | "eligiblePlayers" | "winners";
 /**
- * Given a list of Players, return a function that will deserialize a
- * JSON representation of a Pot.
- * @param players the deserialized Players sitting at the table
+ * Given a Table, return a function that will deserialize a JSON representation
+ * of a Pot.
+ *
+ * @param t the deserialized Table the Players are sitting at
  * @returns a function that will deserialize a JSON representation of a Pot;
- *   function takes a JSONValue and returns a Pot
+ *   function takes a JSONValue and an optional mutableContext, and returns a
+ *   Pot
  */
 export const createDeserializeFn =
-  (players: (Player | null)[]): Deserialize<Pot> =>
-  (json: JSONValue) => {
-    const deserializeArrayOfPlayerRefs = createDeserializeArrayFn(
-      createDeserializePlayerReferenceFn(players)
+  (t: Table): Deserialize<Pot, PlayerMutableContext> =>
+  (json: JSONValue, mutableContext?: PlayerMutableContext) => {
+    const deserializePlayers = createDeserializeArrayFn(
+      createDeserializePlayerFn(t)
     );
-    const fieldDeserializationSpec: FieldDeserializationSpec<
+
+    const deserializeFields = createDeserializeFieldsFn<
       Pot,
-      DeserializableFields
-    > = {
+      "amount" | "eligiblePlayers" | "winners",
+      PlayerMutableContext
+    >({
       amount: deserializeNumber,
-      eligiblePlayers: deserializeArrayOfPlayerRefs,
-      winners: createDeserializeOptionalFn(deserializeArrayOfPlayerRefs),
-    };
-    const deserializeFields = createDeserializeFieldsFn(
-      fieldDeserializationSpec
+      eligiblePlayers: deserializePlayers,
+      winners: createDeserializeOptionalFn(deserializePlayers),
+    });
+
+    return assignDeserializedFieldsTo(
+      new Pot(),
+      deserializeFields(json, mutableContext)
     );
-    return assignDeserializedFieldsTo(new Pot(), deserializeFields(json));
   };
