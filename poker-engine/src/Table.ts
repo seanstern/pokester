@@ -193,14 +193,14 @@ export class Table {
     let playersToStandUp: Player[];
     if (typeof player === "string") {
       playersToStandUp = this.players.filter(
-        (p) => p && p.id === player && !p.left
+        (p) => p && p.id === player && (!p.left || !this.currentRound)
       ) as Player[];
       if (playersToStandUp.length === 0) {
         throw new Error(`No player found.`);
       }
     } else {
       playersToStandUp = this.players.filter(
-        (p) => p === player && !p.left
+        (p) => p === player && (!p.left || !this.currentRound)
       ) as Player[];
     }
     for (const player of playersToStandUp) {
