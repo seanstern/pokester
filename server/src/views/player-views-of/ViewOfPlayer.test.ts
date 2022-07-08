@@ -132,13 +132,13 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
             "bet": 0,
             "folded": true,
             "holeCards": undefined,
-            "id": "Juan",
+            "id": "Jane",
             "isSelf": true,
             "left": false,
             "legalActions": Array [
               "stand",
             ],
-            "stackSize": 9189,
+            "stackSize": 2990,
           }
         `);
       });
@@ -168,22 +168,22 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
           "holeCards": Array [
             Object {
               "color": "#000000",
-              "rank": "2",
+              "rank": "4",
               "suit": "s",
               "suitChar": "♠",
             },
             Object {
               "color": "#000000",
-              "rank": "3",
+              "rank": "5",
               "suit": "s",
               "suitChar": "♠",
             },
           ],
-          "id": "Jane",
+          "id": "Juan",
           "isSelf": false,
           "left": false,
           "legalActions": undefined,
-          "stackSize": 3010,
+          "stackSize": 9209,
         }
       `);
     });

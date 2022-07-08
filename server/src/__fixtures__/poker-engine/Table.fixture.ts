@@ -90,7 +90,7 @@ export const turn: Fixture<Table> = {
         "t.currentActor in flop Table.fixture expected to be non-nullish"
       );
     }
-    t.standUp("Jay");
+    t.dealer && t.standUp(t.dealer);
     t.currentActor.betAction(50);
     t.currentActor.foldAction();
     t.currentActor.callAction();

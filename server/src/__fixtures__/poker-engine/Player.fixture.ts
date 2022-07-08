@@ -5,6 +5,7 @@ import {
   playersSeated,
   preFlop,
   completeRound,
+  flop,
   turn,
 } from "./Table.fixture";
 
@@ -41,10 +42,10 @@ export const smallBlindAmongSeatedPlayers: Fixture<Player> = {
   },
 };
 
-export const dealerAtTurn: Fixture<Player> = {
-  description: "Dealer at turn",
+export const dealerAtFlop: Fixture<Player> = {
+  description: "Dealer at flop",
   create: () => {
-    const player = turn.create().dealer;
+    const player = flop.create().dealer;
     if (!player) {
       throw new Error("No dealer in playersSeated Table.fixture");
     }
@@ -88,14 +89,32 @@ export const folded: Fixture<Player> = {
   },
 };
 
-export const dealerAfterFirstRound: Fixture<Player> = {
-  description: "Dealer, immediately after completion of round",
+export const dealerStoodUpAtEndOfRound: Fixture<Player> = {
+  description: "Dealer who has stood up, immediately after completion of round",
   create: () => {
-    const player = completeRound.create().dealer;
-    if (!player) {
-      throw new Error("No dea array in completeRound Table.fixture");
+    const { dealer } = completeRound.create();
+    if (!dealer) {
+      throw new Error("No dealer in completeRound Table.fixture");
     }
-    return player;
+    if (!dealer.left) {
+      throw new Error("Dealer has not stood up in completeRound Table.fixtre");
+    }
+    return dealer;
+  },
+};
+
+export const nonDealerPlayerWithStoodUpDealerAtEndOfRound: Fixture<Player> = {
+  description:
+    "Non dealer at table with dealer who stood up, immediately after completion of round",
+  create: () => {
+    const table = completeRound.create();
+    const nonDealer = table.players.find(
+      (p) => p?.left === false && table.dealer !== p
+    );
+    if (!nonDealer) {
+      throw new Error("No non dealer in completeRound Table.fixture");
+    }
+    return nonDealer;
   },
 };
 
