@@ -16,7 +16,6 @@ import {
   ActReqParams,
   ActReqBody,
   getAll,
-  GetAllReqQuery,
 } from "./PokerRoomsController";
 
 // Common mocks
@@ -283,6 +282,7 @@ describe("get", () => {
     expect((res.json as jest.Mock).mock.lastCall).toMatchInlineSnapshot(`
       Array [
         Object {
+          "canSit": false,
           "id": "roomId",
           "name": "tableName",
           "table": Object {
@@ -318,6 +318,7 @@ describe("get", () => {
               Object {
                 "bet": 0,
                 "folded": false,
+                "handDescr": undefined,
                 "holeCards": undefined,
                 "id": "Jane",
                 "isSelf": false,
@@ -328,6 +329,7 @@ describe("get", () => {
               Object {
                 "bet": 0,
                 "folded": false,
+                "handDescr": undefined,
                 "holeCards": undefined,
                 "id": "Juan",
                 "isSelf": false,
@@ -339,6 +341,7 @@ describe("get", () => {
               Object {
                 "bet": 0,
                 "folded": false,
+                "handDescr": undefined,
                 "holeCards": undefined,
                 "id": "John",
                 "isSelf": false,
@@ -352,6 +355,7 @@ describe("get", () => {
               Object {
                 "bet": 0,
                 "folded": false,
+                "handDescr": "Straight Flush, Qs High",
                 "holeCards": Array [
                   Object {
                     "color": "#000000",
@@ -387,6 +391,7 @@ describe("get", () => {
                   Object {
                     "bet": 0,
                     "folded": false,
+                    "handDescr": undefined,
                     "holeCards": undefined,
                     "id": "Jane",
                     "isSelf": false,
@@ -397,6 +402,7 @@ describe("get", () => {
                   Object {
                     "bet": 0,
                     "folded": false,
+                    "handDescr": undefined,
                     "holeCards": undefined,
                     "id": "Juan",
                     "isSelf": false,
@@ -407,6 +413,7 @@ describe("get", () => {
                   Object {
                     "bet": 0,
                     "folded": false,
+                    "handDescr": undefined,
                     "holeCards": undefined,
                     "id": "John",
                     "isSelf": false,
@@ -417,6 +424,7 @@ describe("get", () => {
                   Object {
                     "bet": 0,
                     "folded": false,
+                    "handDescr": "Straight Flush, Qs High",
                     "holeCards": Array [
                       Object {
                         "color": "#000000",
