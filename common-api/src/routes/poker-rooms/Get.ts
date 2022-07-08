@@ -13,6 +13,7 @@ type CommonPlayer = Pick<
   "bet" | "folded" | "left" | "id" | "stackSize"
 > & {
   holeCards?: [Card, Card];
+  handDescr?: string;
 };
 
 export type SelfPlayer = CommonPlayer & {
