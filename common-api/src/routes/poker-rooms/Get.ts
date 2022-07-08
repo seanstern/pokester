@@ -55,4 +55,5 @@ export type ResBody = {
   id: string;
   name: string;
   table: Table;
+  canSit: boolean;
 };
