@@ -106,6 +106,7 @@ const viewOfPlayer = (
       ? viewOfHoleCards(pokerEngineHoleCards)
       : undefined,
     legalActions: isSelf ? viewOfLegalActions(p) : undefined,
+    handDescr: canViewHoleCards ? p.hand?.descr : undefined,
   };
 };
 

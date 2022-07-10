@@ -13,6 +13,7 @@ type CommonPlayer = Pick<
   "bet" | "folded" | "left" | "id" | "stackSize"
 > & {
   holeCards?: [Card, Card];
+  handDescr?: string;
 };
 
 export type SelfPlayer = CommonPlayer & {
@@ -54,4 +55,5 @@ export type ResBody = {
   id: string;
   name: string;
   table: Table;
+  canSit: boolean;
 };

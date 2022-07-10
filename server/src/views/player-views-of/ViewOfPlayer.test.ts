@@ -24,6 +24,7 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
           Object {
             "bet": 0,
             "folded": false,
+            "handDescr": "5 High",
             "holeCards": Array [
               Object {
                 "color": "#000000",
@@ -65,6 +66,7 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
           Object {
             "bet": 10,
             "folded": false,
+            "handDescr": "3 High",
             "holeCards": Array [
               Object {
                 "color": "#000000",
@@ -105,6 +107,7 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
           Object {
             "bet": 0,
             "folded": false,
+            "handDescr": undefined,
             "holeCards": undefined,
             "id": "John",
             "isSelf": true,
@@ -131,6 +134,7 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
           Object {
             "bet": 0,
             "folded": true,
+            "handDescr": undefined,
             "holeCards": undefined,
             "id": "Jane",
             "isSelf": true,
@@ -165,6 +169,7 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
         Object {
           "bet": 0,
           "folded": false,
+          "handDescr": "Royal Flush",
           "holeCards": Array [
             Object {
               "color": "#000000",
@@ -205,6 +210,7 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
         Object {
           "bet": 0,
           "folded": false,
+          "handDescr": undefined,
           "holeCards": undefined,
           "id": "Juan",
           "isSelf": false,

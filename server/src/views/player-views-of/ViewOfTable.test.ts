@@ -130,6 +130,7 @@ describe("viewOfTable produces valid JSON when given", () => {
             Object {
               "bet": 0,
               "folded": true,
+              "handDescr": undefined,
               "holeCards": undefined,
               "id": "Jane",
               "isSelf": false,
@@ -140,6 +141,7 @@ describe("viewOfTable produces valid JSON when given", () => {
             Object {
               "bet": 0,
               "folded": false,
+              "handDescr": "Royal Flush",
               "holeCards": Array [
                 Object {
                   "color": "#000000",
@@ -167,6 +169,7 @@ describe("viewOfTable produces valid JSON when given", () => {
             Object {
               "bet": 0,
               "folded": true,
+              "handDescr": undefined,
               "holeCards": undefined,
               "id": "John",
               "isSelf": false,
@@ -180,6 +183,7 @@ describe("viewOfTable produces valid JSON when given", () => {
             Object {
               "bet": 0,
               "folded": false,
+              "handDescr": "Royal Flush",
               "holeCards": Array [
                 Object {
                   "color": "#000000",
@@ -210,6 +214,7 @@ describe("viewOfTable produces valid JSON when given", () => {
                 Object {
                   "bet": 0,
                   "folded": false,
+                  "handDescr": "Royal Flush",
                   "holeCards": Array [
                     Object {
                       "color": "#000000",
@@ -236,6 +241,7 @@ describe("viewOfTable produces valid JSON when given", () => {
                 Object {
                   "bet": 0,
                   "folded": false,
+                  "handDescr": "Royal Flush",
                   "holeCards": Array [
                     Object {
                       "color": "#000000",
@@ -261,6 +267,7 @@ describe("viewOfTable produces valid JSON when given", () => {
                 Object {
                   "bet": 0,
                   "folded": false,
+                  "handDescr": "Royal Flush",
                   "holeCards": Array [
                     Object {
                       "color": "#000000",
@@ -287,6 +294,7 @@ describe("viewOfTable produces valid JSON when given", () => {
                 Object {
                   "bet": 0,
                   "folded": false,
+                  "handDescr": "Royal Flush",
                   "holeCards": Array [
                     Object {
                       "color": "#000000",
@@ -316,6 +324,7 @@ describe("viewOfTable produces valid JSON when given", () => {
             Object {
               "bet": 0,
               "folded": false,
+              "handDescr": "Royal Flush",
               "holeCards": Array [
                 Object {
                   "color": "#000000",
@@ -342,6 +351,7 @@ describe("viewOfTable produces valid JSON when given", () => {
             Object {
               "bet": 0,
               "folded": false,
+              "handDescr": "Royal Flush",
               "holeCards": Array [
                 Object {
                   "color": "#000000",
@@ -422,6 +432,7 @@ describe("viewOfTable produces valid JSON when given", () => {
             Object {
               "bet": 0,
               "folded": true,
+              "handDescr": undefined,
               "holeCards": undefined,
               "id": "Jane",
               "isSelf": false,
@@ -432,6 +443,7 @@ describe("viewOfTable produces valid JSON when given", () => {
             Object {
               "bet": 0,
               "folded": false,
+              "handDescr": "Royal Flush",
               "holeCards": Array [
                 Object {
                   "color": "#000000",
@@ -456,6 +468,7 @@ describe("viewOfTable produces valid JSON when given", () => {
             Object {
               "bet": 0,
               "folded": true,
+              "handDescr": undefined,
               "holeCards": undefined,
               "id": "John",
               "isSelf": false,
@@ -469,6 +482,7 @@ describe("viewOfTable produces valid JSON when given", () => {
             Object {
               "bet": 0,
               "folded": false,
+              "handDescr": "Royal Flush",
               "holeCards": Array [
                 Object {
                   "color": "#000000",
@@ -499,6 +513,7 @@ describe("viewOfTable produces valid JSON when given", () => {
                 Object {
                   "bet": 0,
                   "folded": false,
+                  "handDescr": "Royal Flush",
                   "holeCards": Array [
                     Object {
                       "color": "#000000",
@@ -522,6 +537,7 @@ describe("viewOfTable produces valid JSON when given", () => {
                 Object {
                   "bet": 0,
                   "folded": false,
+                  "handDescr": "Royal Flush",
                   "holeCards": Array [
                     Object {
                       "color": "#000000",
@@ -547,6 +563,7 @@ describe("viewOfTable produces valid JSON when given", () => {
                 Object {
                   "bet": 0,
                   "folded": false,
+                  "handDescr": "Royal Flush",
                   "holeCards": Array [
                     Object {
                       "color": "#000000",
@@ -570,6 +587,7 @@ describe("viewOfTable produces valid JSON when given", () => {
                 Object {
                   "bet": 0,
                   "folded": false,
+                  "handDescr": "Royal Flush",
                   "holeCards": Array [
                     Object {
                       "color": "#000000",
@@ -599,6 +617,7 @@ describe("viewOfTable produces valid JSON when given", () => {
             Object {
               "bet": 0,
               "folded": false,
+              "handDescr": "Royal Flush",
               "holeCards": Array [
                 Object {
                   "color": "#000000",
@@ -622,6 +641,7 @@ describe("viewOfTable produces valid JSON when given", () => {
             Object {
               "bet": 0,
               "folded": false,
+              "handDescr": "Royal Flush",
               "holeCards": Array [
                 Object {
                   "color": "#000000",

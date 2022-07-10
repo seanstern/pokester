@@ -168,6 +168,7 @@ export const get: RequestHandler<
       id: roomId,
       name,
       table: viewOfTable(sessionID, table),
+      canSit: pr.canSit(sessionID),
     });
     return;
   } catch (err) {
