@@ -1,14 +1,17 @@
 import React, { FC, useMemo } from "react";
-import { NavLink, useRouteMatch, useLocation, Link } from "react-router-dom";
+import { useRouteMatch, useLocation, useHistory, Link } from "react-router-dom";
 import { parse, ParsedQs } from "qs";
-import { useGetAll } from "./queries/RoomsQueries";
+import { useGetAll, useAct } from "./queries/RoomsQueries";
 import { Routes } from "@pokester/common-api";
 
-interface ListProps {
+type ListProps = {
   queryParams: Routes.PokerRooms.GetAll.ReqQuery;
-}
-const List: FC<ListProps> = ({ queryParams }) => {
+  url: string;
+};
+const List: FC<ListProps> = ({ queryParams, url }) => {
   const allRoomsQuery = useGetAll(queryParams);
+  const act = useAct();
+  const history = useHistory();
 
   switch (allRoomsQuery.status) {
     case "error":
@@ -25,10 +28,27 @@ const List: FC<ListProps> = ({ queryParams }) => {
       }
       return (
         <ul>
-          {allRoomsQuery.data.map(({ id, name }) => (
+          {allRoomsQuery.data.map(({ id, name, canSit, isSeated }) => (
             <li key={id}>
-              {name}
-              <Link to={`/rooms/${id}`}>View</Link>
+              <Link to={`${url}/${id}`}>{name}</Link>
+              {canSit && (
+                <button
+                  disabled={act.isLoading}
+                  onClick={async () => {
+                    try {
+                      await act.mutateAsync({
+                        roomId: id,
+                        data: {
+                          action: Routes.PokerRooms.Act.PlayerAction.SIT,
+                        },
+                      });
+                      history.push(`${url}/${id}`);
+                    } catch (err) {}
+                  }}
+                >
+                  SIT
+                </button>
+              )}
             </li>
           ))}
         </ul>
@@ -36,23 +56,38 @@ const List: FC<ListProps> = ({ queryParams }) => {
   }
 };
 
-interface TitleProps {
+type TitleProps = {
   queryParams: Routes.PokerRooms.GetAll.ReqQuery;
-}
+};
 const Title: FC<TitleProps> = ({ queryParams }) => {
-  // X Rooms Named Y Created By Z
-  const { openSeat, name, creatorId } = queryParams;
-  const openTitle =
-    openSeat === undefined || !["true", "false"].includes(openSeat)
+  const { canSit, isSeated, name, creatorId } = queryParams;
+
+  const seatedTitle =
+    isSeated === undefined || !["true", "false"].includes(isSeated)
       ? ""
-      : openSeat === "true"
-      ? "Open "
-      : "Full ";
+      : isSeated === "true"
+      ? " Are In"
+      : " Aren't In";
+  const canSitTitle =
+    isSeated === "true" ||
+    canSit === undefined ||
+    !["true", "false"].includes(canSit)
+      ? ""
+      : canSit === "true"
+      ? " Can Join"
+      : " Can't Join";
+  const seatedCanSitPrefix =
+    seatedTitle === "" && canSitTitle === "" ? "" : " You";
+  const seatedCanSitConjunction =
+    seatedTitle === "" || canSitTitle === "" ? "" : " and";
+  const seatedCanSitTitle = `${seatedCanSitPrefix}${seatedTitle}${seatedCanSitConjunction}${canSitTitle}`;
+
   const nameTitle = name === undefined ? "" : ` Named ${name}`;
+
   const creatorIdTitle =
     creatorId === undefined ? "" : ` Created by ${creatorId}`;
 
-  return <h2>{`${openTitle}Rooms${nameTitle}${creatorIdTitle}`}</h2>;
+  return <h2>{`Rooms${seatedCanSitTitle}${nameTitle}${creatorIdTitle}`}</h2>;
 };
 
 const pickEntry = <
@@ -72,8 +107,8 @@ const pickEntry = <
   } as Record<T, U>;
 };
 
-interface RommsProps {}
-const Rooms: FC<RommsProps> = () => {
+type RoomsProps = {};
+const Rooms: FC<RoomsProps> = () => {
   const { url } = useRouteMatch();
   const { search } = useLocation();
   const queryParams = useMemo(() => {
@@ -91,7 +126,13 @@ const Rooms: FC<RommsProps> = () => {
       ),
       ...pickEntry(
         parsedQs,
-        "openSeat",
+        "canSit",
+        (pqv): pqv is "true" | "false" =>
+          typeof pqv === "string" && ["true", "false"].includes(pqv)
+      ),
+      ...pickEntry(
+        parsedQs,
+        "isSeated",
         (pqv): pqv is "true" | "false" =>
           typeof pqv === "string" && ["true", "false"].includes(pqv)
       ),
@@ -100,10 +141,8 @@ const Rooms: FC<RommsProps> = () => {
 
   return (
     <>
-      <NavLink to={`${url}?openSeat=true`}>Open Rooms</NavLink>
-      <NavLink to={`${url}?openSeat=false`}>Full Rooms</NavLink>
       <Title {...{ queryParams }} />
-      <List {...{ queryParams }} />
+      <List {...{ queryParams, url }} />
     </>
   );
 };
