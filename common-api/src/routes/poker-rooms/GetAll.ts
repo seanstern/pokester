@@ -1,6 +1,7 @@
 export type ResBody = {
   id: string;
   name: string;
+  creatorId: string;
   canSit: boolean;
   isSeated: boolean;
 }[];

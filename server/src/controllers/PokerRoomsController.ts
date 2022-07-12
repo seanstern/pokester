@@ -102,18 +102,23 @@ export const getAll: RequestHandler<
     mutablePokerRoomsQuery.select({
       name: 1,
       playerIds: 1,
+      creatorId: 1,
     });
 
     const pokerRooms = await mutablePokerRoomsQuery.exec();
 
     const pokerRoomsResponse: GetAllResBody = pokerRooms.map((pr) => {
-      const { id, name } = pr;
+      const { id, name, creatorId } = pr;
       if (!name) {
         throw new Error(`PokerRoom ${id} missing name property`);
+      }
+      if (!creatorId) {
+        throw new Error(`PokerRoom ${id} missing creatorId property`);
       }
       return {
         id,
         name,
+        creatorId,
         canSit: pr.canSit(sessionID),
         isSeated: pr.isSeated(sessionID),
       };
