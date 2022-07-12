@@ -136,6 +136,7 @@ describe("getAll", () => {
     const resJsonCalledWith = mockFindExecResolution.map((pr) => ({
       id: pr.id,
       name: pr.name,
+      creatorId: pr.creatorId,
       canSit: pr.canSit(sessionID),
       isSeated: pr.isSeated(sessionID),
     }));
@@ -161,6 +162,7 @@ describe("getAll", () => {
       expect(mockFindSelect).toHaveBeenCalledWith({
         name: 1,
         playerIds: 1,
+        creatorId: 1,
       });
       expect(mockFindExec).toHaveBeenCalledTimes(1);
       expect(mockFindExec).toHaveBeenCalledWith();
@@ -191,6 +193,7 @@ describe("getAll", () => {
       expect(mockFindSelect).toHaveBeenCalledWith({
         name: 1,
         playerIds: 1,
+        creatorId: 1,
       });
       expect(mockFindExec).toHaveBeenCalledTimes(1);
       expect(mockFindExec).toHaveBeenCalledWith();
@@ -221,6 +224,7 @@ describe("getAll", () => {
       expect(mockFindSelect).toHaveBeenCalledWith({
         name: 1,
         playerIds: 1,
+        creatorId: 1,
       });
       expect(mockFindExec).toHaveBeenCalledTimes(1);
       expect(mockFindExec).toHaveBeenCalledWith();
@@ -251,6 +255,7 @@ describe("getAll", () => {
       expect(mockFindSelect).toHaveBeenCalledWith({
         name: 1,
         playerIds: 1,
+        creatorId: 1,
       });
       expect(mockFindExec).toHaveBeenCalledTimes(1);
       expect(mockFindExec).toHaveBeenCalledWith();
