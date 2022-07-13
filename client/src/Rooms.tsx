@@ -1,17 +1,17 @@
 import React, { FC, useMemo } from "react";
-import { useRouteMatch, useLocation, useHistory, Link } from "react-router-dom";
+import { useRouteMatch, useLocation } from "react-router-dom";
 import { parse, ParsedQs } from "qs";
 import { useGetAll, useAct } from "./queries/RoomsQueries";
 import { Routes } from "@pokester/common-api";
+import Grid from "@mui/material/Grid";
+import RoomSummary from "./components/rooms-list/RoomSummary";
 
 type ListProps = {
   queryParams: Routes.PokerRooms.GetAll.ReqQuery;
-  url: string;
 };
-const List: FC<ListProps> = ({ queryParams, url }) => {
+const List: FC<ListProps> = ({ queryParams }) => {
   const allRoomsQuery = useGetAll(queryParams);
   const act = useAct();
-  const history = useHistory();
 
   switch (allRoomsQuery.status) {
     case "error":
@@ -23,35 +23,18 @@ const List: FC<ListProps> = ({ queryParams, url }) => {
     // intentional fallthrough
     case "success":
     default:
-      if (allRoomsQuery.data.length === 0) {
-        return <div>No rooms yet!</div>;
-      }
       return (
-        <ul>
-          {allRoomsQuery.data.map(({ id, name, canSit, isSeated }) => (
-            <li key={id}>
-              <Link to={`${url}/${id}`}>{name}</Link>
-              {canSit && (
-                <button
-                  disabled={act.isLoading}
-                  onClick={async () => {
-                    try {
-                      await act.mutateAsync({
-                        roomId: id,
-                        data: {
-                          action: Routes.PokerRooms.Act.PlayerAction.SIT,
-                        },
-                      });
-                      history.push(`${url}/${id}`);
-                    } catch (err) {}
-                  }}
-                >
-                  SIT
-                </button>
-              )}
-            </li>
+        <Grid
+          container
+          spacing={{ xs: 2, md: 3 }}
+          columns={{ xs: 4, sm: 8, md: 12 }}
+        >
+          {allRoomsQuery.data.map((room) => (
+            <Grid item key={room.id} xs={4}>
+              <RoomSummary {...{ ...room, act }} />
+            </Grid>
           ))}
-        </ul>
+        </Grid>
       );
   }
 };
