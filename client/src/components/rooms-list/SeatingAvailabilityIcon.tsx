@@ -48,13 +48,13 @@ const SeatedPlayerIcon: FC<SeatedPlayerIconProps> = ({
   return (
     <AirlineSeatReclineNormalIcon
       fontSize={DEFAULT_FONT_SIZE}
-      sx={sx}
+      sx={{ ...sx, paddingBottom: 0.75 }}
       color={color}
     />
   );
 };
 
-const DEFAULT_EMPTY_SEAT_HORIZONTAL_MARGIN = -1.5;
+const DEFAULT_EMPTY_SEAT_HORIZONTAL_MARGIN = -0.75;
 type EmptySeatIconProps = {
   tableTo: "left" | "right";
 };
@@ -73,7 +73,12 @@ const EmptySeatIcon: FC<EmptySeatIconProps> = ({ tableTo }) => {
     tableTo === "left"
       ? { marginLeft: DEFAULT_EMPTY_SEAT_HORIZONTAL_MARGIN }
       : { marginRight: DEFAULT_EMPTY_SEAT_HORIZONTAL_MARGIN };
-  return <EventSeatIcon fontSize={DEFAULT_FONT_SIZE} sx={sx} />;
+  return (
+    <EventSeatIcon
+      fontSize={DEFAULT_FONT_SIZE}
+      sx={{ ...sx, paddingTop: 0.25, paddingBottom: 0.25 }}
+    />
+  );
 };
 
 type SeatingAvailabilityIconProps = {
@@ -94,7 +99,7 @@ const SeatingAvailabilityIcon: FC<SeatingAvailabilityIconProps> = ({
   canSit,
 }) => {
   const viewerIcon = isSeated ? (
-    <SeatedPlayerIcon facing="right" color="primary" />
+    <SeatedPlayerIcon facing="right" color="inherit" />
   ) : canSit ? (
     <EmptySeatIcon tableTo="right" />
   ) : (
