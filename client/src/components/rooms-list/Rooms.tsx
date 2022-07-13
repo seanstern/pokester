@@ -1,10 +1,10 @@
 import React, { FC, useMemo } from "react";
 import { useRouteMatch, useLocation } from "react-router-dom";
 import { parse, ParsedQs } from "qs";
-import { useGetAll, useAct } from "./queries/RoomsQueries";
+import { useGetAll, useAct } from "../../queries/RoomsQueries";
 import { Routes } from "@pokester/common-api";
 import Grid from "@mui/material/Grid";
-import RoomSummary from "./components/rooms-list/RoomSummary";
+import RoomSummary from "./RoomSummary";
 
 type ListProps = {
   queryParams: Routes.PokerRooms.GetAll.ReqQuery;
