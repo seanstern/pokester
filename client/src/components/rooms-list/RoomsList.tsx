@@ -90,8 +90,8 @@ const pickEntry = <
   } as Record<T, U>;
 };
 
-type RoomsProps = {};
-const Rooms: FC<RoomsProps> = () => {
+type RoomsListProps = {};
+const RoomsList: FC<RoomsListProps> = () => {
   const { url } = useRouteMatch();
   const { search } = useLocation();
   const queryParams = useMemo(() => {
@@ -130,4 +130,4 @@ const Rooms: FC<RoomsProps> = () => {
   );
 };
 
-export default Rooms;
+export default RoomsList;
