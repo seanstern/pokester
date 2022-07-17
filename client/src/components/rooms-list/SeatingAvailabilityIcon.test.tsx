@@ -1,9 +1,29 @@
 import { render, screen } from "@testing-library/react";
-import SeatingAvailabilityIcon from "./SeatingAvailabilityIcon";
+import SeatingAvailabilityIcon, {
+  SeatingAvailabilityDescription,
+} from "./SeatingAvailabilityIcon";
 
 test("renders appropriate icons when viewer is seated and cannot sit", () => {
   render(<SeatingAvailabilityIcon isSeated={true} canSit={false} />);
 
+  // Accessibility tests
+  screen.getByRole("img", {
+    name: SeatingAvailabilityDescription.YOU_ARE_SEATED,
+  });
+
+  expect(
+    screen.queryByRole("img", {
+      name: SeatingAvailabilityDescription.EMPTY_SEAT,
+    })
+  ).toBeNull();
+
+  expect(
+    screen.queryByRole("img", {
+      name: SeatingAvailabilityDescription.NO_EMPTY_SEATS,
+    })
+  ).toBeNull();
+
+  // Image/styling tests
   const airlineSeatReclineNormalIcons = screen.getAllByTestId(
     "AirlineSeatReclineNormalIcon"
   );
@@ -24,6 +44,24 @@ test("renders appropriate icons when viewer is seated and cannot sit", () => {
 test("renders appropriate icons when viewer is not seated and cannot sit", () => {
   render(<SeatingAvailabilityIcon isSeated={false} canSit={false} />);
 
+  // Accessibility tests
+  screen.getByRole("img", {
+    name: SeatingAvailabilityDescription.NO_EMPTY_SEATS,
+  });
+
+  expect(
+    screen.queryByRole("img", {
+      name: SeatingAvailabilityDescription.YOU_ARE_SEATED,
+    })
+  ).toBeNull();
+
+  expect(
+    screen.queryByRole("img", {
+      name: SeatingAvailabilityDescription.EMPTY_SEAT,
+    })
+  ).toBeNull();
+
+  // Image/styling tests
   const airlineSeatReclineNormalIcons = screen.getAllByTestId(
     "AirlineSeatReclineNormalIcon"
   );
@@ -43,6 +81,23 @@ test("renders appropriate icons when viewer is not seated and cannot sit", () =>
 
 test("renders appropriate icons when viewer is not seated and can sit", () => {
   render(<SeatingAvailabilityIcon isSeated={false} canSit={true} />);
+
+  // Accessibility tests
+  screen.getByRole("img", {
+    name: SeatingAvailabilityDescription.EMPTY_SEAT,
+  });
+
+  expect(
+    screen.queryByRole("img", {
+      name: SeatingAvailabilityDescription.YOU_ARE_SEATED,
+    })
+  ).toBeNull();
+
+  expect(
+    screen.queryByRole("img", {
+      name: SeatingAvailabilityDescription.NO_EMPTY_SEATS,
+    })
+  ).toBeNull();
 
   const airlineSeatReclineNormalIcons = screen.getAllByTestId(
     "AirlineSeatReclineNormalIcon"

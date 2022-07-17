@@ -2,6 +2,7 @@ import AirlineSeatReclineNormalIcon from "@mui/icons-material/AirlineSeatRecline
 import EventSeatIcon from "@mui/icons-material/EventSeat";
 import TableRestaurantIcon from "@mui/icons-material/TableRestaurant";
 import { SvgIconProps } from "@mui/material/SvgIcon";
+import Tooltip from "@mui/material/Tooltip";
 import React, { FC } from "react";
 
 const DEFAULT_FONT_SIZE = "large";
@@ -81,6 +82,12 @@ const EmptySeatIcon: FC<EmptySeatIconProps> = ({ tableTo }) => {
   );
 };
 
+export enum SeatingAvailabilityDescription {
+  YOU_ARE_SEATED = "You're seated",
+  EMPTY_SEAT = "An empty seat",
+  NO_EMPTY_SEATS = "No empty seats",
+}
+
 type SeatingAvailabilityIconProps = {
   isSeated: boolean;
   canSit: boolean;
@@ -98,19 +105,28 @@ const SeatingAvailabilityIcon: FC<SeatingAvailabilityIconProps> = ({
   isSeated,
   canSit,
 }) => {
-  const viewerIcon = isSeated ? (
-    <SeatedPlayerIcon facing="right" color="inherit" />
-  ) : canSit ? (
-    <EmptySeatIcon tableTo="right" />
-  ) : (
-    <SeatedPlayerIcon facing="right" />
-  );
+  const [viewerIcon, description] = isSeated
+    ? [
+        <SeatedPlayerIcon facing="right" color="inherit" />,
+        SeatingAvailabilityDescription.YOU_ARE_SEATED,
+      ]
+    : canSit
+    ? [
+        <EmptySeatIcon tableTo="right" />,
+        SeatingAvailabilityDescription.EMPTY_SEAT,
+      ]
+    : [
+        <SeatedPlayerIcon facing="right" />,
+        SeatingAvailabilityDescription.NO_EMPTY_SEATS,
+      ];
   return (
-    <>
-      {viewerIcon}
-      <TableIcon />
-      <SeatedPlayerIcon facing="left" />
-    </>
+    <Tooltip title={description}>
+      <div role="img">
+        {viewerIcon}
+        <TableIcon />
+        <SeatedPlayerIcon facing="left" />
+      </div>
+    </Tooltip>
   );
 };
 
