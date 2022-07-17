@@ -1,22 +1,21 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { ComponentProps } from "react";
 import { MemoryRouter, Route } from "react-router-dom";
-import RoomSummary from "./RoomSummary";
+import RoomSummary, { RoomSummaryProps } from "./RoomSummary";
 
-const id = "roomId";
-const name = "roomName";
+const roomId = "roomId";
+const roomName = "roomName";
 const creatorId = "creatorId";
 const act = {
   mutateAsync: jest.fn(() => Promise.resolve()),
   isLoading: false,
-} as unknown as ComponentProps<typeof RoomSummary>["act"];
+} as unknown as RoomSummaryProps["act"];
 
 test("renders room summary with sit button that, when clicked, calls act mutation and changes location", async () => {
   let pathName: string | undefined;
   render(
     <MemoryRouter>
       <RoomSummary
-        {...{ id, name, creatorId }}
+        {...{ id: roomId, name: roomName, creatorId }}
         act={act}
         canSit={true}
         isSeated={false}
@@ -31,30 +30,33 @@ test("renders room summary with sit button that, when clicked, calls act mutatio
     </MemoryRouter>
   );
 
-  screen.getByText(name);
-  screen.getByText(creatorId);
+  screen.getByRole("article", { name: roomName });
 
-  const sitButton = screen.getByText(/sit/i);
+  screen.getByRole("button", { name: roomName });
+
+  screen.getByRole("heading", { level: 2, name: roomName });
+
+  const sitButton = screen.getByRole("button", { name: /sit/i });
   expect(sitButton).toBeEnabled();
 
-  const watchButton = screen.getByText(/watch/i);
-  expect(watchButton).toBeEnabled();
+  const watchLink = screen.getByRole("link", { name: /watch/i });
+  expect(watchLink).toBeEnabled();
 
-  const returnButton = screen.queryByText(/return/i);
-  expect(returnButton).toBeNull();
+  const returnLink = screen.queryByRole("link", { name: /return/i });
+  expect(returnLink).toBeNull();
 
   expect(pathName).toBe("/");
   fireEvent.click(sitButton);
   await waitFor(() => expect(act.mutateAsync).toHaveBeenCalledTimes(1));
-  expect(pathName).toBe(`/rooms/${id}`);
+  expect(pathName).toBe(`/rooms/${roomId}`);
 });
 
-test("renders room summary with watch button that, when clicked, changes location", async () => {
+test("renders room summary with watch link that, when clicked, changes location", async () => {
   let pathName: string | undefined;
   render(
     <MemoryRouter>
       <RoomSummary
-        {...{ id, name, creatorId }}
+        {...{ id: roomId, name: roomName, creatorId }}
         act={act}
         canSit={true}
         isSeated={false}
@@ -69,30 +71,35 @@ test("renders room summary with watch button that, when clicked, changes locatio
     </MemoryRouter>
   );
 
-  screen.getByText(name);
+  screen.getByRole("article", { name: roomName });
+
+  screen.getByRole("button", { name: roomName });
+
+  screen.getByRole("heading", { level: 2, name: roomName });
+
   screen.getByText(creatorId);
 
-  const sitButton = screen.getByText(/sit/i);
+  const sitButton = screen.getByRole("button", { name: /sit/i });
   expect(sitButton).toBeEnabled();
 
-  const watchButton = screen.getByText(/watch/i);
-  expect(watchButton).toBeEnabled();
+  const watchLink = screen.getByRole("link", { name: /watch/i });
+  expect(watchLink).toBeEnabled();
 
-  const returnButton = screen.queryByText(/return/i);
-  expect(returnButton).toBeNull();
+  const returnLink = screen.queryByRole("link", { name: /return/i });
+  expect(returnLink).toBeNull();
 
   expect(pathName).toBe("/");
-  fireEvent.click(watchButton);
-  expect(act.mutateAsync).not.toHaveBeenCalled();
-  expect(pathName).toBe(`/rooms/${id}`);
+  fireEvent.click(sitButton);
+  await waitFor(() => expect(act.mutateAsync).toHaveBeenCalledTimes(1));
+  expect(pathName).toBe(`/rooms/${roomId}`);
 });
 
-test("renders room summary with return button that, when clicked, changes location", async () => {
+test("renders room summary with disabled sit button and return link that, when clicked, changes location", async () => {
   let pathName: string | undefined;
   render(
     <MemoryRouter>
       <RoomSummary
-        {...{ id, name, creatorId }}
+        {...{ id: roomId, name: roomName, creatorId }}
         act={act}
         canSit={false}
         isSeated={true}
@@ -107,25 +114,30 @@ test("renders room summary with return button that, when clicked, changes locati
     </MemoryRouter>
   );
 
-  screen.getByText(name);
+  screen.getByRole("article", { name: roomName });
+
+  screen.getByRole("button", { name: roomName });
+
+  screen.getByRole("heading", { level: 2, name: roomName });
+
   screen.getByText(creatorId);
 
-  const sitButton = screen.getByText(/sit/i);
+  const sitButton = screen.getByRole("button", { name: /sit/i });
   expect(sitButton).toBeDisabled();
 
-  const returnButton = screen.getByText(/return/i);
-  expect(returnButton).toBeEnabled();
+  const returnLink = screen.getByRole("link", { name: /return/i });
+  expect(returnLink).toBeEnabled();
 
-  const watchButton = screen.queryByText(/watch/i);
-  expect(watchButton).toBeNull();
+  const watchLink = screen.queryByRole("link", { name: /watch/i });
+  expect(watchLink).toBeNull();
 
   expect(pathName).toBe("/");
 
   fireEvent.click(sitButton);
   expect(pathName).toBe("/");
 
-  fireEvent.click(returnButton);
-  expect(pathName).toBe(`/rooms/${id}`);
+  fireEvent.click(returnLink);
+  expect(pathName).toBe(`/rooms/${roomId}`);
 
   expect(act.mutateAsync).not.toHaveBeenCalled();
 });
@@ -135,7 +147,7 @@ test("renders room summary with action area that, when clicked, changes location
   render(
     <MemoryRouter>
       <RoomSummary
-        {...{ id, name, creatorId }}
+        {...{ id: roomId, name: roomName, creatorId }}
         act={act}
         canSit={false}
         isSeated={true}
@@ -150,36 +162,41 @@ test("renders room summary with action area that, when clicked, changes location
     </MemoryRouter>
   );
 
-  const nameElement = screen.getByText(name);
+  screen.getByRole("article", { name: roomName });
+
+  const actionArea = screen.getByRole("button", { name: roomName });
+
+  screen.getByRole("heading", { level: 2, name: roomName });
+
   screen.getByText(creatorId);
 
-  const sitButton = screen.getByText(/sit/i);
+  const sitButton = screen.getByRole("button", { name: /sit/i });
   expect(sitButton).toBeDisabled();
 
-  const returnButton = screen.getByText(/return/i);
-  expect(returnButton).toBeEnabled();
+  const returnLink = screen.getByRole("link", { name: /return/i });
+  expect(returnLink).toBeEnabled();
 
-  const watchButton = screen.queryByText(/watch/i);
-  expect(watchButton).toBeNull();
+  const watchLink = screen.queryByRole("link", { name: /watch/i });
+  expect(watchLink).toBeNull();
 
   expect(pathName).toBe("/");
 
   fireEvent.click(sitButton);
   expect(pathName).toBe("/");
 
-  fireEvent.click(nameElement);
+  fireEvent.click(actionArea);
   expect(act.mutateAsync).not.toHaveBeenCalled();
-  await waitFor(() => expect(pathName).toBe(`/rooms/${id}`));
+  await waitFor(() => expect(pathName).toBe(`/rooms/${roomId}`));
 });
 
-test("renders room summary with disabled sit when act is loading", async () => {
+test("renders room summary with disabled sit button when act is loading", async () => {
   let pathName: string | undefined;
   const loadingAct = { ...act };
   loadingAct.isLoading = true;
   render(
     <MemoryRouter>
       <RoomSummary
-        {...{ id, name, creatorId }}
+        {...{ id: roomId, name: roomName, creatorId }}
         act={loadingAct}
         canSit={true}
         isSeated={false}
@@ -194,20 +211,50 @@ test("renders room summary with disabled sit when act is loading", async () => {
     </MemoryRouter>
   );
 
-  screen.getByText(name);
+  screen.getByRole("article", { name: roomName });
+
+  screen.getByRole("button", { name: roomName });
+
+  screen.getByRole("heading", { level: 2, name: roomName });
+
   screen.getByText(creatorId);
 
-  const sitButton = screen.getByText(/sit/i);
+  const sitButton = screen.getByRole("button", { name: /sit/i });
   expect(sitButton).toBeDisabled();
 
-  const watchButton = screen.getByText(/watch/i);
-  expect(watchButton).toBeEnabled();
+  const watchLink = screen.getByRole("link", { name: /watch/i });
+  expect(watchLink).toBeEnabled();
 
-  const returnButton = screen.queryByText(/return/i);
-  expect(returnButton).toBeNull();
+  const returnLink = screen.queryByRole("link", { name: /return/i });
+  expect(returnLink).toBeNull();
 
   expect(pathName).toBe("/");
 
   fireEvent.click(sitButton);
+  expect(act.mutateAsync).not.toHaveBeenCalled();
   expect(pathName).toBe("/");
+});
+
+test("renders skeleton room summary", () => {
+  render(
+    <MemoryRouter>
+      <RoomSummary skeleton />
+    </MemoryRouter>
+  );
+
+  expect(screen.queryByRole("article", { name: roomName })).toBeNull();
+
+  expect(screen.queryByRole("button", { name: roomName })).toBeNull();
+
+  expect(
+    screen.queryByRole("heading", { level: 2, name: roomName })
+  ).toBeNull();
+
+  expect(screen.queryByText(creatorId)).toBeNull();
+
+  expect(screen.queryByRole("button", { name: /sit/i })).toBeNull();
+
+  expect(screen.queryByRole("link", { name: /watch/i })).toBeNull();
+
+  expect(screen.queryByRole("link", { name: /return/i })).toBeNull();
 });
