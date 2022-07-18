@@ -1,42 +1,50 @@
-import React, { FC, useMemo } from "react";
-import { useRouteMatch, useLocation } from "react-router-dom";
-import { parse, ParsedQs } from "qs";
-import { useGetAll, useAct } from "../../queries/RoomsQueries";
-import { Routes } from "@pokester/common-api";
 import Grid from "@mui/material/Grid";
-import RoomSummary from "./RoomSummary";
+import { Routes } from "@pokester/common-api";
+import { parse, ParsedQs } from "qs";
+import React, { FC, useMemo } from "react";
+import { useLocation, useRouteMatch } from "react-router-dom";
+import { useAct, useGetAll } from "../../queries/RoomsQueries";
+import ErrorSnackbar from "../utils/ErrorSnackbar";
+import LoadingProgress from "../utils/LoadingProgress";
+import RoomSummary, { RoomSummarySkeletonProps } from "./RoomSummary";
+
+const skeletonRoomSummaryProps: RoomSummarySkeletonProps = { skeleton: true };
+const skeletonRoomSummaryPropsWithKeyList = [
+  { ...skeletonRoomSummaryProps, key: 0 },
+];
 
 type ListProps = {
   queryParams: Routes.PokerRooms.GetAll.ReqQuery;
 };
 const List: FC<ListProps> = ({ queryParams }) => {
-  const allRoomsQuery = useGetAll(queryParams);
+  const getAll = useGetAll(queryParams);
   const act = useAct();
 
-  switch (allRoomsQuery.status) {
-    case "error":
-      return <div>Could not load games.</div>;
-    //intentional fallthrough
-    case "idle":
-    case "loading":
-      return <div>Loading games...</div>;
-    // intentional fallthrough
-    case "success":
-    default:
-      return (
-        <Grid
-          container
-          spacing={{ xs: 2, md: 3 }}
-          columns={{ xs: 4, sm: 8, md: 12 }}
-        >
-          {allRoomsQuery.data.map((room) => (
-            <Grid item key={room.id} xs={4}>
-              <RoomSummary {...{ ...room, act }} />
-            </Grid>
-          ))}
-        </Grid>
-      );
-  }
+  const queryOrMutationInProgress = getAll.isFetching || act.isLoading;
+  const isQueryOrMutationError = getAll.isError || act.isError;
+  const roomSummaryPropsWithKeyList = getAll.data
+    ? getAll.data.map((room) => ({ ...room, act, key: room.id }))
+    : skeletonRoomSummaryPropsWithKeyList;
+
+  return (
+    <>
+      <ErrorSnackbar
+        show={!queryOrMutationInProgress && isQueryOrMutationError}
+      />
+      <LoadingProgress show={queryOrMutationInProgress} />
+      <Grid
+        container
+        spacing={{ xs: 2, md: 3 }}
+        columns={{ xs: 4, sm: 8, md: 12 }}
+      >
+        {roomSummaryPropsWithKeyList.map((roomSummaryProps) => (
+          <Grid key={roomSummaryProps.key} item xs={4}>
+            <RoomSummary {...{ ...roomSummaryProps, act }} />
+          </Grid>
+        ))}
+      </Grid>
+    </>
+  );
 };
 
 type TitleProps = {
@@ -70,7 +78,7 @@ const Title: FC<TitleProps> = ({ queryParams }) => {
   const creatorIdTitle =
     creatorId === undefined ? "" : ` Created by ${creatorId}`;
 
-  return <h2>{`Rooms${seatedCanSitTitle}${nameTitle}${creatorIdTitle}`}</h2>;
+  return <h1>{`Rooms${seatedCanSitTitle}${nameTitle}${creatorIdTitle}`}</h1>;
 };
 
 const pickEntry = <
