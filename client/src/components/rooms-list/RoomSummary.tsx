@@ -6,12 +6,11 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Skeleton from "@mui/material/Skeleton";
 import Typography from "@mui/material/Typography";
-import Fade from "@mui/material/Fade";
 import { Routes } from "@pokester/common-api";
 import React, { FC } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useAct } from "../../queries/RoomsQueries";
-import SeatingAvailabilityIcon from "./SeatingAvailabilityIcon";
+import SeatingAvailabilityIcon from "../icons/SeatingAvailabilityIcon";
 
 /**
  * Given props, returns the skeletal child components of a room summary (i.e.
@@ -186,40 +185,38 @@ const RoomSummary: FC<RoomSummaryProps | RoomSummarySkeletonProps> = (
     : { "aria-labelledby": ariaTitleId };
 
   return (
-    <Fade in={true}>
-      <Card
-        component="article"
-        variant="outlined"
-        {...{ ...ariaLablledByTitleProps, ...cardAriaBusyProps }}
+    <Card
+      component="article"
+      variant="outlined"
+      {...{ ...ariaLablledByTitleProps, ...cardAriaBusyProps }}
+    >
+      <CardActionArea
+        disabled={!!props.skeleton}
+        onClick={cardActionOnClick}
+        {...ariaLablledByTitleProps}
       >
-        <CardActionArea
-          disabled={!!props.skeleton}
-          onClick={cardActionOnClick}
-          {...ariaLablledByTitleProps}
-        >
-          <CardContent>
-            <Typography noWrap component="h2" variant="h5" {...ariaTitleProps}>
-              {name}
-            </Typography>
-            <Typography
-              noWrap
-              component="p"
-              variant="subtitle2"
-              color="text.secondary"
-            >
-              {creatorId}
-            </Typography>
-            <Box mt={2} display="flex" justifyContent="center">
-              {seatingAvailabilityIcon}
-            </Box>
-          </CardContent>
-        </CardActionArea>
-        <CardActions>
-          {sitButton}
-          {viewButton}
-        </CardActions>
-      </Card>
-    </Fade>
+        <CardContent>
+          <Typography noWrap component="h2" variant="h5" {...ariaTitleProps}>
+            {name}
+          </Typography>
+          <Typography
+            noWrap
+            component="p"
+            variant="subtitle2"
+            color="text.secondary"
+          >
+            {creatorId}
+          </Typography>
+          <Box mt={2} display="flex" justifyContent="center">
+            {seatingAvailabilityIcon}
+          </Box>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
+        {sitButton}
+        {viewButton}
+      </CardActions>
+    </Card>
   );
 };
 
