@@ -1,12 +1,11 @@
 import AirlineSeatReclineNormalIcon from "@mui/icons-material/AirlineSeatReclineNormal";
 import EventSeatIcon from "@mui/icons-material/EventSeat";
 import TableRestaurantIcon from "@mui/icons-material/TableRestaurant";
+import Box from "@mui/material/Box";
 import { SvgIconProps } from "@mui/material/SvgIcon";
 import Tooltip from "@mui/material/Tooltip";
 import React, { FC } from "react";
-
-const DEFAULT_FONT_SIZE = "large";
-const DEFAULT_COLOR = "disabled";
+import { fontSize } from "./defaults";
 
 /**
  * Returns an icon representing the table.
@@ -14,14 +13,10 @@ const DEFAULT_COLOR = "disabled";
  * @returns an icon representing the table.
  */
 const TableIcon: FC = () => (
-  <TableRestaurantIcon
-    sx={{ paddingTop: 0.75 }}
-    fontSize={DEFAULT_FONT_SIZE}
-    color={DEFAULT_COLOR}
-  />
+  <TableRestaurantIcon sx={{ paddingTop: 0.75 }} fontSize={fontSize} />
 );
 
-const DEFAULT_SEATED_PLAYER_HORIZONTAL_MARGIN = -1.5;
+const defaultSeatedPlayerHorizontalMargin = -1.5;
 type SeatedPlayerIconProps = {
   facing: "left" | "right";
   color?: SvgIconProps["color"];
@@ -34,30 +29,28 @@ type SeatedPlayerIconProps = {
  * @param props.color An optional color
  * @returns an icon representing a seated player
  */
-const SeatedPlayerIcon: FC<SeatedPlayerIconProps> = ({
-  facing,
-  color: colorProp,
-}) => {
+const SeatedPlayerIcon: FC<SeatedPlayerIconProps> = ({ facing, color }) => {
   const sx =
     facing === "left"
       ? {
-          marginLeft: DEFAULT_SEATED_PLAYER_HORIZONTAL_MARGIN,
+          marginLeft: defaultSeatedPlayerHorizontalMargin,
           transform: "scale(-1, 1)",
         }
-      : { marginRight: DEFAULT_SEATED_PLAYER_HORIZONTAL_MARGIN };
-  const color = colorProp === undefined ? DEFAULT_COLOR : colorProp;
+      : { marginRight: defaultSeatedPlayerHorizontalMargin };
+  const colorProps = color === undefined ? {} : { color };
   return (
     <AirlineSeatReclineNormalIcon
-      fontSize={DEFAULT_FONT_SIZE}
+      fontSize={fontSize}
       sx={{ ...sx, paddingBottom: 0.75 }}
-      color={color}
+      {...colorProps}
     />
   );
 };
 
-const DEFAULT_EMPTY_SEAT_HORIZONTAL_MARGIN = -0.75;
+const defaultEmptySeatHorizontalMargin = -0.75;
 type EmptySeatIconProps = {
   tableTo: "left" | "right";
+  color?: SvgIconProps["color"];
 };
 /**
  * Given props, returns an icon representing an empty seat (i.e. a seat
@@ -69,15 +62,17 @@ type EmptySeatIconProps = {
  *   of the empty seat")
  * @returns an icon representing an empty seat
  */
-const EmptySeatIcon: FC<EmptySeatIconProps> = ({ tableTo }) => {
+const EmptySeatIcon: FC<EmptySeatIconProps> = ({ tableTo, color }) => {
   const sx =
     tableTo === "left"
-      ? { marginLeft: DEFAULT_EMPTY_SEAT_HORIZONTAL_MARGIN }
-      : { marginRight: DEFAULT_EMPTY_SEAT_HORIZONTAL_MARGIN };
+      ? { marginLeft: defaultEmptySeatHorizontalMargin }
+      : { marginRight: defaultEmptySeatHorizontalMargin };
+  const colorProps = color === undefined ? {} : { color };
   return (
     <EventSeatIcon
-      fontSize={DEFAULT_FONT_SIZE}
+      fontSize={fontSize}
       sx={{ ...sx, paddingTop: 0.25, paddingBottom: 0.25 }}
+      {...colorProps}
     />
   );
 };
@@ -107,12 +102,12 @@ const SeatingAvailabilityIcon: FC<SeatingAvailabilityIconProps> = ({
 }) => {
   const [viewerIcon, description] = isSeated
     ? [
-        <SeatedPlayerIcon facing="right" color="inherit" />,
+        <SeatedPlayerIcon facing="right" color="primary" />,
         SeatingAvailabilityDescription.YOU_ARE_SEATED,
       ]
     : canSit
     ? [
-        <EmptySeatIcon tableTo="right" />,
+        <EmptySeatIcon tableTo="right" color="primary" />,
         SeatingAvailabilityDescription.EMPTY_SEAT,
       ]
     : [
@@ -121,11 +116,13 @@ const SeatingAvailabilityIcon: FC<SeatingAvailabilityIconProps> = ({
       ];
   return (
     <Tooltip title={description}>
-      <div role="img">
+      <Box role="img" display="flex">
         {viewerIcon}
-        <TableIcon />
-        <SeatedPlayerIcon facing="left" />
-      </div>
+        <Box color="text.secondary">
+          <TableIcon />
+          <SeatedPlayerIcon facing="left" />
+        </Box>
+      </Box>
     </Tooltip>
   );
 };

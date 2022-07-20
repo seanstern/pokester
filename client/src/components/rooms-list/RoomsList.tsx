@@ -1,3 +1,4 @@
+import Fade from "@mui/material/Fade";
 import Grid from "@mui/material/Grid";
 import { Routes } from "@pokester/common-api";
 import { parse, ParsedQs } from "qs";
@@ -6,12 +7,25 @@ import { useLocation, useRouteMatch } from "react-router-dom";
 import { useAct, useGetAll } from "../../queries/RoomsQueries";
 import ErrorSnackbar from "../utils/ErrorSnackbar";
 import LoadingProgress from "../utils/LoadingProgress";
+import NoRoomSummaries from "./NoRoomSummaries";
 import RoomSummary, { RoomSummarySkeletonProps } from "./RoomSummary";
 
 const skeletonRoomSummaryProps: RoomSummarySkeletonProps = { skeleton: true };
 const skeletonRoomSummaryPropsWithKeyList = [
   { ...skeletonRoomSummaryProps, key: 0 },
 ];
+const gridColumns = { xs: 4, sm: 8, md: 12 };
+const noRoomSummariesGridItem = (
+  <Grid
+    key="noRoomsSummaries"
+    item
+    xs={gridColumns.xs}
+    sm={gridColumns.sm}
+    md={gridColumns.md}
+  >
+    <NoRoomSummaries />
+  </Grid>
+);
 
 type ListProps = {
   queryParams: Routes.PokerRooms.GetAll.ReqQuery;
@@ -22,9 +36,19 @@ const List: FC<ListProps> = ({ queryParams }) => {
 
   const queryOrMutationInProgress = getAll.isFetching || act.isLoading;
   const isQueryOrMutationError = getAll.isError || act.isError;
-  const roomSummaryPropsWithKeyList = getAll.data
-    ? getAll.data.map((room) => ({ ...room, act, key: room.id }))
-    : skeletonRoomSummaryPropsWithKeyList;
+
+  const roomSummariesPropsWithKey = !getAll.data
+    ? skeletonRoomSummaryPropsWithKeyList
+    : getAll.data.map((room) => ({ ...room, act, key: room.id }));
+
+  const gridItems =
+    roomSummariesPropsWithKey.length <= 0
+      ? [noRoomSummariesGridItem]
+      : roomSummariesPropsWithKey.map((roomSummaryProps) => (
+          <Grid key={roomSummaryProps.key} item xs={gridColumns.xs}>
+            <RoomSummary {...{ ...roomSummaryProps, act }} />
+          </Grid>
+        ));
 
   return (
     <>
@@ -32,15 +56,11 @@ const List: FC<ListProps> = ({ queryParams }) => {
         show={!queryOrMutationInProgress && isQueryOrMutationError}
       />
       <LoadingProgress show={queryOrMutationInProgress} />
-      <Grid
-        container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-      >
-        {roomSummaryPropsWithKeyList.map((roomSummaryProps) => (
-          <Grid key={roomSummaryProps.key} item xs={4}>
-            <RoomSummary {...{ ...roomSummaryProps, act }} />
-          </Grid>
+      <Grid container spacing={{ xs: 2, md: 3 }} columns={gridColumns}>
+        {gridItems.map((gridItem) => (
+          <Fade key={gridItem.key} in={true}>
+            {gridItem}
+          </Fade>
         ))}
       </Grid>
     </>
