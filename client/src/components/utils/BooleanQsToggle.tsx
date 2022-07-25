@@ -4,7 +4,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Tooltip from "@mui/material/Tooltip";
 import Typogrpahy from "@mui/material/Typography";
 import { ParsedQs } from "qs";
-import React, { useCallback, ReactElement, FC, useMemo } from "react";
+import React, { FC, ReactElement, useCallback, useMemo } from "react";
 import useValidQsState from "../../hooks/qs/useValidQsState";
 
 const idSuffix = "-boolean-qs-toggle-group-label";
