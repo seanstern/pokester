@@ -1,4 +1,9 @@
+import { deepPurple, orange } from "@mui/material/colors";
 import Container from "@mui/material/Container";
+import CssBaseline from "@mui/material/CssBaseline";
+import createTheme from "@mui/material/styles/createTheme";
+import ThemeProvider from "@mui/material/styles/ThemeProvider";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import React, { FC, useMemo } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import {
@@ -10,11 +15,6 @@ import {
 import RoomsList from "./components/rooms-list";
 import CreateRoom from "./CreateRoom";
 import Room from "./Room";
-import ThemeProvider from "@mui/material/styles/ThemeProvider";
-import createTheme from "@mui/material/styles/createTheme";
-import { deepPurple, orange } from "@mui/material/colors";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import CssBaseline from "@mui/material/CssBaseline";
 
 const qc = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false } },
