@@ -1,16 +1,23 @@
+import SearchIcon from "@mui/icons-material/Search";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import CardActionArea from "@mui/material/CardActionArea";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
+import IconButton from "@mui/material/IconButton";
 import Skeleton from "@mui/material/Skeleton";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { Routes } from "@pokester/common-api";
 import React, { FC } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useAct } from "../../queries/RoomsQueries";
 import SeatingAvailabilityIcon from "../icons/SeatingAvailabilityIcon";
+
+export const findByCreatorLinkLabelPrefix = "Find rooms created by";
+export const sitButtonLabel = "Sit";
+export const watchLinkLabel = "Watch";
+export const returnLinkLabel = "Return";
 
 /**
  * Given props, returns the skeletal child components of a room summary (i.e.
@@ -47,16 +54,25 @@ const useSkeletalChildComponents = (
 
   const to = isSkeleton ? "" : `/rooms/${props.id}`;
 
-  const cardActionOnClick = isSkeleton
-    ? async () => Promise.resolve()
-    : async () => {
-        await new Promise((res) => setTimeout(res, 175));
-        history.push(to);
-      };
-
   const name = isSkeleton ? <Skeleton /> : props.name;
 
-  const creatorId = isSkeleton ? <Skeleton /> : props.creatorId;
+  const creator = isSkeleton ? (
+    <Skeleton />
+  ) : (
+    <>
+      <Tooltip title={`${findByCreatorLinkLabelPrefix} ${props.creatorId}`}>
+        <IconButton
+          color="primary"
+          component={Link}
+          to={`?creatorId=${props.creatorId}`}
+          size="small"
+        >
+          <SearchIcon />
+        </IconButton>
+      </Tooltip>
+      {props.creatorId}
+    </>
+  );
 
   const seatingAvailabilityIcon = (
     <SeatingAvailabilityIcon
@@ -95,7 +111,7 @@ const useSkeletalChildComponents = (
       disabled={sitButtonDisabled}
       onClick={sitButtonOnClick}
     >
-      Sit
+      {sitButtonLabel}
     </Button>
   );
   const wrappedSitButton = isSkeleton ? (
@@ -106,7 +122,7 @@ const useSkeletalChildComponents = (
 
   const viewButton = (
     <Button component={Link} to={to} sx={{ marginLeft: "auto" }}>
-      {isSkeleton || props.isSeated ? "Return" : "Watch"}
+      {isSkeleton || props.isSeated ? returnLinkLabel : watchLinkLabel}
     </Button>
   );
 
@@ -119,9 +135,8 @@ const useSkeletalChildComponents = (
   );
 
   return {
-    cardActionOnClick,
     name,
-    creatorId,
+    creator,
     seatingAvailabilityIcon: wrappedSeatingAvailabilityIcon,
     sitButton: wrappedSitButton,
     viewButton: wrappedViewButton,
@@ -168,14 +183,8 @@ export type RoomSummarySkeletonProps = {
 const RoomSummary: FC<RoomSummaryProps | RoomSummarySkeletonProps> = (
   props
 ) => {
-  const {
-    cardActionOnClick,
-    name,
-    creatorId,
-    seatingAvailabilityIcon,
-    sitButton,
-    viewButton,
-  } = useSkeletalChildComponents(props);
+  const { name, creator, seatingAvailabilityIcon, sitButton, viewButton } =
+    useSkeletalChildComponents(props);
 
   const cardAriaBusyProps = props.skeleton ? { "aria-hidden": true } : {};
   const ariaTitleId = props.skeleton ? "" : `title-for-room-id-${props.id}`;
@@ -187,31 +196,25 @@ const RoomSummary: FC<RoomSummaryProps | RoomSummarySkeletonProps> = (
   return (
     <Card
       component="article"
-      variant="outlined"
+      variant="elevation"
       {...{ ...ariaLablledByTitleProps, ...cardAriaBusyProps }}
     >
-      <CardActionArea
-        disabled={!!props.skeleton}
-        onClick={cardActionOnClick}
-        {...ariaLablledByTitleProps}
-      >
-        <CardContent>
-          <Typography noWrap component="h2" variant="h5" {...ariaTitleProps}>
-            {name}
-          </Typography>
-          <Typography
-            noWrap
-            component="p"
-            variant="subtitle2"
-            color="text.secondary"
-          >
-            {creatorId}
-          </Typography>
-          <Box mt={2} display="flex" justifyContent="center">
-            {seatingAvailabilityIcon}
-          </Box>
-        </CardContent>
-      </CardActionArea>
+      <CardContent>
+        <Typography noWrap component="h2" variant="h5" {...ariaTitleProps}>
+          {name}
+        </Typography>
+        <Typography
+          noWrap
+          component="p"
+          variant="subtitle1"
+          color="text.secondary"
+        >
+          {creator}
+        </Typography>
+        <Box mt={2} display="flex" justifyContent="center">
+          {seatingAvailabilityIcon}
+        </Box>
+      </CardContent>
       <CardActions>
         {sitButton}
         {viewButton}
