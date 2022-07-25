@@ -79,8 +79,8 @@ const EmptySeatIcon: FC<EmptySeatIconProps> = ({ tableTo, color }) => {
 
 export enum SeatingAvailabilityDescription {
   YOU_ARE_SEATED = "You're seated",
-  EMPTY_SEAT = "An empty seat",
-  NO_EMPTY_SEATS = "No empty seats",
+  OPEN_SEAT = "An open seat",
+  NO_OPEN_SEATS = "No open seats",
 }
 
 type SeatingAvailabilityIconProps = {
@@ -108,11 +108,13 @@ const SeatingAvailabilityIcon: FC<SeatingAvailabilityIconProps> = ({
     : canSit
     ? [
         <EmptySeatIcon tableTo="right" color="primary" />,
-        SeatingAvailabilityDescription.EMPTY_SEAT,
+        SeatingAvailabilityDescription.OPEN_SEAT,
       ]
     : [
-        <SeatedPlayerIcon facing="right" />,
-        SeatingAvailabilityDescription.NO_EMPTY_SEATS,
+        <Box color="text.secondary">
+          <SeatedPlayerIcon facing="right" />
+        </Box>,
+        SeatingAvailabilityDescription.NO_OPEN_SEATS,
       ];
   return (
     <Tooltip title={description}>

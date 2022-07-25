@@ -13,13 +13,13 @@ test("renders appropriate icons when viewer is seated and cannot sit", () => {
 
   expect(
     screen.queryByRole("img", {
-      name: SeatingAvailabilityDescription.EMPTY_SEAT,
+      name: SeatingAvailabilityDescription.OPEN_SEAT,
     })
   ).toBeNull();
 
   expect(
     screen.queryByRole("img", {
-      name: SeatingAvailabilityDescription.NO_EMPTY_SEATS,
+      name: SeatingAvailabilityDescription.NO_OPEN_SEATS,
     })
   ).toBeNull();
 
@@ -46,7 +46,7 @@ test("renders appropriate icons when viewer is not seated and cannot sit", () =>
 
   // Accessibility tests
   screen.getByRole("img", {
-    name: SeatingAvailabilityDescription.NO_EMPTY_SEATS,
+    name: SeatingAvailabilityDescription.NO_OPEN_SEATS,
   });
 
   expect(
@@ -57,7 +57,7 @@ test("renders appropriate icons when viewer is not seated and cannot sit", () =>
 
   expect(
     screen.queryByRole("img", {
-      name: SeatingAvailabilityDescription.EMPTY_SEAT,
+      name: SeatingAvailabilityDescription.OPEN_SEAT,
     })
   ).toBeNull();
 
@@ -84,7 +84,7 @@ test("renders appropriate icons when viewer is not seated and can sit", () => {
 
   // Accessibility tests
   screen.getByRole("img", {
-    name: SeatingAvailabilityDescription.EMPTY_SEAT,
+    name: SeatingAvailabilityDescription.OPEN_SEAT,
   });
 
   expect(
@@ -95,7 +95,7 @@ test("renders appropriate icons when viewer is not seated and can sit", () => {
 
   expect(
     screen.queryByRole("img", {
-      name: SeatingAvailabilityDescription.NO_EMPTY_SEATS,
+      name: SeatingAvailabilityDescription.NO_OPEN_SEATS,
     })
   ).toBeNull();
 
