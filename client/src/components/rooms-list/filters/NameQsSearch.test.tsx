@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import NameQsSearch from "./NameQsSearch";
+import NameQsSearch, { label } from "./NameQsSearch";
 
 test("renders qs search; (interactions tested in QsSearch.test)", () => {
   render(
@@ -9,5 +9,5 @@ test("renders qs search; (interactions tested in QsSearch.test)", () => {
     </MemoryRouter>
   );
 
-  screen.getByRole("searchbox", { name: /name/i });
+  screen.getByRole("searchbox", { name: label });
 });

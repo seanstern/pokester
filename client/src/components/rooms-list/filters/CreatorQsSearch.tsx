@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import QsSearch from "../../utils/QsSearch";
 
+export const label = "Creator";
 /**
  * Returns a search box that controls the creatorId query key value in the
  * query string component of the URL.
@@ -8,6 +9,6 @@ import QsSearch from "../../utils/QsSearch";
  * @returns a search box that controls the creatorId query key value in the
  *   query string component of the URL.
  */
-const CreatorQsSeach: FC = () => <QsSearch qsKey="creatorId" label="Creator" />;
+const CreatorQsSeach: FC = () => <QsSearch qsKey="creatorId" label={label} />;
 
 export default CreatorQsSeach;

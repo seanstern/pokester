@@ -1,6 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import SeatedStatusQsToggle from "./SeatedStatusQsToggle";
+import SeatedStatusQsToggle, {
+  label,
+  trueButtonLabel,
+  falseButtonLabel,
+} from "./SeatedStatusQsToggle";
 
 test("renders toggle button group; (interactions tested in BooleanQsToggle.test)", () => {
   render(
@@ -9,9 +13,8 @@ test("renders toggle button group; (interactions tested in BooleanQsToggle.test)
     </MemoryRouter>
   );
 
-  const label = /your status/i;
   screen.getByRole("heading", { name: label, level: 3 });
   screen.getByRole("group", { name: label });
-  screen.getByRole("button", { name: /you're seated/i });
-  screen.getByRole("button", { name: /you're not seated/i });
+  screen.getByRole("button", { name: trueButtonLabel });
+  screen.getByRole("button", { name: falseButtonLabel });
 });

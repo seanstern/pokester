@@ -3,6 +3,9 @@ import React, { FC } from "react";
 import NoEventSeatIcon from "../../icons/NoEventSeatIcon";
 import BooleanQsToggle from "../../utils/BooleanQsToggle";
 
+export const label = "Seat Availability";
+export const trueButtonLabel = "Has open seat(s)";
+export const falseButtonLabel = "No open seat";
 /**
  * Returns a toggle button group that controls the canSit query key value
  * in the query string component of the URL.
@@ -13,14 +16,14 @@ import BooleanQsToggle from "../../utils/BooleanQsToggle";
 const SeatingAvailabilityQsToggle: FC = () => (
   <BooleanQsToggle
     qsKey="canSit"
-    label="Seat Availability"
+    label={label}
     labelIdPrefix="seat-availability"
     trueButton={{
-      label: "Has open seat(s)",
+      label: trueButtonLabel,
       child: <EventSeatIcon />,
     }}
     falseButton={{
-      label: "No open seat",
+      label: falseButtonLabel,
       child: <NoEventSeatIcon />,
     }}
   />

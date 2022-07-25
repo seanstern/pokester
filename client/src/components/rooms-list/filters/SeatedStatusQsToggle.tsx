@@ -3,6 +3,9 @@ import React, { FC } from "react";
 import NoAirlineSeatReclineNormalIcon from "../../icons/NoAirlineSeatReclineNormalIcon";
 import BooleanQsToggle from "../../utils/BooleanQsToggle";
 
+export const label = "Your Status";
+export const trueButtonLabel = "You're seated";
+export const falseButtonLabel = "You're not seated";
 /**
  * Returns a toggle button group that controls the isSeated query key value
  * in the query string component of the URL.
@@ -13,14 +16,14 @@ import BooleanQsToggle from "../../utils/BooleanQsToggle";
 const SeatedStatusQsToggle: FC = () => (
   <BooleanQsToggle
     qsKey="isSeated"
-    label="Your Status"
+    label={label}
     labelIdPrefix="seated-status"
     trueButton={{
-      label: "You're seated",
+      label: trueButtonLabel,
       child: <AirlineSeatReclineNormalIcon />,
     }}
     falseButton={{
-      label: "You're not seated",
+      label: falseButtonLabel,
       child: <NoAirlineSeatReclineNormalIcon />,
     }}
   />
