@@ -35,7 +35,7 @@ type BooleanQsToggleProps = {
  * optional query string key that can be "true" or "false".
  *
  * @param props
- * @param props.qsKey the optional query string key
+ * @param props.qsKey the query string key
  * @param props.labelIdPrefix the leading characters for the string
  *   that serves as the id for the aria-label for this component
  * @param props.label the label for the toggle button group
