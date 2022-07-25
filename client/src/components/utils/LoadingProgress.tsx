@@ -44,6 +44,7 @@ const LoadingProgress: FC<LoadingProgressProps> = ({
         marginTop: 1,
         marginBottom: 1,
       }}
+      color="secondary"
       aria-label={`${defaultAriaLabel}${
         ariaLoadingObjectLabel ? ` ${ariaLoadingObjectLabel}` : ""
       }`}
