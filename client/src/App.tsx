@@ -13,7 +13,7 @@ import {
   Switch,
 } from "react-router-dom";
 import RoomsList from "./components/rooms-list";
-import CreateRoom from "./CreateRoom";
+import CreateRoom from "./components/create-room/CreateRoom";
 import Room from "./Room";
 
 const qc = new QueryClient({

@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useHistory } from "react-router-dom";
-import { useCreate } from "./queries/RoomsQueries";
+import { useCreate } from "../../queries/RoomsQueries";
 
 type CreateRoomProps = {};
 const CreateRoom: FC<CreateRoomProps> = () => {
