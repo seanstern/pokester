@@ -1,19 +1,19 @@
-import { waitFor, render, screen, act } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter, Route } from "react-router-dom";
-import CreateRoom, {
-  title,
+import server from "../../__fixtures__/server";
+import RoomCreator, {
+  bigBlindLabel,
+  buyInLabel,
+  createLabel,
+  defaultBigBlind,
+  defaultBuyIn,
+  defaultSmallBlind,
   nameLabel,
   smallBlindLabel,
-  defaultSmallBlind,
-  bigBlindLabel,
-  defaultBigBlind,
-  buyInLabel,
-  defaultBuyIn,
-  createLabel,
-} from "./CreateRoom";
-import server from "../../__fixtures__/server";
-import { QueryClient, QueryClientProvider } from "react-query";
+  title,
+} from "./RoomCreator";
 
 const titleRegExp = new RegExp(`^${title}$`, "i");
 const nameLabelRegExp = new RegExp(`^${nameLabel}$`, "i");
@@ -30,7 +30,7 @@ test("renders initial form", async () => {
   render(
     <QueryClientProvider client={new QueryClient()}>
       <MemoryRouter>
-        <CreateRoom />
+        <RoomCreator />
       </MemoryRouter>
     </QueryClientProvider>
   );
@@ -95,7 +95,7 @@ describe("renders error message and disables create button for invalid; no error
     render(
       <QueryClientProvider client={new QueryClient()}>
         <MemoryRouter>
-          <CreateRoom />
+          <RoomCreator />
         </MemoryRouter>
       </QueryClientProvider>
     );
@@ -138,7 +138,7 @@ describe("renders error message and disables create button for invalid; no error
     render(
       <QueryClientProvider client={new QueryClient()}>
         <MemoryRouter>
-          <CreateRoom />
+          <RoomCreator />
         </MemoryRouter>
       </QueryClientProvider>
     );
@@ -182,7 +182,7 @@ describe("renders error message and disables create button for invalid; no error
     render(
       <QueryClientProvider client={new QueryClient()}>
         <MemoryRouter>
-          <CreateRoom />
+          <RoomCreator />
         </MemoryRouter>
       </QueryClientProvider>
     );
@@ -227,7 +227,7 @@ test("renders error message, disable create button after clicking create with in
   render(
     <QueryClientProvider client={new QueryClient()}>
       <MemoryRouter>
-        <CreateRoom />
+        <RoomCreator />
       </MemoryRouter>
     </QueryClientProvider>
   );
@@ -254,7 +254,7 @@ test("creates new room and redirects to it after clicking create with valid inpu
   render(
     <QueryClientProvider client={new QueryClient()}>
       <MemoryRouter>
-        <CreateRoom />
+        <RoomCreator />
         <Route
           path="*"
           render={({ location }) => {

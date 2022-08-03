@@ -112,7 +112,7 @@ const getTextFieldErrorInfoProps = (
  *
  * @returns the page containing a form for create a new room.
  */
-const CreateRoom: FC = () => {
+const RoomCreator: FC = () => {
   const create = useCreate();
   const history = useHistory();
   const {
@@ -263,4 +263,4 @@ const CreateRoom: FC = () => {
   );
 };
 
-export default CreateRoom;
+export default RoomCreator;

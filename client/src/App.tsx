@@ -13,7 +13,7 @@ import {
   Switch,
 } from "react-router-dom";
 import RoomsList from "./components/rooms-list";
-import CreateRoom from "./components/room-creator/CreateRoom";
+import RoomCreator from "./components/room-creator/RoomCreator";
 import Room from "./Room";
 
 const qc = new QueryClient({
@@ -47,7 +47,7 @@ const App: FC = () => {
                 <RoomsList />
               </Route>
               <Route strict path="/create">
-                <CreateRoom />
+                <RoomCreator />
               </Route>
               <Redirect to="/rooms" />
             </Switch>
