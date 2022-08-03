@@ -9,7 +9,7 @@ const userFriendlyNumberTypeError = "${path} must be a number";
 
 export const smallBlindLabel = "small blind";
 export const bigBlindLabel = "big blind";
-export const buyInLabel = "buy-in";
+export const buyInLabel = "buy in";
 export const nameLabel = "name";
 
 export const defaultSmallBlind = 0.5;
