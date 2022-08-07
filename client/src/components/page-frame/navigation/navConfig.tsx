@@ -1,6 +1,6 @@
-import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import TableRestaurantIcon from "@mui/icons-material/TableRestaurant";
+import React from "react";
 
 export type NavConfigEntry = {
   humanName: string;
