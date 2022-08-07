@@ -31,10 +31,13 @@ const navConfig: NavConfig = {
   },
 };
 
-type FlatNavConfigEntry = {
-  path: string;
+export type FlatNavConfigEntry = {
   humanName: string;
   icon?: JSX.Element;
+  path: string;
+  title: string;
+  hasChildren: boolean;
+  ancestorHumanNames: string[];
 };
 
 type HumanNameReducer = (
@@ -42,7 +45,7 @@ type HumanNameReducer = (
   reducedHumanName?: string
 ) => string;
 
-export const defaultHumanNameReducer: HumanNameReducer = (
+export const defaultTitleReducer: HumanNameReducer = (
   humanName?,
   reducedHumanName?
 ) =>
@@ -54,13 +57,13 @@ export const defaultHumanNameReducer: HumanNameReducer = (
     ? humanName || ""
     : `${reducedHumanName} ${humanName}`;
 
-type FlattenNavConfigOptions = { humanNameReducer?: HumanNameReducer };
+type FlattenNavConfigOptions = { titleReducer?: HumanNameReducer };
 
 const flattenNavConfig = (
   nc?: NavConfig,
   options?: FlattenNavConfigOptions
 ): FlatNavConfigEntry[] => {
-  const humanNameReducer = options?.humanNameReducer || defaultHumanNameReducer;
+  const titleReducer = options?.titleReducer || defaultTitleReducer;
 
   const flattenNavConfigEntryRecursive = ([pathComponent, nce]: [
     string,
@@ -68,14 +71,27 @@ const flattenNavConfig = (
   ]): FlatNavConfigEntry[] => {
     const path = `/${pathComponent}`;
     const { humanName, icon, navConfig } = nce;
-    const fncEntry = { path, humanName, icon };
     const fncEntries = flattenNavConfigRecursive(navConfig).map(
-      ({ path: childPath, humanName: childHumanName, ...rest }) => ({
+      ({
+        path: childPath,
+        title: childTitle,
+        ancestorHumanNames,
+        ...rest
+      }) => ({
         path: `${path}${childPath}`,
-        humanName: humanNameReducer(humanName, childHumanName),
+        title: titleReducer(humanName, childTitle),
+        ancestorHumanNames: [humanName, ...ancestorHumanNames],
         ...rest,
       })
     );
+    const fncEntry = {
+      path,
+      humanName,
+      icon,
+      title: humanName,
+      hasChildren: fncEntries.length > 0,
+      ancestorHumanNames: [],
+    };
     return [fncEntry, ...fncEntries];
   };
 

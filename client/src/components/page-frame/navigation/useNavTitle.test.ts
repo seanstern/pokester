@@ -4,12 +4,9 @@ import { getNavTitle } from "./useNavTitle";
 describe("getNavTitle", () => {
   describe("when exact is true", () => {
     describe("returns navConfig based title when given paths that match navConfig exactly", () => {
-      test.each(flatNavConfig)(
-        "$path returns $humanName",
-        ({ path, humanName }) => {
-          expect(getNavTitle(path, true)).toBe(humanName);
-        }
-      );
+      test.each(flatNavConfig)("$path returns $title", ({ path, title }) => {
+        expect(getNavTitle(path, true)).toBe(title);
+      });
     });
 
     describe("returns undefined when given paths that do not match navConfig exactly", () => {
@@ -27,21 +24,18 @@ describe("getNavTitle", () => {
 
   describe("when exact is false", () => {
     describe("returns navConfig based title when given paths that match navConfig exactly", () => {
-      test.each(flatNavConfig)(
-        "$path returns $humanName",
-        ({ path, humanName }) => {
-          expect(getNavTitle(path, false)).toBe(humanName);
-        }
-      );
+      test.each(flatNavConfig)("$path returns $title", ({ path, title }) => {
+        expect(getNavTitle(path, false)).toBe(title);
+      });
     });
 
     describe("returns navConfig based title when given paths that do not match navConfig exactly", () => {
       const noMatchPathComponent = "nomatch";
       test.each(flatNavConfig)(
-        `$path/${noMatchPathComponent} returns $humanName`,
-        ({ path, humanName }) => {
+        `$path/${noMatchPathComponent} returns $title`,
+        ({ path, title }) => {
           expect(getNavTitle(`${path}/${noMatchPathComponent}`, false)).toBe(
-            humanName
+            title
           );
         }
       );

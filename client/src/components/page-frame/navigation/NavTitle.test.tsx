@@ -5,18 +5,15 @@ import NavTitle, { defaultTitle } from "./NavTitle";
 
 describe("when exact is true", () => {
   describe("renders navConfig based title when given paths that match navConfig exactly", () => {
-    test.each(flatNavConfig)(
-      "$path renders $humanName",
-      ({ path, humanName }) => {
-        render(
-          <MemoryRouter initialEntries={[path]}>
-            <NavTitle exact />
-          </MemoryRouter>
-        );
+    test.each(flatNavConfig)("$path renders $title", ({ path, title }) => {
+      render(
+        <MemoryRouter initialEntries={[path]}>
+          <NavTitle exact />
+        </MemoryRouter>
+      );
 
-        screen.getByRole("heading", { name: humanName, level: 1 });
-      }
-    );
+      screen.getByRole("heading", { name: title, level: 1 });
+    });
   });
 
   describe("renders default title when given paths that do not match navConfig exactly", () => {
@@ -38,32 +35,29 @@ describe("when exact is true", () => {
 
 describe("when exact is false", () => {
   describe("renders navConfig based title when given paths that match navConfig exactly", () => {
-    test.each(flatNavConfig)(
-      "$path renders $humanName",
-      ({ path, humanName }) => {
-        render(
-          <MemoryRouter initialEntries={[path]}>
-            <NavTitle exact={false} />
-          </MemoryRouter>
-        );
+    test.each(flatNavConfig)("$path renders $title", ({ path, title }) => {
+      render(
+        <MemoryRouter initialEntries={[path]}>
+          <NavTitle exact={false} />
+        </MemoryRouter>
+      );
 
-        screen.getByRole("heading", { name: humanName, level: 1 });
-      }
-    );
+      screen.getByRole("heading", { name: title, level: 1 });
+    });
   });
 
   describe("renders navConfig based title when given paths that do not match navConfig exactly", () => {
     const noMatchPathComponent = "noMatch";
     test.each(flatNavConfig)(
-      `$path/${noMatchPathComponent} renders $humanName`,
-      ({ path, humanName }) => {
+      `$path/${noMatchPathComponent} renders $title`,
+      ({ path, title }) => {
         render(
           <MemoryRouter initialEntries={[`${path}/${noMatchPathComponent}`]}>
             <NavTitle exact={false} />
           </MemoryRouter>
         );
 
-        screen.getByRole("heading", { name: humanName, level: 1 });
+        screen.getByRole("heading", { name: title, level: 1 });
       }
     );
   });

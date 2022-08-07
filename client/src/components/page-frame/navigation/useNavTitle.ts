@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import navConfig, {
-  defaultHumanNameReducer,
+  defaultTitleReducer,
   NavConfig,
   NavConfigEntry,
 } from "./navConfig";
@@ -68,7 +68,7 @@ export const getNavTitle = (
       nce.navConfig
     );
     if (exact && !navConfigTitle) return undefined;
-    return defaultHumanNameReducer(nce.humanName, navConfigTitle);
+    return defaultTitleReducer(nce.humanName, navConfigTitle);
   };
 
   const pathComponents = pathname
