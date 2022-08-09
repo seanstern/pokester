@@ -11,6 +11,8 @@ const navMenuLinks = flatNavConfig.filter(isNavMenuLink);
 test.each(navMenuLinks)(
   "renders navigation menu with link to $title under appropriate navConfig category",
   async ({ humanName, ancestorHumanNames, path }) => {
+    const user = userEvent.setup();
+
     let pathname: string | undefined;
     let { container } = render(
       <MemoryRouter>
@@ -37,7 +39,7 @@ test.each(navMenuLinks)(
 
     const link = within(container).getByRole("link", { name: humanName });
 
-    await userEvent.click(link);
+    await user.click(link);
 
     expect(pathname).toBe(path);
   }
