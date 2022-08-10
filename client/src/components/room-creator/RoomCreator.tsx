@@ -3,7 +3,6 @@ import Button from "@mui/material/Button";
 import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
-import Typography from "@mui/material/Typography";
 import { Routes } from "@pokester/common-api";
 import startCase from "lodash/startCase";
 import upperFirst from "lodash/upperFirst";
@@ -25,7 +24,6 @@ const {
   defaultBuyInToBigBlindRatio,
 } = Routes.PokerRooms.Create;
 
-export const title = "Create a Room";
 export const nameLabel = startCase(rawNameLabel);
 export const smallBlindLabel = startCase(rawSmallBlindLabel);
 export const bigBlindLabel = startCase(rawBigBlindLabel);
@@ -138,7 +136,7 @@ const RoomCreator: FC = () => {
   const onSubmit = async (createReqBody: Routes.PokerRooms.Create.ReqBody) => {
     try {
       const roomId = await create.mutateAsync(createReqBody);
-      history.push(`/rooms/${roomId}`);
+      history.push(`/room/${roomId}`);
     } catch (err) {}
   };
 
@@ -147,14 +145,11 @@ const RoomCreator: FC = () => {
 
   return (
     <>
-      <Typography variant="h4" component="h1" color="primary.dark">
-        {title}
-      </Typography>
       <ErrorSnackbar show={create.isError && !create.isLoading}></ErrorSnackbar>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack
           alignItems="stretch"
-          sx={{ width: { xs: 1, sm: 2 / 3, md: 1 / 2 } }}
+          sx={{ width: { xs: 1, md: 2 / 3 } }}
           spacing={1}
         >
           <Controller

@@ -12,10 +12,8 @@ import RoomCreator, {
   defaultSmallBlind,
   nameLabel,
   smallBlindLabel,
-  title,
 } from "./RoomCreator";
 
-const titleRegExp = new RegExp(`^${title}$`, "i");
 const nameLabelRegExp = new RegExp(`^${nameLabel}$`, "i");
 const smallBlindLabelRegExp = new RegExp(`^${smallBlindLabel}$`, "i");
 const bigBlindLabelRegExp = new RegExp(`^${bigBlindLabel}$`, "i");
@@ -34,8 +32,6 @@ test("renders initial form", async () => {
       </MemoryRouter>
     </QueryClientProvider>
   );
-
-  screen.getByRole("heading", { name: titleRegExp });
 
   expect(screen.queryByRole("alert")).toBeNull();
 
@@ -275,5 +271,5 @@ test("creates new room and redirects to it after clicking create with valid inpu
   await user.type(nameTextBox, "an example room name");
   await act(() => user.click(createButton));
 
-  await waitFor(() => expect(pathname).toMatch(/^\/rooms\/[^/]+$/));
+  await waitFor(() => expect(pathname).toMatch(/^\/room\/[^/]+$/));
 });
