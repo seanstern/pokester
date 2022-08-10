@@ -8,8 +8,10 @@ import ResponsiveDrawer from "./responsive-drawer";
 
 const drawerWidth = 200;
 /**
- * Given props, returns a page frame--that is an app bar and navigation menu
- * which frames all child nodes/page content.
+ * Given props, returns a page frame--that is, an app bar and navigation menu
+ * which frames all child nodes/page content. Exists as a component separate
+ * from {@linkcode PageFrame} so {@linkcode usePageTitle} hook can be called
+ * inside of {@linkcode PageTitleProvider}.
  *
  * @param props
  * @param props.children the child nodes representing the page content inside
@@ -17,7 +19,7 @@ const drawerWidth = 200;
  * @returns the child nodes representing the content framed by an app bar and
  *   navigation menu
  */
-const PageFrame: FC = ({ children }) => {
+const InnerPageFrame: FC = ({ children }) => {
   const pageTitle = usePageTitle();
 
   const [isOpenForMobile, setOpenForMobile] = useState(false);
@@ -28,31 +30,45 @@ const PageFrame: FC = ({ children }) => {
   const closeForMobile = () => setOpenForMobile(false);
 
   return (
-    <PageTitleProvider>
-      <Box sx={{ display: "flex" }}>
-        <AppBar onMenuClick={toggleIsOpenForMobile} title={pageTitle} />
-        <ResponsiveDrawer
-          isOpenForMobile={isOpenForMobile}
-          onCloseForMobile={closeForMobile}
-          drawerWidth={drawerWidth}
-        >
-          <NavMenu />
-        </ResponsiveDrawer>
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            p: 3,
-            width: { xs: 1, md: `calc(100% - ${drawerWidth}px)` },
-            maxWidth: "lg",
-          }}
-        >
-          <Toolbar />
-          {children}
-        </Box>
+    <Box sx={{ display: "flex" }}>
+      <AppBar onMenuClick={toggleIsOpenForMobile} title={pageTitle} />
+      <ResponsiveDrawer
+        isOpenForMobile={isOpenForMobile}
+        onCloseForMobile={closeForMobile}
+        drawerWidth={drawerWidth}
+      >
+        <NavMenu />
+      </ResponsiveDrawer>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { xs: 1, md: `calc(100% - ${drawerWidth}px)` },
+          maxWidth: "lg",
+        }}
+      >
+        <Toolbar />
+        {children}
       </Box>
-    </PageTitleProvider>
+    </Box>
   );
 };
+
+/**
+ * Given props, returns a page frame--that is an app bar and navigation menu
+ * which frames all child nodes/page content.
+ *
+ * @param props
+ * @param props.children the child nodes representing the page content inside
+ *   the frame
+ * @returns the child nodes representing the content framed by an app bar and
+ *   navigation menu
+ */
+const PageFrame: FC = ({ children }) => (
+  <PageTitleProvider>
+    <InnerPageFrame>{children}</InnerPageFrame>
+  </PageTitleProvider>
+);
 
 export default PageFrame;
