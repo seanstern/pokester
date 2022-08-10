@@ -52,7 +52,7 @@ const useSkeletalChildComponents = (
 
   const isSkeleton = props.skeleton;
 
-  const to = isSkeleton ? "" : `/rooms/${props.id}`;
+  const to = isSkeleton ? "" : `/room/${props.id}`;
 
   const name = isSkeleton ? <Skeleton /> : props.name;
 
