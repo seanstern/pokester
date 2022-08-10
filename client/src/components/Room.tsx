@@ -1,8 +1,9 @@
-import React, { FC, useMemo } from "react";
-import { useParams, useRouteMatch, useHistory } from "react-router-dom";
 import { Routes } from "@pokester/common-api";
-import { useGet, useAct } from "./queries/RoomsQueries";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import React, { FC, useMemo } from "react";
+import { useHistory, useParams, useRouteMatch } from "react-router-dom";
+import { useAct, useGet } from "../queries/RoomsQueries";
+import { useSetPageTitle } from "./page-frame";
 
 type PlayerProps = {
   position: number;
@@ -288,15 +289,11 @@ const Body: FC<BodyProps> = ({ table }) => {
   );
 };
 
-type TitleProps = {
-  name: string;
-};
-const Title: FC<TitleProps> = ({ name }) => <h2>Room: "{name}"</h2>;
-
 type RoomProps = {};
 const Room: FC<RoomProps> = () => {
   const { roomId } = useParams<{ roomId: string }>();
   const roomQuery = useGet(roomId);
+  useSetPageTitle(roomQuery.data?.name || "");
   switch (roomQuery.status) {
     case "error":
       return <div>Could not load game.</div>;
@@ -309,7 +306,6 @@ const Room: FC<RoomProps> = () => {
     default:
       return (
         <>
-          <Title name={roomQuery.data.name} />
           {roomQuery.data.canSit && (
             <PlayerAction
               playerAction={Routes.PokerRooms.Act.PlayerAction.SIT}
