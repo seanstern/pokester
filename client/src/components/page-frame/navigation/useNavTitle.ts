@@ -17,8 +17,6 @@ import navConfig, {
  * node on the navConfig tree (i.e. a path that extends beyond the tree will
  * return undefined).
  *
- * When defaultTitle is defined, it is returned in cases where the function
- * would otherwise return undefined.
  *
  * @param pathname a url path
  * @param exact a boolean indicating the correspondence requried between the
@@ -27,15 +25,9 @@ import navConfig, {
  *   the navConfig tree (i.e. a path that extends beyond the tree will return
  *   undefined); when false, a title is returned when the pathname traverses
  *   any part of the navConfig tree
- * @param defaultTitle the string returned in cases where the function would
- *   otherwise return undefined
  * @returns a title based on the humanNames in the navConfig
  */
-export const getNavTitle = (
-  pathname: string,
-  exact: boolean,
-  defaultTitle?: string
-) => {
+export const getNavTitle = (pathname: string, exact: boolean) => {
   const getTitleFromNavConfigRecursive = (
     pathComponents: string[],
     nc?: NavConfig
@@ -78,11 +70,10 @@ export const getNavTitle = (
     pathComponents,
     navConfig
   );
-  return navConfigTitle || defaultTitle;
+  return navConfigTitle;
 };
 
 type UseSiteNavTitleOptions = {
-  defaultTitle?: string;
   exact?: boolean;
 };
 const defaultUseSiteNavNameOptions: UseSiteNavTitleOptions = {
@@ -95,8 +86,6 @@ const defaultUseSiteNavNameOptions: UseSiteNavTitleOptions = {
  * accumulating humanNames along the traversal.
  *
  * @param options
- * @param options.defaultTitle the string returned in cases where the function
- *   would otherwise return undefined
  * @param options.exact optional boolean indicating the correspondence requried
  *   between the pathname and the navConfig tree in order to return a defined
  *   title; when true, a title is returned only for pathnames that terminate in
@@ -106,11 +95,10 @@ const defaultUseSiteNavNameOptions: UseSiteNavTitleOptions = {
  * @returns a human readable title based on the names listed in the navConfig
  */
 const useNavTitle = ({
-  defaultTitle,
   exact = true,
 }: UseSiteNavTitleOptions | undefined = defaultUseSiteNavNameOptions) => {
   const { pathname } = useLocation();
-  return getNavTitle(pathname, exact, defaultTitle);
+  return getNavTitle(pathname, exact);
 };
 
 export default useNavTitle;
