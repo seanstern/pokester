@@ -16,6 +16,10 @@
     "ts-node": "^10.8.1",
     "typescript": "4.4.2"
   },
+  "resolutions": {
+    "nth-check": "2.0.1",
+    "terser": "5.14.2"
+  },
   "scripts": {
     "g:clean": "cd $INIT_CWD && rimraf ./build",
     "g:build": "cd $INIT_CWD && run g:clean && tsc",
