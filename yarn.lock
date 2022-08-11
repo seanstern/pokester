@@ -3623,7 +3623,6 @@ __metadata:
     "@types/express": ^4.17.13
     "@types/express-session": ^1.17.4
     "@types/jest": ^27.5.1
-    "@types/mongoose": ^5.11.97
     "@types/node": ^17.0.21
     "@types/supertest": ^2.0.12
     "@typescript-eslint/eslint-plugin": ^5.27.0
@@ -4337,15 +4336,6 @@ __metadata:
   version: 1.3.2
   resolution: "@types/mime@npm:1.3.2"
   checksum: 0493368244cced1a69cb791b485a260a422e6fcc857782e1178d1e6f219f1b161793e9f87f5fae1b219af0f50bee24fcbe733a18b4be8fdd07a38a8fb91146fd
-  languageName: node
-  linkType: hard
-
-"@types/mongoose@npm:^5.11.97":
-  version: 5.11.97
-  resolution: "@types/mongoose@npm:5.11.97"
-  dependencies:
-    mongoose: "*"
-  checksum: 54c896814a92898535eb8965f90308f2661b75f4a53e28405802fbe9f90ba7d37140f151b1e291e08555a1700d3486911104c108ed02a94c6feddeab6bd3bfea
   languageName: node
   linkType: hard
 
@@ -6092,15 +6082,6 @@ __metadata:
   version: 1.1.6
   resolution: "bson@npm:1.1.6"
   checksum: 75762c9b7e0b3156cb0f38c7eb9ffcade53f0b04ac87dece9cba38f6dc570d9af91251de6a8988b294063cfaa21894c60ac9e85c34176accb3674acb092d66a7
-  languageName: node
-  linkType: hard
-
-"bson@npm:^4.2.2, bson@npm:^4.6.1":
-  version: 4.6.2
-  resolution: "bson@npm:4.6.2"
-  dependencies:
-    buffer: ^5.6.0
-  checksum: f4072d059ad9a46dd92451da5efb278d98f7b23fe6de0ee8dd1f9f05e005189156509b11deeba655befdf9434cffd283bfc35bcf75d2123c1fdf9b723ce8a98d
   languageName: node
   linkType: hard
 
@@ -10961,13 +10942,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kareem@npm:2.3.5":
-  version: 2.3.5
-  resolution: "kareem@npm:2.3.5"
-  checksum: eb1b996937e0a7a031230ed56ba2142f35179af5973ff86074921a082375fc3d5df7820b4c7a70b51e7e19c063bf3d735defd5b99a50982095674d68442f4ecb
-  languageName: node
-  linkType: hard
-
 "kareem@npm:2.4.1":
   version: 2.4.1
   resolution: "kareem@npm:2.4.1"
@@ -11626,7 +11600,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongodb-connection-string-url@npm:^2.4.1, mongodb-connection-string-url@npm:^2.5.2":
+"mongodb-connection-string-url@npm:^2.5.2":
   version: 2.5.2
   resolution: "mongodb-connection-string-url@npm:2.5.2"
   dependencies:
@@ -11666,22 +11640,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongodb@npm:4.3.1":
-  version: 4.3.1
-  resolution: "mongodb@npm:4.3.1"
-  dependencies:
-    bson: ^4.6.1
-    denque: ^2.0.1
-    mongodb-connection-string-url: ^2.4.1
-    saslprep: ^1.0.3
-    socks: ^2.6.1
-  dependenciesMeta:
-    saslprep:
-      optional: true
-  checksum: 5684b5481bfbf73e4628b8bad7018cd4436fdb23b9548fb38dece3e079b1716fe870d41070a505d13ae4d86c107315afaf34891ba2b64925eb4fa4cd5bb70300
-  languageName: node
-  linkType: hard
-
 "mongodb@npm:4.8.1":
   version: 4.8.1
   resolution: "mongodb@npm:4.8.1"
@@ -11695,21 +11653,6 @@ __metadata:
     saslprep:
       optional: true
   checksum: 97ff4ebe3fde7b3b5b133d8f7a2e4d6e372c44f8223a6d40b13bb3a705bbbb48ed50958a0fc6b3a33161605723479fced8e0eb83cf7fd5271f7530e6e2d67a2d
-  languageName: node
-  linkType: hard
-
-"mongoose@npm:*":
-  version: 6.2.9
-  resolution: "mongoose@npm:6.2.9"
-  dependencies:
-    bson: ^4.2.2
-    kareem: 2.3.5
-    mongodb: 4.3.1
-    mpath: 0.8.4
-    mquery: 4.0.2
-    ms: 2.1.3
-    sift: 16.0.0
-  checksum: e5769926a303ad9e0275807df070ed99065728cc6f41965aae1e40d7a68c997263843afc28ead9da2486f47c5e0c556230ed77b65774bd3d2854f71ee60f62dd
   languageName: node
   linkType: hard
 
@@ -11728,26 +11671,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mpath@npm:0.8.4":
-  version: 0.8.4
-  resolution: "mpath@npm:0.8.4"
-  checksum: 06ad1d443766626fa361b67a4eca9cd4c36a71e475e92e8a5c242dbbc9a911adac00ce971177843b48475356df609f847342548da7701a976a2ab4116135caf0
-  languageName: node
-  linkType: hard
-
 "mpath@npm:0.9.0":
   version: 0.9.0
   resolution: "mpath@npm:0.9.0"
   checksum: 1052f1f926db04502440f76164ae16ed53aa41f3ce34e7e64e3ed451b7d91ede295c3b600801c5f9eb862f03d9d59b7aa5aaf690c341fc521bef025d0f5cd773
-  languageName: node
-  linkType: hard
-
-"mquery@npm:4.0.2":
-  version: 4.0.2
-  resolution: "mquery@npm:4.0.2"
-  dependencies:
-    debug: 4.x
-  checksum: 39ac308294fe26fe214fd117a9a2e92f754ee00193d3d8602b23c13cf677688faf8417fc74fa18940d51358bf04105ce279364a396b35fd23d73d452f860a098
   languageName: node
   linkType: hard
 
