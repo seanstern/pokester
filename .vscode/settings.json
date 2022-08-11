@@ -10,5 +10,6 @@
   "eslint.nodePath": ".yarn/sdks",
   "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "files.eol": "\n"
+  "files.eol": "\n",
+  "editor.rulers": [80]
 }
