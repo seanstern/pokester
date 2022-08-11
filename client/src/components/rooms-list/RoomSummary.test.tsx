@@ -121,7 +121,7 @@ test("renders room summary with sit button that, when clicked, calls act mutatio
   fireEvent.click(sitButton);
 
   await waitFor(() => expect(act.mutateAsync).toHaveBeenCalledTimes(1));
-  expect(pathName).toBe(`/rooms/${roomId}`);
+  expect(pathName).toBe(`/room/${roomId}`);
 });
 
 test("renders room summary with watch link that, when clicked, changes path", async () => {
@@ -168,7 +168,7 @@ test("renders room summary with watch link that, when clicked, changes path", as
 
   fireEvent.click(watchLink);
 
-  expect(pathName).toBe(`/rooms/${roomId}`);
+  expect(pathName).toBe(`/room/${roomId}`);
   expect(act.mutateAsync).not.toHaveBeenCalled();
 });
 
@@ -220,7 +220,7 @@ test("renders room summary with disabled sit button and return link that, when c
 
   fireEvent.click(returnLink);
 
-  expect(pathName).toBe(`/rooms/${roomId}`);
+  expect(pathName).toBe(`/room/${roomId}`);
 
   expect(act.mutateAsync).not.toHaveBeenCalled();
 });

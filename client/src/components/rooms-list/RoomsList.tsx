@@ -1,6 +1,5 @@
 import Fade from "@mui/material/Fade";
 import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
 import { Routes } from "@pokester/common-api";
 import React, { FC } from "react";
 import useValidParsedQs from "../../hooks/qs/useValidParsedQs";
@@ -15,15 +14,9 @@ const skeletonRoomSummaryProps: RoomSummarySkeletonProps = { skeleton: true };
 const skeletonRoomSummaryPropsWithKeyList = [
   { ...skeletonRoomSummaryProps, key: 0 },
 ];
-const gridColumns = { xs: 4, sm: 8, md: 12 };
+const gridColumns = { xs: 4, sm: 8, lg: 12 };
 const noRoomSummariesGridItem = (
-  <Grid
-    key="noRoomsSummaries"
-    item
-    xs={gridColumns.xs}
-    sm={gridColumns.sm}
-    md={gridColumns.md}
-  >
+  <Grid key="noRoomsSummaries" item xs={true} md={8}>
     <NoRoomSummaries />
   </Grid>
 );
@@ -77,13 +70,9 @@ const List: FC = () => {
   );
 };
 
-type RoomsListProps = {};
-const RoomsList: FC<RoomsListProps> = () => {
+const RoomsList: FC = () => {
   return (
     <>
-      <Typography variant="h4" component="h1">
-        Rooms
-      </Typography>
       <Filters />
       <List />
     </>
