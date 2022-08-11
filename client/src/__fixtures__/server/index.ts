@@ -1,4 +1,1 @@
-import server from "./server";
-export default server;
-
-export { rest } from "./server";
+export { default, rest } from "./server";
