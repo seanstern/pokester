@@ -1,4 +1,3 @@
-import Fade from "@mui/material/Fade";
 import Grid from "@mui/material/Grid";
 import { Routes } from "@pokester/common-api";
 import React, { FC } from "react";
@@ -60,11 +59,7 @@ const List: FC = () => {
       />
       <LoadingProgress show={queryOrMutationInProgress} />
       <Grid container spacing={{ xs: 2, md: 3 }} columns={gridColumns}>
-        {gridItems.map((gridItem) => (
-          <Fade key={gridItem.key} in={true}>
-            {gridItem}
-          </Fade>
-        ))}
+        {gridItems}
       </Grid>
     </>
   );
