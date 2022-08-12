@@ -13,7 +13,7 @@ import {
   useRouteMatch,
 } from "react-router-dom";
 import PageFrame from "./components/page-frame";
-import Room from "./components/Room";
+import Room from "./components/room/Room";
 import RoomCreator from "./components/room-creator/RoomCreator";
 import RoomsList from "./components/rooms-list";
 import ScrollToTop from "./components/utils/ScrollToTop";
