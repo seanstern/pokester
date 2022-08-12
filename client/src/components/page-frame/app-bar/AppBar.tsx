@@ -1,14 +1,12 @@
 import MenuIcon from "@mui/icons-material/Menu";
 import MuiAppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Fade from "@mui/material/Fade";
 import IconButton from "@mui/material/IconButton";
 import { useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import React, { FC } from "react";
-import { SwitchTransition } from "react-transition-group";
 import pokesterImage from "./pokester.png";
 
 export const menuButtonLabel = "Menu";
@@ -53,11 +51,7 @@ const AppBar: FC<AppBarProps> = ({ title, onMenuClick }) => {
         </Box>
         <Typography variant="h6" component="h1" noWrap>
           {`${showSiteName ? defaultSiteName : ""}${defaultTitleSeparator}`}
-          <SwitchTransition>
-            <Fade key={title}>
-              <span>{title}</span>
-            </Fade>
-          </SwitchTransition>
+          {title}
         </Typography>
       </Toolbar>
     </MuiAppBar>
