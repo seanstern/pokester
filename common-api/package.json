@@ -1,6 +1,5 @@
 {
   "name": "@pokester/common-api",
-  "packageManager": "yarn@3.2.0",
   "private": true,
   "description": "shared libraries for use across @pokester/client and @pokester/server",
   "author": "seanstern",
@@ -9,17 +8,19 @@
     "@chevtek/poker-engine": "workspace:*"
   },
   "devDependencies": {
-    "@tsconfig/node14": "^1.0.0",
-    "@types/jest": "^27.5.1",
-    "@types/node": "^17.0.33",
-    "@typescript-eslint/eslint-plugin": "^5.27.0",
-    "@typescript-eslint/parser": "^5.27.0",
+    "@tsconfig/node14": "^1.0.3",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^17.0.45",
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "@typescript-eslint/parser": "^5.33.1",
     "eslint-config-prettier": "^8.5.0",
-    "ts-jest": "^27.1.4",
+    "ts-jest": "^27.1.5",
     "yup": "^0.32.11"
   },
   "peerDependencies": {
     "eslint": "*",
+    "jest": "*",
+    "typescript": "*",
     "yup": "^0.32.0"
   },
   "scripts": {
