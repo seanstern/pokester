@@ -3951,6 +3951,8 @@ __metadata:
     typescript: 4.7.4
     web-vitals: ^2.1.4
     yup: ^0.32.11
+  peerDependencies:
+    jest: "*"
   languageName: unknown
   linkType: soft
 
@@ -3969,6 +3971,8 @@ __metadata:
     yup: ^0.32.11
   peerDependencies:
     eslint: "*"
+    jest: "*"
+    typescript: "*"
     yup: ^0.32.0
   languageName: unknown
   linkType: soft
@@ -3992,6 +3996,7 @@ __metadata:
     eslint-config-prettier: ^8.5.0
     express: ^4.18.1
     express-session: ^1.17.3
+    mongodb: ^4.8.1
     mongoose: ^6.5.2
     supertest: ^6.2.4
     ts-jest: ^27.1.5
@@ -12119,7 +12124,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mongodb@npm:4.8.1":
+"mongodb@npm:4.8.1, mongodb@npm:^4.8.1":
   version: 4.8.1
   resolution: "mongodb@npm:4.8.1"
   dependencies:

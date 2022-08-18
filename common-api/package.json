@@ -19,6 +19,8 @@
   },
   "peerDependencies": {
     "eslint": "*",
+    "jest": "*",
+    "typescript": "*",
     "yup": "^0.32.0"
   },
   "scripts": {
