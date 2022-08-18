@@ -6,7 +6,7 @@
     "poker-engine",
     "common-api"
   ],
-  "packageManager": "yarn@3.2.0",
+  "packageManager": "yarn@3.2.2",
   "devDependencies": {
     "@types/node": "^17.0.41",
     "eslint": "^8.17.0",
