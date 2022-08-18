@@ -3,7 +3,7 @@
   "workspaces": [
     "client",
     "server",
-    "poker-engine",
+    "poker-engine/@chevtek__poker-engine",
     "common-api"
   ],
   "packageManager": "yarn@3.2.2",
