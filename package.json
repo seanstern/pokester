@@ -4,6 +4,7 @@
     "client",
     "server",
     "poker-engine/chevtek",
+    "poker-engine/fixtures",
     "common-api"
   ],
   "packageManager": "yarn@3.2.2",
