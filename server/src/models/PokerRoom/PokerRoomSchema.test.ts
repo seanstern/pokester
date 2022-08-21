@@ -1,8 +1,10 @@
 import { Player } from "@chevtek/poker-engine";
+import {
+  asJestCasesTable,
+  Table as TableFixtures,
+} from "@pokester/poker-engine-fixtures";
 import { model } from "mongoose";
 import { serialize } from "../../serializers/TableSerializer";
-import * as TableFixtures from "../../__fixtures__/poker-engine/Table.fixture";
-import { asJestCasesTable } from "../../__fixtures__/TestCaseUtils";
 // import * in order to jest.spyOn below
 import * as PokerRoomSchemaModule from "./PokerRoomSchema";
 
