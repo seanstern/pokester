@@ -1,0 +1,32 @@
+{
+  "name": "@pokester/poker-engine-fixtures",
+  "private": true,
+  "description": "shared fixtures based on @chevtek/poker-engine for use in testing across @pokester/client and @pokester/server",
+  "author": "seanstern",
+  "main": "./build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./Card": "./build/fixtures/Card.fixture.js",
+    "./Player": "./build/fixtures/Player.fixture.js",
+    "./Pot": "./build/fixtures/Pot.fixture.js",
+    "./Table": "./build/fixtures/Table.fixture.js"
+  },
+  "dependencies": {
+    "@chevtek/poker-engine": "workspace:*"
+  },
+  "devDependencies": {
+    "@tsconfig/node16": "^1.0.3",
+    "@types/node": "^17.0.45",
+    "@typescript-eslint/eslint-plugin": "^5.33.1",
+    "@typescript-eslint/parser": "^5.33.1",
+    "eslint-config-prettier": "^8.5.0"
+  },
+  "peerDependencies": {
+    "eslint": "*",
+    "typescript": "*"
+  },
+  "scripts": {
+    "clean": "run g:clean",
+    "build": "run g:build"
+  }
+}

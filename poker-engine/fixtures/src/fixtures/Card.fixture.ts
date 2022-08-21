@@ -1,5 +1,5 @@
 import { Card, CardSuit, CardRank } from "@chevtek/poker-engine";
-import { FixtureModule } from "../TypeUtils";
+import { FixtureModule } from "./FixtureTypes";
 
 type CardSuitEntry = [string, CardSuit];
 const cardSuits: CardSuitEntry[] = Object.entries(CardSuit);

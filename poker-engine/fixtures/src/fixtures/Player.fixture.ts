@@ -1,5 +1,5 @@
 import { Player } from "@chevtek/poker-engine";
-import { Fixture } from "../TypeUtils";
+import { Fixture } from "./FixtureTypes";
 import {
   onePlayerSeated,
   playersSeated,

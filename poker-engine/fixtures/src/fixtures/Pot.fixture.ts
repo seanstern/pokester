@@ -1,5 +1,5 @@
 import { Pot } from "@chevtek/poker-engine";
-import { Fixture } from "../TypeUtils";
+import { Fixture } from "./FixtureTypes";
 import { preFlop, flop, completeRound } from "./Table.fixture";
 
 /**

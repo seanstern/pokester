@@ -1,7 +1,9 @@
-import { CardSuit, CardRank } from "@chevtek/poker-engine";
-import CardFixtures from "../__fixtures__/poker-engine/Card.fixture";
-import { asJestCasesTable } from "../__fixtures__/TestCaseUtils";
-import { serialize, deserialize } from "./CardSerializer";
+import { CardRank, CardSuit } from "@chevtek/poker-engine";
+import {
+  asJestCasesTable,
+  Card as CardFixtures,
+} from "@pokester/poker-engine-fixtures";
+import { deserialize, serialize } from "./CardSerializer";
 
 const cardCases = asJestCasesTable(CardFixtures);
 

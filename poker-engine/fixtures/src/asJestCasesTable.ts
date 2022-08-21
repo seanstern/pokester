@@ -1,4 +1,4 @@
-import { Fixture, FixtureModule } from "./TypeUtils";
+import { Fixture, FixtureModule } from "./fixtures";
 
 /**
  * Given a fixture module, returns each fixture as cases table that
@@ -19,6 +19,7 @@ import { Fixture, FixtureModule } from "./TypeUtils";
  * @returns a fixture cases table that can be consumed by jest's
  *   describe.each or test.each
  */
-export const asJestCasesTable = <T>(
-  fixtureModule: FixtureModule<T>
-): Fixture<T>[] => Object.values(fixtureModule);
+const asJestCasesTable = <T>(fixtureModule: FixtureModule<T>): Fixture<T>[] =>
+  Object.values(fixtureModule);
+
+export default asJestCasesTable;

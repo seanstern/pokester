@@ -4,7 +4,7 @@ import {
   priorActorPostDealPreFlop,
   folded,
   winner,
-} from "../../__fixtures__/poker-engine/Player.fixture";
+} from "@pokester/poker-engine-fixtures/Player";
 import { Routes } from "@pokester/common-api";
 import viewOfPlayer from "./ViewOfPlayer";
 

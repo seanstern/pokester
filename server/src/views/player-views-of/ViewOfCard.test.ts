@@ -1,5 +1,7 @@
-import CardFixtures from "../../__fixtures__/poker-engine/Card.fixture";
-import { asJestCasesTable } from "../../__fixtures__/TestCaseUtils";
+import {
+  asJestCasesTable,
+  Card as CardFixtures,
+} from "@pokester/poker-engine-fixtures";
 import viewOfCard from "./ViewOfCard";
 
 const cardCases = asJestCasesTable(CardFixtures);

@@ -1,21 +1,18 @@
 import { getMockReq, getMockRes } from "@jest-mock/express";
 import { Routes } from "@pokester/common-api";
+import { flop, playersSeated } from "@pokester/poker-engine-fixtures/Table";
 import { NextFunction } from "express";
 import { Types } from "mongoose";
 import PokerRoom from "../models/PokerRoom";
 import {
-  flop,
-  playersSeated,
-} from "../__fixtures__/poker-engine/Table.fixture";
-import {
+  act,
+  ActReqBody,
+  ActReqParams,
   create,
   CreateReqBody,
   get,
-  GetReqParams,
-  act,
-  ActReqParams,
-  ActReqBody,
   getAll,
+  GetReqParams,
 } from "./PokerRoomsController";
 
 // Common mocks

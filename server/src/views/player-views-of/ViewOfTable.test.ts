@@ -7,8 +7,8 @@ import {
   river,
   completeRound,
   roundTwo,
-} from "../../__fixtures__/poker-engine/Table.fixture";
-import { asJestCasesTable } from "../../__fixtures__/TestCaseUtils";
+} from "@pokester/poker-engine-fixtures/Table";
+import { asJestCasesTable } from "@pokester/poker-engine-fixtures";
 import viewOfTable from "./ViewOfTable";
 
 describe("viewOfTable produces valid JSON when given", () => {

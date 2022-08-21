@@ -1,5 +1,5 @@
 import { Table, Card, CardSuit, CardRank } from "@chevtek/poker-engine";
-import { Fixture } from "../TypeUtils";
+import { Fixture } from "./FixtureTypes";
 
 /**
  * Returns a new deck with card ordered deterministically.

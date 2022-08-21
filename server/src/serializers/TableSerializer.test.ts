@@ -1,6 +1,8 @@
 import { Table } from "@chevtek/poker-engine";
-import * as TableFixtures from "../__fixtures__/poker-engine/Table.fixture";
-import { asJestCasesTable } from "../__fixtures__/TestCaseUtils";
+import {
+  asJestCasesTable,
+  Table as TableFixtures,
+} from "@pokester/poker-engine-fixtures";
 import { deserialize, serialize } from "./TableSerializer";
 
 const tableCases = asJestCasesTable(TableFixtures);

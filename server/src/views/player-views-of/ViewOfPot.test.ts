@@ -2,7 +2,7 @@ import {
   emptyPot,
   potWithEligiblePlayersNoWinners,
   potWithWinners,
-} from "../../__fixtures__/poker-engine/Pot.fixture";
+} from "@pokester/poker-engine-fixtures/Pot";
 import viewOfPot from "./ViewOfPot";
 
 describe("viewOfPot produces valid JSON when given", () => {
