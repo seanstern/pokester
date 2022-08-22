@@ -1,11 +1,11 @@
+import { SelfPlayer } from "@pokester/common-api/poker-rooms/get";
 import {
-  dealerAmongSeatedPlayers,
   currentActorPostDealPreFlop,
-  priorActorPostDealPreFlop,
+  dealerAmongSeatedPlayers,
   folded,
+  priorActorPostDealPreFlop,
   winner,
-} from "@pokester/poker-engine-fixtures/Player";
-import { Routes } from "@pokester/common-api";
+} from "@pokester/poker-engine-fixtures/player";
 import viewOfPlayer from "./ViewOfPlayer";
 
 describe("viewOfPlayer produces vaild JSON when given a Player", () => {
@@ -162,9 +162,7 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
       // view is not a SelfPlayer--it's an OpponentPlayer,
       // however one sub-goal of unit test is to ensure legalActions
       // is *always* undefined on OpponentPlayer
-      expect(
-        (view as Routes.PokerRooms.Get.SelfPlayer).legalActions
-      ).toBeUndefined();
+      expect((view as SelfPlayer).legalActions).toBeUndefined();
       expect(view).toMatchInlineSnapshot(`
         Object {
           "bet": 0,
@@ -203,9 +201,7 @@ describe("viewOfPlayer produces vaild JSON when given a Player", () => {
       // view is not a SelfPlayer--it's an OpponentPlayer,
       // however one sub-goal of unit test is to ensure legalActions
       // is *always* undefined on OpponentPlayer
-      expect(
-        (view as Routes.PokerRooms.Get.SelfPlayer).legalActions
-      ).toBeUndefined();
+      expect((view as SelfPlayer).legalActions).toBeUndefined();
       expect(view).toMatchInlineSnapshot(`
         Object {
           "bet": 0,

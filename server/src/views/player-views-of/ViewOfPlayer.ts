@@ -1,5 +1,9 @@
-import { Player } from "@chevtek/poker-engine";
-import { Routes } from "@pokester/common-api";
+import { Player as PokerEnginePlayer } from "@chevtek/poker-engine";
+import {
+  Card,
+  Player as CommonAPIPlayer,
+  PlayerAction,
+} from "@pokester/common-api/poker-rooms/get";
 import { canDealCards } from "../../poker-engine/Utils";
 import viewOfCard from "./ViewOfCard";
 
@@ -17,15 +21,12 @@ import viewOfCard from "./ViewOfCard";
  *   of holeCards
  */
 const viewOfHoleCards = (
-  holeCards: Player["holeCards"]
-): [Routes.PokerRooms.Get.Card, Routes.PokerRooms.Get.Card] | undefined => {
+  holeCards: PokerEnginePlayer["holeCards"]
+): [Card, Card] | undefined => {
   if (!holeCards) {
     return holeCards;
   }
-  return holeCards.map((holeCard) => viewOfCard(holeCard)) as [
-    Routes.PokerRooms.Get.Card,
-    Routes.PokerRooms.Get.Card
-  ];
+  return holeCards.map((holeCard) => viewOfCard(holeCard)) as [Card, Card];
 };
 
 /**
@@ -34,9 +35,9 @@ const viewOfHoleCards = (
  * representation of the legalActions from the perspective of a player.
  *
  * These elements of the returned array may differ subtly from
- * {@link Player.legalActions} (i.e. may include
- * {@link Routes.PokerRooms.Get.PlayerAction} values which have no corresponding
- * representation in {@link Player.legalActions}.
+ * {@link PokerEnginePlayer.legalActions} (i.e. may include
+ * {@link ActPlayerAction} values which have no corresponding
+ * representation in {@link PokerEnginePlayer.legalActions}.
  *
  * Should only be called when a player is viewing themself.
  *
@@ -46,22 +47,20 @@ const viewOfHoleCards = (
  *   of the legalActions the Player can take
  */
 const viewOfLegalActions = (
-  p: Player
-): Routes.PokerRooms.Get.PlayerAction[] | undefined => {
-  const legalActions: Routes.PokerRooms.Get.PlayerAction[] = [];
+  p: PokerEnginePlayer
+): PlayerAction[] | undefined => {
+  const legalActions: PlayerAction[] = [];
 
   if (!p.left) {
-    legalActions.push(Routes.PokerRooms.Get.PlayerAction.STAND);
+    legalActions.push(PlayerAction.STAND);
   }
 
   if (canDealCards(p)) {
-    legalActions.push(Routes.PokerRooms.Get.PlayerAction.DEAL);
+    legalActions.push(PlayerAction.DEAL);
   }
 
   if (p.table.currentActor === p) {
-    legalActions.push(
-      ...(p.legalActions() as Routes.PokerRooms.Get.PlayerAction[])
-    );
+    legalActions.push(...(p.legalActions() as PlayerAction[]));
   }
 
   return legalActions.length > 0 ? legalActions : undefined;
@@ -80,8 +79,8 @@ const viewOfLegalActions = (
  */
 const viewOfPlayer = (
   viewerId: string,
-  p: Player
-): Routes.PokerRooms.Get.Player => {
+  p: PokerEnginePlayer
+): CommonAPIPlayer => {
   const {
     bet,
     folded,

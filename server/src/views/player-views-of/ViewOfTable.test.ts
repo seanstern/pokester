@@ -7,7 +7,7 @@ import {
   river,
   completeRound,
   roundTwo,
-} from "@pokester/poker-engine-fixtures/Table";
+} from "@pokester/poker-engine-fixtures/table";
 import { asJestCasesTable } from "@pokester/poker-engine-fixtures";
 import viewOfTable from "./ViewOfTable";
 

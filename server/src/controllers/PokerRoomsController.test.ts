@@ -1,6 +1,6 @@
 import { getMockReq, getMockRes } from "@jest-mock/express";
-import { Routes } from "@pokester/common-api";
-import { flop, playersSeated } from "@pokester/poker-engine-fixtures/Table";
+import { PlayerAction } from "@pokester/common-api/poker-rooms/act";
+import { flop, playersSeated } from "@pokester/poker-engine-fixtures/table";
 import { NextFunction } from "express";
 import { Types } from "mongoose";
 import PokerRoom from "../models/PokerRoom";
@@ -507,7 +507,7 @@ describe("act", () => {
       const req = getMockReq({
         sessionID: dealerId,
         params: roomIdParam,
-        body: { action: Routes.PokerRooms.Act.PlayerAction.DEAL },
+        body: { action: PlayerAction.DEAL },
       }) as Parameters<typeof act>[0];
 
       // Ignore getMockRes type parameter because typing is
@@ -530,17 +530,11 @@ describe("act", () => {
     });
 
     const actionCaseTable: [string, ActReqBody][] = [
-      ["checks", { action: Routes.PokerRooms.Act.PlayerAction.CHECK }],
-      [
-        "bets",
-        { action: Routes.PokerRooms.Act.PlayerAction.BET, amount: bigBlind },
-      ],
-      [
-        "raises",
-        { action: Routes.PokerRooms.Act.PlayerAction.RAISE, amount: bigBlind },
-      ],
-      ["folds", { action: Routes.PokerRooms.Act.PlayerAction.FOLD }],
-      ["stands", { action: Routes.PokerRooms.Act.PlayerAction.STAND }],
+      ["checks", { action: PlayerAction.CHECK }],
+      ["bets", { action: PlayerAction.BET, amount: bigBlind }],
+      ["raises", { action: PlayerAction.RAISE, amount: bigBlind }],
+      ["folds", { action: PlayerAction.FOLD }],
+      ["stands", { action: PlayerAction.STAND }],
     ];
     test.each(actionCaseTable)("when existing player %s", async (_, body) => {
       const params: ActReqParams = roomIdParam;
@@ -574,7 +568,7 @@ describe("act", () => {
     test("when new player sits", async () => {
       const params: ActReqParams = roomIdParam;
       const body: ActReqBody = {
-        action: Routes.PokerRooms.Act.PlayerAction.SIT,
+        action: PlayerAction.SIT,
       };
       const sessionID = "newPlayerId";
       if (players.find((player) => player?.id === sessionID)) {
@@ -615,7 +609,7 @@ describe("act", () => {
 
       const params: ActReqParams = roomIdParam;
       const body: ActReqBody = {
-        action: Routes.PokerRooms.Act.PlayerAction.CHECK,
+        action: PlayerAction.CHECK,
       };
       // Ignore getMockReq type parameter because typing is
       // overly restrictive (i.e. doesn't allow never in
@@ -646,7 +640,7 @@ describe("act", () => {
     test("when existing player sits", async () => {
       const params: ActReqParams = roomIdParam;
       const body: ActReqBody = {
-        action: Routes.PokerRooms.Act.PlayerAction.SIT,
+        action: PlayerAction.SIT,
       };
 
       // Ignore getMockReq type parameter because typing is
@@ -677,7 +671,7 @@ describe("act", () => {
     test("when new player stands", async () => {
       const params: ActReqParams = roomIdParam;
       const body: ActReqBody = {
-        action: Routes.PokerRooms.Act.PlayerAction.STAND,
+        action: PlayerAction.STAND,
       };
       const sessionID = "newPlayerId";
       if (players.find((player) => player?.id === sessionID)) {
@@ -712,7 +706,7 @@ describe("act", () => {
     test("when player is not currentActor folds", async () => {
       const params: ActReqParams = roomIdParam;
       const body: ActReqBody = {
-        action: Routes.PokerRooms.Act.PlayerAction.FOLD,
+        action: PlayerAction.FOLD,
       };
       // Ignore getMockReq type parameter because typing is
       // overly restrictive (i.e. doesn't allow never in
@@ -742,11 +736,7 @@ describe("act", () => {
     test("when action is invalid", async () => {
       const params: ActReqParams = roomIdParam;
       const invalidActionValue = "invalidActionValue";
-      if (
-        Object.values(Routes.PokerRooms.Act.PlayerAction).includes(
-          invalidActionValue as any
-        )
-      ) {
+      if (Object.values(PlayerAction).includes(invalidActionValue as any)) {
         throw new Error(`${invalidActionValue} is a PlayerAction`);
       }
       const body = { action: invalidActionValue };
@@ -779,7 +769,7 @@ describe("act", () => {
     test("when player illegally calls", async () => {
       const params: ActReqParams = roomIdParam;
       const body: ActReqBody = {
-        action: Routes.PokerRooms.Act.PlayerAction.CALL,
+        action: PlayerAction.CALL,
       };
       // Ignore getMockReq type parameter because typing is
       // overly restrictive (i.e. doesn't allow never in
@@ -809,7 +799,7 @@ describe("act", () => {
     test("when player illegally deals", async () => {
       const params: ActReqParams = roomIdParam;
       const body: ActReqBody = {
-        action: Routes.PokerRooms.Act.PlayerAction.DEAL,
+        action: PlayerAction.DEAL,
       };
       // Ignore getMockReq type parameter because typing is
       // overly restrictive (i.e. doesn't allow never in

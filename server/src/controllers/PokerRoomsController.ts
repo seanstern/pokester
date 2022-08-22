@@ -1,11 +1,11 @@
+import { Player, Table } from "@chevtek/poker-engine";
+import { Act, Create, Get, GetAll } from "@pokester/common-api/poker-rooms";
 import { RequestHandler } from "express";
-import { Table, Player } from "@chevtek/poker-engine";
-import { Routes } from "@pokester/common-api";
 import PokerRoom from "../models/PokerRoom";
-import viewOfTable from "../views/player-views-of/ViewOfTable";
 import { canDealCards } from "../poker-engine/Utils";
+import viewOfTable from "../views/player-views-of/ViewOfTable";
 
-export type CreateReqBody = Routes.PokerRooms.Create.ReqBody;
+export type CreateReqBody = Create.ReqBody;
 /**
  * Given an HTTP request to create a new PokerRoom, an HTTP response, and a
  * callback, attempts to create a new PokerRoom. Responds with a status of
@@ -52,8 +52,8 @@ export const create: RequestHandler<
   }
 };
 
-export type GetAllResBody = Routes.PokerRooms.GetAll.ResBody;
-export type GetAllReqQuery = Routes.PokerRooms.GetAll.ReqQuery;
+export type GetAllResBody = GetAll.ResBody;
+export type GetAllReqQuery = GetAll.ReqQuery;
 /**
  * Given an HTTP request to get PokerRooms (including optional filters),
  * an HTTP response, and a callback, attempts to respond with a JSON
@@ -134,7 +134,7 @@ export const getAll: RequestHandler<
 export type GetReqParams = {
   roomId: string;
 };
-export type GetResBody = Routes.PokerRooms.Get.ResBody;
+export type GetResBody = Get.ResBody;
 /**
  * Given an HTTP request to get a PokerRoom, an HTTP response, and a
  * callback, attempts to respond with a JSON representation of the
@@ -201,7 +201,7 @@ const findPlayer = (id: string, players: Table["players"]): Player => {
 export type ActReqParams = {
   roomId: string;
 };
-export type ActReqBody = Routes.PokerRooms.Act.ReqBody;
+export type ActReqBody = Act.ReqBody;
 /**
  * Given an HTTP request to take a PlayerAction in PokerRoom, an HTTP response,
  * and a callback, attempts to take the action specified in the request.
@@ -238,31 +238,31 @@ export const act: RequestHandler<
 
     const { table } = pr;
     switch (body.action) {
-      case Routes.PokerRooms.Act.PlayerAction.SIT:
+      case Act.PlayerAction.SIT:
         pr.table.sitDown(sessionID, table.buyIn);
         break;
-      case Routes.PokerRooms.Act.PlayerAction.STAND:
+      case Act.PlayerAction.STAND:
         pr.table.standUp(sessionID);
         break;
-      case Routes.PokerRooms.Act.PlayerAction.DEAL:
+      case Act.PlayerAction.DEAL:
         if (!canDealCards(findPlayer(sessionID, table.players))) {
           throw new Error("Action invoked on player out of turn!");
         }
         pr.table.dealCards();
         break;
-      case Routes.PokerRooms.Act.PlayerAction.BET:
+      case Act.PlayerAction.BET:
         findPlayer(sessionID, table.players).betAction(body.amount);
         break;
-      case Routes.PokerRooms.Act.PlayerAction.CALL:
+      case Act.PlayerAction.CALL:
         findPlayer(sessionID, table.players).callAction();
         break;
-      case Routes.PokerRooms.Act.PlayerAction.RAISE:
+      case Act.PlayerAction.RAISE:
         findPlayer(sessionID, table.players).raiseAction(body.amount);
         break;
-      case Routes.PokerRooms.Act.PlayerAction.CHECK:
+      case Act.PlayerAction.CHECK:
         findPlayer(sessionID, table.players).checkAction();
         break;
-      case Routes.PokerRooms.Act.PlayerAction.FOLD:
+      case Act.PlayerAction.FOLD:
         findPlayer(sessionID, table.players).foldAction();
         break;
       default:
