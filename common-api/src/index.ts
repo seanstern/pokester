@@ -1,1 +1,1 @@
-export * as Routes from "./routes/index";
+export * as PokerRooms from "./poker-rooms/index";

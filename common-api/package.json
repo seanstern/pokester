@@ -4,6 +4,14 @@
   "description": "shared libraries for use across @pokester/client and @pokester/server",
   "author": "seanstern",
   "main": "./build/index.js",
+  "exports": {
+    ".": "./build/index.js",
+    "./poker-rooms": "./build/poker-rooms/index.js",
+    "./poker-rooms/act": "./build/poker-rooms/Act.js",
+    "./poker-rooms/create": "./build/poker-rooms/Create.js",
+    "./poker-rooms/get": "./build/poker-rooms/Get.js",
+    "./poker-rooms/get-all": "./build/poker-rooms/GetAll.js"
+  },
   "dependencies": {
     "@chevtek/poker-engine": "workspace:*"
   },
