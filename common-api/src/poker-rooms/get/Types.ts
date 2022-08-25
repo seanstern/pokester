@@ -1,5 +1,5 @@
 import * as PokerEngine from "@chevtek/poker-engine";
-import PlayerAction from "./PlayerAction";
+import PlayerAction from "../PlayerAction";
 
 export { PlayerAction };
 
