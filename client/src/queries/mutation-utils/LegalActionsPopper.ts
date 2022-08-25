@@ -1,7 +1,7 @@
-import { Routes } from "@pokester/common-api";
+import { PokerRooms } from "@pokester/common-api";
 
-export type LegalActions = Routes.PokerRooms.Act.PlayerAction[] | undefined;
-type Player = Routes.PokerRooms.Get.Player | null;
+export type LegalActions = PokerRooms.Act.PlayerAction[] | undefined;
+type Player = PokerRooms.Get.Player | null;
 
 export const popPlayerLegalActions = (player: Player): LegalActions => {
   if (!player?.isSelf) {
@@ -21,7 +21,7 @@ export const popPlayersLegalActions = (players: Player[]): LegalActions =>
     return prevLegalActions || playerLegalActions;
   }, undefined as LegalActions);
 
-type Pot = Routes.PokerRooms.Get.Pot;
+type Pot = PokerRooms.Get.Pot;
 export const popPotLegalActions = (pot: Pot): LegalActions =>
   popPlayersLegalActions(pot.eligiblePlayers);
 
@@ -45,7 +45,7 @@ export const popPotsLegalActions = (pots: Pot[]): LegalActions =>
     return potLegalActions;
   }, undefined as LegalActions);
 
-type Table = Routes.PokerRooms.Get.Table;
+type Table = PokerRooms.Get.Table;
 export const popTableLegalActions = (table: Table): LegalActions => {
   const { players, pots } = table;
   const playersLegalActions = popPlayersLegalActions(players);

@@ -6,10 +6,10 @@
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
-    "./Card": "./build/fixtures/Card.fixture.js",
-    "./Player": "./build/fixtures/Player.fixture.js",
-    "./Pot": "./build/fixtures/Pot.fixture.js",
-    "./Table": "./build/fixtures/Table.fixture.js"
+    "./card": "./build/fixtures/Card.fixture.js",
+    "./player": "./build/fixtures/Player.fixture.js",
+    "./pot": "./build/fixtures/Pot.fixture.js",
+    "./table": "./build/fixtures/Table.fixture.js"
   },
   "dependencies": {
     "@chevtek/poker-engine": "workspace:*"

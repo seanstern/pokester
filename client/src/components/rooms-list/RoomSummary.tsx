@@ -8,7 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import Skeleton from "@mui/material/Skeleton";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import { Routes } from "@pokester/common-api";
+import { PokerRooms } from "@pokester/common-api";
 import React, { FC } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { useAct } from "../../queries/RoomsQueries";
@@ -98,7 +98,7 @@ const useSkeletalChildComponents = (
           await props.act.mutateAsync({
             roomId: props.id,
             data: {
-              action: Routes.PokerRooms.Act.PlayerAction.SIT,
+              action: PokerRooms.Act.PlayerAction.SIT,
             },
           });
           history.push(to);

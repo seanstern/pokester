@@ -3,6 +3,7 @@ export type Fixture<T> = {
   readonly create: () => T;
 };
 
-export type FixtureModule<T> = {
-  [name: string]: Fixture<T>;
-};
+export type FixtureModule<
+  T,
+  K extends string | number | symbol = string
+> = Record<K, Fixture<T>>;

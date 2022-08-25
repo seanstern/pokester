@@ -5,7 +5,7 @@ import {
   nonDealerPlayerWithStoodUpDealerAtEndOfRound,
   onlyDealerSeated,
   smallBlindAmongSeatedPlayers,
-} from "@pokester/poker-engine-fixtures/Player";
+} from "@pokester/poker-engine-fixtures/player";
 import { canDealCards } from "./Utils";
 
 describe("canDealCards", () => {

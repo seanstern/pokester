@@ -1,7 +1,7 @@
-import { Routes } from "@pokester/common-api";
+import { PokerRooms } from "@pokester/common-api";
 
-type LegalActions = Routes.PokerRooms.Act.PlayerAction[];
-type Player = Routes.PokerRooms.Get.Player | null;
+type LegalActions = PokerRooms.Act.PlayerAction[];
+type Player = PokerRooms.Get.Player | null;
 
 export const pushPlayerLegalActions = (
   player: Player,
@@ -28,7 +28,7 @@ export const pushPlayersLegalActions = (
   return;
 };
 
-type Pot = Routes.PokerRooms.Get.Pot;
+type Pot = PokerRooms.Get.Pot;
 export const pushPotLegalActions = (
   pot: Pot,
   legalActions: LegalActions
@@ -39,7 +39,7 @@ export const pushPotsLegalActions = (
   legalActions: LegalActions
 ): void => pots.forEach((pot) => pushPotLegalActions(pot, legalActions));
 
-type Table = Routes.PokerRooms.Get.Table;
+type Table = PokerRooms.Get.Table;
 export const pushTableLegalActions = (
   table: Table,
   legalActions?: LegalActions

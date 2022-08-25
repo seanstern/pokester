@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
-import { Routes } from "@pokester/common-api";
+import { PokerRooms } from "@pokester/common-api";
 import startCase from "lodash/startCase";
 import upperFirst from "lodash/upperFirst";
 import React, { FC } from "react";
@@ -18,11 +18,11 @@ const {
   smallBlindLabel: rawSmallBlindLabel,
   bigBlindLabel: rawBigBlindLabel,
   buyInLabel: rawBuyInLabel,
-  reqBodySchema,
+  schema: reqBodySchema,
   defaultSmallBlind,
   defaultBigBlindToSmallBlindRatio,
   defaultBuyInToBigBlindRatio,
-} = Routes.PokerRooms.Create;
+} = PokerRooms.Create.ReqBodySchema;
 
 export const nameLabel = startCase(rawNameLabel);
 export const smallBlindLabel = startCase(rawSmallBlindLabel);
@@ -128,12 +128,10 @@ const RoomCreator: FC = () => {
         defaultBigBlindToSmallBlindRatio *
         defaultBuyInToBigBlindRatio,
     },
-    resolver: yupResolver(
-      reqBodySchema
-    ) as Resolver<Routes.PokerRooms.Create.ReqBody>,
+    resolver: yupResolver(reqBodySchema) as Resolver<PokerRooms.Create.ReqBody>,
   });
 
-  const onSubmit = async (createReqBody: Routes.PokerRooms.Create.ReqBody) => {
+  const onSubmit = async (createReqBody: PokerRooms.Create.ReqBody) => {
     try {
       const roomId = await create.mutateAsync(createReqBody);
       history.push(`/room/${roomId}`);

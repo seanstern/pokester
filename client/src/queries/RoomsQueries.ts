@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useQuery, useQueryClient, useMutation } from "react-query";
-import { Routes } from "@pokester/common-api";
+import { PokerRooms } from "@pokester/common-api";
 import popLegalActions, {
   LegalActions,
 } from "./mutation-utils/LegalActionsPopper";
@@ -8,9 +8,9 @@ import pushLegalActions from "./mutation-utils/LegalActionsPusher";
 
 const PATH = "/api/rooms";
 
-export const useGetAll = (query: Routes.PokerRooms.GetAll.ReqQuery) =>
+export const useGetAll = (query: PokerRooms.GetAll.ReqQuery) =>
   useQuery(["api", "rooms", query], async () => {
-    const { data } = await axios.get<Routes.PokerRooms.GetAll.ResBody>(PATH, {
+    const { data } = await axios.get<PokerRooms.GetAll.ResBody>(PATH, {
       params: query,
       validateStatus: (status) => status === 200,
     });
@@ -21,7 +21,7 @@ export const useGet = (roomId: string) =>
   useQuery(
     ["api", "rooms", roomId],
     async () => {
-      const { data } = await axios.get<Routes.PokerRooms.Get.ResBody>(
+      const { data } = await axios.get<PokerRooms.Get.ResBody>(
         `${PATH}/${roomId}`,
         {
           validateStatus: (status) => status === 200,
@@ -36,8 +36,8 @@ export const useCreate = () => {
   const qc = useQueryClient();
 
   return useMutation(
-    async (reqBody: Routes.PokerRooms.Create.ReqBody) => {
-      const { data } = await axios.post<Routes.PokerRooms.Create.ResBody>(
+    async (reqBody: PokerRooms.Create.ReqBody) => {
+      const { data } = await axios.post<PokerRooms.Create.ResBody>(
         PATH,
         reqBody,
         {
@@ -52,10 +52,10 @@ export const useCreate = () => {
 
 type ActParam = {
   roomId: string;
-  data: Routes.PokerRooms.Act.ReqBody;
+  data: PokerRooms.Act.ReqBody;
 };
 type ActContext = {
-  pokerRoom?: Routes.PokerRooms.Get.ResBody;
+  pokerRoom?: PokerRooms.Get.ResBody;
   legalActions?: LegalActions;
   canSit?: boolean;
 };
@@ -76,7 +76,7 @@ export const useAct = () => {
 
         let legalActions = undefined;
         let canSit = undefined;
-        const pokerRoom = qc.getQueryData<Routes.PokerRooms.Get.ResBody>(qk);
+        const pokerRoom = qc.getQueryData<PokerRooms.Get.ResBody>(qk);
         if (pokerRoom) {
           legalActions = popLegalActions(pokerRoom.table);
           canSit = pokerRoom.canSit;

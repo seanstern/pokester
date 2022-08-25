@@ -4202,12 +4202,15 @@ __metadata:
   resolution: "@pokester/common-api@workspace:common-api"
   dependencies:
     "@chevtek/poker-engine": "workspace:*"
+    "@pokester/poker-engine-fixtures": "workspace:*"
     "@tsconfig/node16": ^1.0.3
     "@types/jest": ^27.5.2
+    "@types/lodash": ^4.14.184
     "@types/node": ^17.0.45
     "@typescript-eslint/eslint-plugin": ^5.33.1
     "@typescript-eslint/parser": ^5.33.1
     eslint-config-prettier: ^8.5.0
+    lodash: ^4.17.21
     ts-jest: ^28.0.8
     yup: ^0.32.11
   peerDependencies:
@@ -4990,6 +4993,13 @@ __metadata:
   version: 4.14.183
   resolution: "@types/lodash@npm:4.14.183"
   checksum: 9c754dc7a2e5f26f9c67e494cffbe5447135a4e30eb2fcbc9da05dd5fa5fbf8579059bcf15014307c1c5d1c6d1b7870860618990d96abee9389d8cb79b3ac93c
+  languageName: node
+  linkType: hard
+
+"@types/lodash@npm:^4.14.184":
+  version: 4.14.184
+  resolution: "@types/lodash@npm:4.14.184"
+  checksum: 6d9a4d67f7f9d0ec3fd21174f3dd3d00629dc1227eb469450eace53adbc1f7e2330699c28d0fe093e5f0fef0f0e763098be1f779268857213224af082b62be21
   languageName: node
   linkType: hard
 

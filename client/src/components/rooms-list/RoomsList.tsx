@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid";
-import { Routes } from "@pokester/common-api";
+import { PokerRooms } from "@pokester/common-api";
 import React, { FC } from "react";
 import useValidParsedQs from "../../hooks/qs/useValidParsedQs";
 import { useAct, useGetAll } from "../../queries/RoomsQueries";
@@ -30,7 +30,7 @@ const isRoomsGetAllValidParsedQsMap = {
     typeof pqv === "string" && ["true", "false"].includes(pqv),
 };
 const List: FC = () => {
-  const parsedQs = useValidParsedQs<Routes.PokerRooms.GetAll.ReqQuery>(
+  const parsedQs = useValidParsedQs<PokerRooms.GetAll.ReqQuery>(
     isRoomsGetAllValidParsedQsMap
   );
   const getAll = useGetAll(parsedQs);

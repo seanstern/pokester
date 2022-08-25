@@ -1,4 +1,4 @@
-import { Routes } from "@pokester/common-api";
+import { PokerRooms } from "@pokester/common-api";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { FC, useMemo } from "react";
 import { useHistory, useParams, useRouteMatch } from "react-router-dom";
@@ -7,7 +7,7 @@ import { useSetPageTitle } from "../page-frame";
 
 type PlayerProps = {
   position: number;
-  player: Routes.PokerRooms.Get.Player | null;
+  player: PokerRooms.Get.Player | null;
   specialPosition?: "dealer" | "smallBlind" | "bigBlind";
   currentActor: boolean;
 };
@@ -36,7 +36,7 @@ const Player: FC<PlayerProps> = ({
 };
 
 type PlayersProps = {
-  table: Routes.PokerRooms.Get.Table;
+  table: PokerRooms.Get.Table;
 };
 const Players: FC<PlayersProps> = ({ table }) => {
   const {
@@ -85,9 +85,7 @@ const Players: FC<PlayersProps> = ({ table }) => {
 
 type BetActionProps = {
   roomId: string;
-  action:
-    | Routes.PokerRooms.Get.PlayerAction.BET
-    | Routes.PokerRooms.Get.PlayerAction.RAISE;
+  action: PokerRooms.Get.PlayerAction.BET | PokerRooms.Get.PlayerAction.RAISE;
 };
 const BetAction: FC<BetActionProps> = ({ roomId, action }) => {
   const act = useAct();
@@ -129,7 +127,7 @@ const BetAction: FC<BetActionProps> = ({ roomId, action }) => {
 };
 
 type PlayerActionProps = {
-  playerAction: Routes.PokerRooms.Get.PlayerAction;
+  playerAction: PokerRooms.Get.PlayerAction;
 };
 const PlayerAction: FC<PlayerActionProps> = ({ playerAction }) => {
   const history = useHistory();
@@ -145,10 +143,10 @@ const PlayerAction: FC<PlayerActionProps> = ({ playerAction }) => {
   } = match;
 
   switch (playerAction) {
-    case Routes.PokerRooms.Get.PlayerAction.BET:
-    case Routes.PokerRooms.Get.PlayerAction.RAISE:
+    case PokerRooms.Get.PlayerAction.BET:
+    case PokerRooms.Get.PlayerAction.RAISE:
       return <BetAction action={playerAction} roomId={roomId} />;
-    case Routes.PokerRooms.Get.PlayerAction.STAND:
+    case PokerRooms.Get.PlayerAction.STAND:
       return (
         <button
           onClick={async () => {
@@ -161,11 +159,11 @@ const PlayerAction: FC<PlayerActionProps> = ({ playerAction }) => {
           {playerAction.toUpperCase()}
         </button>
       );
-    case Routes.PokerRooms.Get.PlayerAction.SIT:
-    case Routes.PokerRooms.Get.PlayerAction.CHECK:
-    case Routes.PokerRooms.Get.PlayerAction.CALL:
-    case Routes.PokerRooms.Get.PlayerAction.FOLD:
-    case Routes.PokerRooms.Get.PlayerAction.DEAL:
+    case PokerRooms.Get.PlayerAction.SIT:
+    case PokerRooms.Get.PlayerAction.CHECK:
+    case PokerRooms.Get.PlayerAction.CALL:
+    case PokerRooms.Get.PlayerAction.FOLD:
+    case PokerRooms.Get.PlayerAction.DEAL:
       return (
         <button
           onClick={() => act.mutate({ roomId, data: { action: playerAction } })}
@@ -179,7 +177,7 @@ const PlayerAction: FC<PlayerActionProps> = ({ playerAction }) => {
 };
 
 type PlayerActionsProps = {
-  selfPlayer?: Routes.PokerRooms.Get.SelfPlayer;
+  selfPlayer?: PokerRooms.Get.SelfPlayer;
 };
 const PlayerActions: FC<PlayerActionsProps> = ({ selfPlayer }) => {
   if (!selfPlayer || !selfPlayer.legalActions) {
@@ -188,7 +186,7 @@ const PlayerActions: FC<PlayerActionsProps> = ({ selfPlayer }) => {
   return (
     <>
       {selfPlayer.legalActions
-        .filter((la) => la !== Routes.PokerRooms.Get.PlayerAction.STAND)
+        .filter((la) => la !== PokerRooms.Get.PlayerAction.STAND)
         .map((legalAction) => (
           <PlayerAction playerAction={legalAction} key={legalAction} />
         ))}
@@ -200,16 +198,14 @@ const communityCardLabels = ["Flop", "Flop", "Flop", "Turn", "River"];
 const headerCells = communityCardLabels.map((label, idx) => (
   <th key={idx}>{label}</th>
 ));
-const communityCardsToStrings = (
-  communityCards: Routes.PokerRooms.Get.Card[]
-) =>
+const communityCardsToStrings = (communityCards: PokerRooms.Get.Card[]) =>
   communityCardLabels.map((_, idx) => {
     const communityCard = communityCards[idx] ?? { rank: "?", suitChar: "?" };
     return `${communityCard.rank}${communityCard.suitChar}`;
   });
 
 type CommunityCardsProps = {
-  communityCards: Routes.PokerRooms.Get.Card[];
+  communityCards: PokerRooms.Get.Card[];
 };
 const CommunityCards: FC<CommunityCardsProps> = ({ communityCards }) => {
   const communityCardStrings = useMemo(
@@ -233,7 +229,7 @@ const CommunityCards: FC<CommunityCardsProps> = ({ communityCards }) => {
 };
 
 type PotProps = {
-  pot: Routes.PokerRooms.Get.Pot;
+  pot: PokerRooms.Get.Pot;
 };
 const Pot: FC<PotProps> = ({ pot }) => {
   const { amount, eligiblePlayers, winners } = pot;
@@ -251,7 +247,7 @@ const Pot: FC<PotProps> = ({ pot }) => {
 };
 
 type PotsProps = {
-  pots: Routes.PokerRooms.Get.Pot[];
+  pots: PokerRooms.Get.Pot[];
 };
 const Pots: FC<PotsProps> = ({ pots }) => {
   return (
@@ -273,11 +269,11 @@ const Pots: FC<PotsProps> = ({ pots }) => {
 };
 
 type BodyProps = {
-  table: Routes.PokerRooms.Get.Table;
+  table: PokerRooms.Get.Table;
 };
 const Body: FC<BodyProps> = ({ table }) => {
   const selfPlayer = table.players.find((p) => p?.isSelf) as
-    | Routes.PokerRooms.Get.SelfPlayer
+    | PokerRooms.Get.SelfPlayer
     | undefined;
   return (
     <>
@@ -307,20 +303,16 @@ const Room: FC<RoomProps> = () => {
       return (
         <>
           {roomQuery.data.canSit && (
-            <PlayerAction
-              playerAction={Routes.PokerRooms.Act.PlayerAction.SIT}
-            />
+            <PlayerAction playerAction={PokerRooms.Act.PlayerAction.SIT} />
           )}
           {roomQuery.data.table.players.find(
             (p) =>
               p?.isSelf &&
               p?.legalActions?.find(
-                (la) => la === Routes.PokerRooms.Act.PlayerAction.STAND
+                (la) => la === PokerRooms.Act.PlayerAction.STAND
               )
           ) && (
-            <PlayerAction
-              playerAction={Routes.PokerRooms.Act.PlayerAction.STAND}
-            />
+            <PlayerAction playerAction={PokerRooms.Act.PlayerAction.STAND} />
           )}
           <Body table={roomQuery.data.table} />
         </>

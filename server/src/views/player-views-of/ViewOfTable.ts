@@ -1,13 +1,10 @@
-import { Table } from "@chevtek/poker-engine";
-import { Routes } from "@pokester/common-api";
+import { Table as PokerEngineTable } from "@chevtek/poker-engine";
+import { Table as CommonAPITable } from "@pokester/common-api/poker-rooms/get";
 import viewOfCard from "./ViewOfCard";
 import viewOfPlayer from "./ViewOfPlayer";
 import viewOfPot from "./ViewOfPot";
 
-const viewOfTable = (
-  viewerId: string,
-  t: Table
-): Routes.PokerRooms.Get.Table => {
+const viewOfTable = (viewerId: string, t: PokerEngineTable): CommonAPITable => {
   const {
     bigBlindPosition,
     currentBet,
