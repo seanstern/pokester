@@ -1,9 +1,5 @@
-import { Table } from "@chevtek/poker-engine";
 import { number, object, SchemaOf, string } from "yup";
-
-export type ReqBody = {
-  name: string;
-} & Pick<Table, "buyIn" | "smallBlind" | "bigBlind">;
+import { ReqBody } from "./Types";
 
 const userFriendlyNumberTypeError = "${path} must be a number";
 
@@ -16,7 +12,7 @@ export const defaultSmallBlind = 0.5;
 export const defaultBigBlindToSmallBlindRatio = 2;
 export const defaultBuyInToBigBlindRatio = 20;
 
-export const reqBodySchema: SchemaOf<ReqBody> = object({
+export const schema: SchemaOf<ReqBody> = object({
   name: string()
     .label(nameLabel)
     .required()
@@ -62,5 +58,3 @@ export const reqBodySchema: SchemaOf<ReqBody> = object({
         .default(bigBlind * defaultBuyInToBigBlindRatio)
     ),
 });
-
-export type ResBody = string;
