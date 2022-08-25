@@ -8,16 +8,19 @@
     ".": "./build/index.js",
     "./poker-rooms": "./build/poker-rooms/index.js",
     "./poker-rooms/act": "./build/poker-rooms/Act.js",
-    "./poker-rooms/create": "./build/poker-rooms/Create.js",
-    "./poker-rooms/get": "./build/poker-rooms/Get.js",
+    "./poker-rooms/create": "./build/poker-rooms/create/index.js",
+    "./poker-rooms/get": "./build/poker-rooms/get/index.js",
     "./poker-rooms/get-all": "./build/poker-rooms/GetAll.js"
   },
   "dependencies": {
-    "@chevtek/poker-engine": "workspace:*"
+    "@chevtek/poker-engine": "workspace:*",
+    "@pokester/poker-engine-fixtures": "workspace:*",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.3",
     "@types/jest": "^27.5.2",
+    "@types/lodash": "^4.14.184",
     "@types/node": "^17.0.45",
     "@typescript-eslint/eslint-plugin": "^5.33.1",
     "@typescript-eslint/parser": "^5.33.1",
