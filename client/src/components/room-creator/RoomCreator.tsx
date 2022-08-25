@@ -18,11 +18,11 @@ const {
   smallBlindLabel: rawSmallBlindLabel,
   bigBlindLabel: rawBigBlindLabel,
   buyInLabel: rawBuyInLabel,
-  reqBodySchema,
+  schema: reqBodySchema,
   defaultSmallBlind,
   defaultBigBlindToSmallBlindRatio,
   defaultBuyInToBigBlindRatio,
-} = PokerRooms.Create;
+} = PokerRooms.Create.ReqBodySchema;
 
 export const nameLabel = startCase(rawNameLabel);
 export const smallBlindLabel = startCase(rawSmallBlindLabel);
