@@ -68,7 +68,7 @@
     "@babel/plugin-transform-react-jsx": "^7.18.10",
     "@testing-library/dom": "8.17.1",
     "@types/css-mediaquery": "^0.1.1",
-    "@types/lodash": "^4.14.183",
+    "@types/lodash": "^4.14.184",
     "@types/qs": "^6.9.7",
     "@types/react-transition-group": "^4.4.5",
     "@types/testing-library__jest-dom": "^5.14.5",
