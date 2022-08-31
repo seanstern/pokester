@@ -1,23 +1,23 @@
 import * as PokerEngine from "@chevtek/poker-engine";
 import {
-  FixtureModule,
   Fixture,
+  FixtureModule,
   Player as PokerEnginePlayerFixtures,
   Pot as PokerEnginePotFixtures,
   Table as PokerEngineTableFixtures,
 } from "@pokester/poker-engine-fixtures";
-import capitalize from "lodash/capitalize";
 import mapValues from "lodash/mapValues";
 import pick from "lodash/pick";
 import startCase from "lodash/startCase";
 import transform from "lodash/transform";
+import upperFirst from "lodash/upperFirst";
 import {
   OpponentPlayer,
   PlayerAction,
   Pot as PotType,
+  ResBody as ResBodyType,
   SelfPlayer,
   Table as TableType,
-  ResBody as ResBodyType,
 } from "./Types";
 
 // Useful for mapping PokerEngine*Fixtures keys to common-api *Fixtures keys
@@ -46,7 +46,7 @@ type SelfPlayerFixturesKey = CamelCasePrepend<
 const selfPlayerFixtures = transform(
   PokerEnginePlayerFixtures,
   (selfPlayerFixtures, { description, create }, fixtureName) => {
-    const key = `self${capitalize(fixtureName)}` as SelfPlayerFixturesKey;
+    const key = `self${upperFirst(fixtureName)}` as SelfPlayerFixturesKey;
     selfPlayerFixtures[key] = {
       description,
       create: () => toSelfPlayer(create()),
@@ -72,7 +72,7 @@ type OpponentPlayerFixturesKey = `opponent${Capitalize<
 const opponentPlayerFixtures = transform(
   PokerEnginePlayerFixtures,
   (opponentPlayerFixtures, { description, create }, fixtureName) => {
-    const key = `opponent${capitalize(
+    const key = `opponent${upperFirst(
       fixtureName
     )}` as OpponentPlayerFixturesKey;
     opponentPlayerFixtures[key] = {
@@ -133,7 +133,7 @@ type SelfInPotFixturesKey = CamelCasePrepend<
 const selfInPotFixtures = transform(
   PokerEnginePotFixtures,
   (selfInPotFixtures, { description, create }, fixtureName) => {
-    const key = `selfIn${capitalize(fixtureName)}` as SelfInPotFixturesKey;
+    const key = `selfIn${upperFirst(fixtureName)}` as SelfInPotFixturesKey;
     selfInPotFixtures[key] = {
       description,
       create: () => toPot(create(), true),
@@ -150,7 +150,7 @@ type OpponentsInPotFixturesKey = CamelCasePrepend<
 const opponentsInPotFixtures = transform(
   PokerEnginePotFixtures,
   (opponentsInPotFixtures, { description, create }, fixtureName) => {
-    const key = `opponentsIn${capitalize(
+    const key = `opponentsIn${upperFirst(
       fixtureName
     )}` as OpponentsInPotFixturesKey;
     opponentsInPotFixtures[key] = {
@@ -184,7 +184,7 @@ const opponentsInTableFixtures = transform(
     const pots = pokerEngineTable.pots.map((p) => toPot(p, false));
     const winners = pokerEngineTable.winners?.map((w) => toOpponentPlayer(w));
 
-    const key = `opponentsIn${capitalize(
+    const key = `opponentsIn${upperFirst(
       fixtureName
     )}` as OpponentsInTableFixturesKey;
     opponentsInTableFixtures[key] = {
@@ -238,7 +238,7 @@ const selfInTableFixtures = transform(
         w && (w.id === selfPlayerId ? toSelfPlayer(w) : toOpponentPlayer(w))
     );
 
-    const key = `selfIn${capitalize(fixtureName)}` as SelfInTableFixturesKey;
+    const key = `selfIn${upperFirst(fixtureName)}` as SelfInTableFixturesKey;
     selfInTableFixtures[key] = {
       description,
       create: () => ({
