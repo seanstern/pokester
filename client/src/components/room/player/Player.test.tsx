@@ -7,7 +7,7 @@ import Player, {
   BlindPosition,
   cardsRegionLabel,
   dealerChipText,
-  holeCardsToText,
+  holeCardsToStrings,
   positionsRegionLabel,
   smallBlindChipText,
   stackRegionLabel,
@@ -99,7 +99,7 @@ test.each(jestCasesTable)("renders $description", ({ create }) => {
     level: 3,
     name: cardsRegionLabel,
   });
-  holeCardsToText(
+  holeCardsToStrings(
     playerProps.holeCards,
     playerProps.isRoundInProgress,
     playerProps.folded

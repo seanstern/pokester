@@ -1,11 +1,14 @@
 import Box from "@mui/material/Box";
 import Chip from "@mui/material/Chip";
 import Paper from "@mui/material/Paper";
-import { useTheme } from "@mui/material/styles";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { PokerRooms } from "@pokester/common-api";
 import { FC } from "react";
+import PlayingCard from "../playing-card";
+import toCurrencyFormat from "../toCurrencyFormat";
+import useCurrencyColor from "../useCurrencyColor";
+import cardToString, { CardString } from "../cardToString";
 
 export const positionsRegionLabel = "Position(s)";
 export const dealerChipText = "D";
@@ -14,19 +17,6 @@ export const bigBlindChipText = "B";
 export const stackRegionLabel = "Stack";
 export const cardsRegionLabel = "Cards";
 export const betRegionLabel = "Bet";
-
-const currencyFormat = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
-/**
- * Given a numerical amount of money, return a string representation of the
- * amount.
- *
- * @param amt a numerical amount
- * @returns a string representation of the amount.
- */
-const toCurrencyFormat = (amt: number) => currencyFormat.format(amt);
 
 /**
  * Given a numerical stack, returns a string representation of the stack.
@@ -60,13 +50,14 @@ export const betToCurrencyFormat = (bet: number) =>
  * @param folded boolean indicating whether or not the player has folded
  * @returns a tuple of string representations of each card
  */
-export const holeCardsToText = (
+export const holeCardsToStrings = (
   holeCards: PokerRooms.Get.Player["holeCards"],
   isRoundInProgress: boolean,
   folded: boolean
-): [string, string] | [null, null] => {
-  if (holeCards) holeCards.map(({ rank, suitChar }) => `${rank}${suitChar}`);
-  else if (!folded && isRoundInProgress) return ["🎴", "🎴"];
+): [CardString, CardString] | ["🃏", "🃏"] | [null, null] => {
+  if (!folded && holeCards)
+    return [cardToString(holeCards[0]), cardToString(holeCards[1])];
+  else if (!folded && isRoundInProgress) return ["🃏", "🃏"];
   return [null, null];
 };
 
@@ -99,7 +90,6 @@ type HoleCardsProps = {
   isRoundInProgress: boolean;
   folded: boolean;
 };
-
 /**
  * Given props, returns hole cards.
  *
@@ -119,19 +109,18 @@ const HoleCards: FC<HoleCardsProps> = ({
   isRoundInProgress,
   folded,
 }) => (
-  <>
-    {holeCardsToText(holeCards, isRoundInProgress, folded).map(
-      (hcText, idx) => (
-        <Box
-          key={idx}
-          color={holeCards && holeCards[idx].color}
-          component="span"
-        >
-          {hcText || <>&nbsp;</>}
-        </Box>
-      )
+  <Box minHeight={28} display="flex" width={1}>
+    {holeCardsToStrings(holeCards, isRoundInProgress, folded).map(
+      (hcText, idx) =>
+        hcText === "🃏" ? (
+          <Typography key={idx} variant="body1">
+            {hcText}
+          </Typography>
+        ) : !!hcText ? (
+          <PlayingCard key={idx} value={hcText} color={holeCards![idx].color} />
+        ) : null
     )}
-  </>
+  </Box>
 );
 
 export enum BlindPosition {
@@ -190,13 +179,8 @@ const Player: FC<PlayerProps> = ({
   isRoundInProgress,
   seatNumber,
 }) => {
-  const theme = useTheme();
-  const currencyColor =
-    left || folded
-      ? undefined
-      : theme.palette.mode === "dark"
-      ? "lightgreen"
-      : "darkgreen";
+  const currencyColor = useCurrencyColor();
+  const playerCurrencyColor = left || folded ? undefined : currencyColor;
   const positionChipColor = left || folded ? "default" : "secondary";
   const topRowFontWeight = isSelf ? "bold" : undefined;
   const defaultFontColor = left
@@ -222,7 +206,7 @@ const Player: FC<PlayerProps> = ({
       >
         <Box display="flex" alignItems="flex-start">
           <Box minWidth={2 / 5}>
-            <Box display="flex">
+            <Box display="flex" minHeight={26}>
               <Typography
                 component="h2"
                 variant="body1"
@@ -261,12 +245,13 @@ const Player: FC<PlayerProps> = ({
             maxWidth={3 / 5}
             component="section"
             aria-label={stackRegionLabel}
+            minHeight={26}
           >
             <Typography
               variant="body1"
               noWrap
               fontWeight={topRowFontWeight}
-              color={currencyColor}
+              color={playerCurrencyColor}
               textAlign="right"
             >
               {toCurrencyFormat(stackSize)}
@@ -282,9 +267,7 @@ const Player: FC<PlayerProps> = ({
             <Typography component="h3" variant="caption" id={cardsLabelId}>
               {cardsRegionLabel}
             </Typography>
-            <Typography noWrap variant="body2">
-              <HoleCards {...{ isRoundInProgress, folded, holeCards }} />
-            </Typography>
+            <HoleCards {...{ isRoundInProgress, folded, holeCards }} />
           </Box>
           <Box
             marginLeft="auto"
@@ -300,7 +283,7 @@ const Player: FC<PlayerProps> = ({
             >
               {betRegionLabel}
             </Typography>
-            <Typography color={currencyColor} noWrap variant="body2">
+            <Typography color={playerCurrencyColor} noWrap variant="body2">
               {betToCurrencyFormat(bet) || <>&nbsp;</>}
             </Typography>
           </Box>

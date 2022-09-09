@@ -1,1 +1,1 @@
-export { default } from "./Player";
+export { default, BlindPosition } from "./Player";
