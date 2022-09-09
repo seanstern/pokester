@@ -9,10 +9,10 @@ import { preFlop, flop, completeRound } from "./Table.fixture";
  */
 const getPot = (pots: Pot[]): Pot => {
   if (!pots) {
-    throw new Error("No pots array in preFlop Table.fixture");
+    throw new Error("No pots array");
   }
   if (pots.length < 1) {
-    throw new Error("No elements in pots array in preFlop Table.fixture");
+    throw new Error("No elements in pots array");
   }
   return pots[0];
 };
