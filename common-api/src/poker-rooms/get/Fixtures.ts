@@ -33,11 +33,23 @@ type PokerEnginePlayerFixturesKey = keyof typeof PokerEnginePlayerFixtures;
  * @param p a PokerEngine.Player
  * @returns a SelfPlayer
  */
-const toSelfPlayer = (p: PokerEngine.Player): SelfPlayer => ({
-  ...pick(p, ["bet", "folded", "left", "id", "stackSize", "holeCards"]),
-  isSelf: true,
-  legalActions: p.legalActions() as PlayerAction[],
-});
+const toSelfPlayer = (p: PokerEngine.Player): SelfPlayer => {
+  const legalActions: PlayerAction[] = [];
+
+  if (!p.left) {
+    legalActions.push(PlayerAction.STAND);
+  }
+
+  if (p.table.currentActor === p) {
+    legalActions.push(...(p.legalActions() as PlayerAction[]));
+  }
+
+  return {
+    ...pick(p, ["bet", "folded", "left", "id", "stackSize", "holeCards"]),
+    isSelf: true,
+    legalActions: legalActions.length > 0 ? legalActions : undefined,
+  };
+};
 
 type SelfPlayerFixturesKey = CamelCasePrepend<
   "self",
