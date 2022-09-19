@@ -7,7 +7,7 @@
   "exports": {
     ".": "./build/index.js",
     "./poker-rooms": "./build/poker-rooms/index.js",
-    "./poker-rooms/act": "./build/poker-rooms/Act.js",
+    "./poker-rooms/act": "./build/poker-rooms/act/index.js",
     "./poker-rooms/create": "./build/poker-rooms/create/index.js",
     "./poker-rooms/get": "./build/poker-rooms/get/index.js",
     "./poker-rooms/get-all": "./build/poker-rooms/GetAll.js"
