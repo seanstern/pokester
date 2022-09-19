@@ -18,7 +18,7 @@ const {
   smallBlindLabel: rawSmallBlindLabel,
   bigBlindLabel: rawBigBlindLabel,
   buyInLabel: rawBuyInLabel,
-  schema: reqBodySchema,
+  default: reqBodySchema,
   defaultSmallBlind,
   defaultBigBlindToSmallBlindRatio,
   defaultBuyInToBigBlindRatio,
