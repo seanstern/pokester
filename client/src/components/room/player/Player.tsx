@@ -124,8 +124,8 @@ const HoleCards: FC<HoleCardsProps> = ({
 );
 
 export enum BlindPosition {
-  Small = "Small Blind",
-  Big = "Big Blind",
+  SMALL = "Small Blind",
+  BIG = "Big Blind",
 }
 
 export type PlayerProps = PokerRooms.Get.Player & {
@@ -217,7 +217,12 @@ const Player: FC<PlayerProps> = ({
               >
                 {id}
               </Typography>
-              <Box mx={1} component="section" aria-label={positionsRegionLabel}>
+              <Box
+                mx={1}
+                display="flex"
+                component="section"
+                aria-label={positionsRegionLabel}
+              >
                 {isDealer && (
                   <Chip
                     size="small"
@@ -229,7 +234,7 @@ const Player: FC<PlayerProps> = ({
                   <Chip
                     size="small"
                     label={
-                      blindPosition === BlindPosition.Big
+                      blindPosition === BlindPosition.BIG
                         ? bigBlindChipText
                         : smallBlindChipText
                     }
