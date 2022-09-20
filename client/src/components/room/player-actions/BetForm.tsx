@@ -2,7 +2,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "@mui/material/Button";
 import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
+import { Theme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
+import { SxProps } from "@mui/system";
 import { PokerRooms } from "@pokester/common-api";
 import { FC } from "react";
 import { Controller, Resolver, useForm } from "react-hook-form";
@@ -17,6 +19,7 @@ type AmountOnlyActReqBody = Pick<VariableWagerActReqBody, "amount">;
 export type BetFormProps = Pick<VariableWagerActReqBody, "action"> & {
   disabled: boolean;
   act: (reqBody: VariableWagerActReqBody) => void;
+  buttonSx?: SxProps<Theme>;
 };
 /**
  * Given props, returns a form for entering a bet or raise.
@@ -25,9 +28,10 @@ export type BetFormProps = Pick<VariableWagerActReqBody, "action"> & {
  * @param props.disabled boolean indicating if the form should be disabled or
  *   not; set to true when betting/raising is not a legal action
  * @param props.act a callback that the betting/raising action
+ * @param props.buttonSx sx prop passed to button(s) in the form
  * @returns a form for entering a bet or raise
  */
-const BetForm: FC<BetFormProps> = ({ action, disabled, act }) => {
+const BetForm: FC<BetFormProps> = ({ action, disabled, act, buttonSx }) => {
   const {
     control,
     handleSubmit,
@@ -54,6 +58,7 @@ const BetForm: FC<BetFormProps> = ({ action, disabled, act }) => {
           variant="contained"
           disabled={disabled || disabledBecauseOfForm}
           type="submit"
+          sx={buttonSx}
         >
           {action}
         </Button>
