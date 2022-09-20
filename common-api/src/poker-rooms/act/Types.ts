@@ -1,5 +1,5 @@
 import { Player } from "@chevtek/poker-engine";
-import PlayerAction from "./PlayerAction";
+import PlayerAction from "../PlayerAction";
 
 export { PlayerAction };
 
@@ -36,6 +36,8 @@ type StandActReqBody = {
 type DealActReqBody = {
   action: PlayerAction.DEAL;
 };
+
+export type VariableWagerActReqBody = BetActReqBody | RaiseActReqBody;
 
 export type ReqBody =
   | BetActReqBody

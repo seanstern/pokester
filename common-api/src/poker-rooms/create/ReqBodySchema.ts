@@ -1,7 +1,6 @@
 import { number, object, SchemaOf, string } from "yup";
+import { userFriendlyNumberTypeError } from "../SchemaUtils";
 import { ReqBody } from "./Types";
-
-const userFriendlyNumberTypeError = "${path} must be a number";
 
 export const smallBlindLabel = "small blind";
 export const bigBlindLabel = "big blind";
@@ -12,7 +11,7 @@ export const defaultSmallBlind = 0.5;
 export const defaultBigBlindToSmallBlindRatio = 2;
 export const defaultBuyInToBigBlindRatio = 20;
 
-export const schema: SchemaOf<ReqBody> = object({
+const reqBodySchema: SchemaOf<ReqBody> = object({
   name: string()
     .label(nameLabel)
     .required()
@@ -58,3 +57,5 @@ export const schema: SchemaOf<ReqBody> = object({
         .default(bigBlind * defaultBuyInToBigBlindRatio)
     ),
 });
+
+export default reqBodySchema;

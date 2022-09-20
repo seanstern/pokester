@@ -1,8 +1,7 @@
-import {
+import reqBodySchema, {
   bigBlindLabel,
   buyInLabel,
   nameLabel,
-  schema,
   smallBlindLabel,
 } from "./ReqBodySchema";
 import { ReqBody } from "./Types";
@@ -152,14 +151,14 @@ describe("reqBodySchema", () => {
     test.each(validReqBodyTable)(
       "returns true when given valid req body with %s",
       (_, validReqBody) => {
-        expect(schema.isValidSync(validReqBody)).toBe(true);
+        expect(reqBodySchema.isValidSync(validReqBody)).toBe(true);
       }
     );
 
     test.each(invalidReqBodyTable)(
       "returns false when given invalid req body with %s",
       (_, invalidReqBody) => {
-        expect(schema.isValidSync(invalidReqBody)).toBe(false);
+        expect(reqBodySchema.isValidSync(invalidReqBody)).toBe(false);
       }
     );
   });
@@ -168,14 +167,16 @@ describe("reqBodySchema", () => {
     test.each(validReqBodyTable)(
       "casts to expected object when given valid req body with %s",
       (_, validReqBody, castReqBody) => {
-        expect(schema.validateSync(validReqBody)).toStrictEqual(castReqBody);
+        expect(reqBodySchema.validateSync(validReqBody)).toStrictEqual(
+          castReqBody
+        );
       }
     );
 
     test.each(invalidReqBodyTable)(
       "throws when given invalid req body with %s",
       (_, invalidReqBody, invalidFieldLabel) => {
-        expect(() => schema.validateSync(invalidReqBody)).toThrowError(
+        expect(() => reqBodySchema.validateSync(invalidReqBody)).toThrowError(
           new RegExp(invalidFieldLabel)
         );
       }

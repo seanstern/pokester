@@ -42,11 +42,11 @@ const jestCasesTable = [
   .flatMap(({ description, props }) => [
     {
       description: `${description}, big blind`,
-      props: { ...props, blindPosition: BlindPosition.Big },
+      props: { ...props, blindPosition: BlindPosition.BIG },
     },
     {
       description: `${description}, big blind`,
-      props: { ...props, blindPosition: BlindPosition.Small },
+      props: { ...props, blindPosition: BlindPosition.SMALL },
     },
     {
       description: `${description}, no blind position`,
@@ -81,10 +81,10 @@ test.each(jestCasesTable)("renders $description", ({ create }) => {
     playerProps.isDealer ? expect.anything() : null
   );
   expect(within(positionRegion).queryByText(smallBlindChipText)).toEqual(
-    playerProps.blindPosition === BlindPosition.Small ? expect.anything() : null
+    playerProps.blindPosition === BlindPosition.SMALL ? expect.anything() : null
   );
   expect(within(positionRegion).queryByText(bigBlindChipText)).toEqual(
-    playerProps.blindPosition === BlindPosition.Big ? expect.anything() : null
+    playerProps.blindPosition === BlindPosition.BIG ? expect.anything() : null
   );
 
   const stackRegion = within(playerRegion).getByRole("region", {
