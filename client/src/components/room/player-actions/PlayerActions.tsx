@@ -12,7 +12,8 @@ export { amountLabel } from "./BetForm";
 
 export const postStandRedirectLocation = "/rooms/browse";
 
-type PlayerAction = PokerRooms.Act.PlayerAction;
+type PlayerActionType = PokerRooms.Act.PlayerAction;
+const PlayerActionEnum = PokerRooms.Act.PlayerAction;
 
 /**
  * Given a set of legal actions a player can take and set of "similar actions"
@@ -36,8 +37,8 @@ type PlayerAction = PokerRooms.Act.PlayerAction;
  *     legal actions, which, in turn, indicates if the "simlar action" should
  *     be disabled in the UI
  */
-const combineSimilarActions = <T extends PlayerAction>(
-  legalActions: PlayerAction[] = [],
+const combineSimilarActions = <T extends PlayerActionType>(
+  legalActions: PlayerActionType[] = [],
   ...similarActionsByPriority: T[]
 ) => {
   for (const similarAction of similarActionsByPriority) {
@@ -51,8 +52,10 @@ const combineSimilarActions = <T extends PlayerAction>(
   };
 };
 
+const buttonSx = { maxWidth: 64 };
+
 export type PlayerActionsProps = {
-  legalActions?: PlayerAction[];
+  legalActions?: PlayerActionType[];
   roomId: string;
 };
 /**
@@ -68,20 +71,21 @@ const PlayerActions: FC<PlayerActionsProps> = ({ legalActions, roomId }) => {
 
   const foldOrStand = combineSimilarActions(
     legalActions,
-    PokerRooms.Act.PlayerAction.FOLD,
-    PokerRooms.Act.PlayerAction.STAND
+    PlayerActionEnum.FOLD,
+    PlayerActionEnum.STAND
   );
 
-  const callOrCheck = combineSimilarActions(
+  const dealCallOrCheck = combineSimilarActions(
     legalActions,
-    PokerRooms.Act.PlayerAction.CALL,
-    PokerRooms.Act.PlayerAction.CHECK
+    PlayerActionEnum.DEAL,
+    PlayerActionEnum.CALL,
+    PlayerActionEnum.CHECK
   );
 
   const raiseOrBet = combineSimilarActions(
     legalActions,
-    PokerRooms.Act.PlayerAction.RAISE,
-    PokerRooms.Act.PlayerAction.BET
+    PlayerActionEnum.RAISE,
+    PlayerActionEnum.BET
   );
 
   return (
@@ -90,32 +94,40 @@ const PlayerActions: FC<PlayerActionsProps> = ({ legalActions, roomId }) => {
       <Stack direction="row" spacing={1} marginTop={1}>
         <Button
           variant="contained"
-          disabled={foldOrStand.disabled}
+          disabled={foldOrStand.disabled || act.isLoading}
+          sx={buttonSx}
           onClick={async () => {
-            try {
-              await act.mutateAsync({
-                roomId,
-                data: { action: foldOrStand.action },
-              });
-              history.push(postStandRedirectLocation);
-            } catch (err) {}
+            const mutateArg = {
+              roomId,
+              data: { action: foldOrStand.action },
+            };
+            if (mutateArg.data.action === PlayerActionEnum.STAND) {
+              try {
+                await act.mutateAsync(mutateArg);
+                history.push(postStandRedirectLocation);
+              } catch (err) {}
+              return;
+            }
+            act.mutate(mutateArg);
           }}
         >
           {foldOrStand.action}
         </Button>
         <Button
           variant="contained"
-          disabled={callOrCheck.disabled}
+          disabled={dealCallOrCheck.disabled || act.isLoading}
           onClick={() => {
-            act.mutate({ roomId, data: { action: callOrCheck.action } });
+            act.mutate({ roomId, data: { action: dealCallOrCheck.action } });
           }}
+          sx={buttonSx}
         >
-          {callOrCheck.action}
+          {dealCallOrCheck.action}
         </Button>
         <BetForm
           action={raiseOrBet.action}
-          disabled={raiseOrBet.disabled}
+          disabled={raiseOrBet.disabled || act.isLoading}
           act={(data) => act.mutate({ roomId, data })}
+          buttonSx={buttonSx}
         />
       </Stack>
     </>

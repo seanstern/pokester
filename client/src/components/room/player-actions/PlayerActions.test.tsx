@@ -19,7 +19,7 @@ const defaultLegalActions = [
 ];
 const highPriorityLegalActions = [
   PlayerAction.FOLD,
-  PlayerAction.CALL,
+  PlayerAction.DEAL,
   PlayerAction.RAISE,
 ];
 const getOmittedLegalActions = (legalActions: PokerRooms.Act.PlayerAction[]) =>
