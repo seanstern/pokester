@@ -1,5 +1,7 @@
 import { Player, Table } from "@chevtek/poker-engine";
 import { Act, Create, Get, GetAll } from "@pokester/common-api/poker-rooms";
+import actReqBodySchema from "@pokester/common-api/poker-rooms/act/reqBodySchema";
+import createReqBodySchema from "@pokester/common-api/poker-rooms/create/reqBodySchema";
 import { RequestHandler } from "express";
 import PokerRoom from "../models/PokerRoom";
 import { canDealCards } from "../poker-engine/Utils";
@@ -29,10 +31,10 @@ export const create: RequestHandler<
   never
 > = async (req, res, next) => {
   try {
-    const {
-      sessionID,
-      body: { name, buyIn, smallBlind, bigBlind },
-    } = req;
+    const { sessionID, body: unvalidatedBody } = req;
+
+    const { name, buyIn, smallBlind, bigBlind } =
+      createReqBodySchema.validateSync(unvalidatedBody);
 
     const table = new Table(buyIn, smallBlind, bigBlind);
     table.sitDown(sessionID, table.buyIn);
@@ -226,8 +228,10 @@ export const act: RequestHandler<
     const {
       sessionID,
       params: { roomId },
-      body,
+      body: unvalidatedBody,
     } = req;
+
+    const body = actReqBodySchema.validateSync(unvalidatedBody);
 
     const pr = await PokerRoom.findOne({
       _id: roomId,
@@ -239,7 +243,7 @@ export const act: RequestHandler<
     const { table } = pr;
     switch (body.action) {
       case Act.PlayerAction.SIT:
-        pr.table.sitDown(sessionID, table.buyIn);
+        pr.table.sitDown(sessionID, table.buyIn, body.seatNumber);
         break;
       case Act.PlayerAction.STAND:
         pr.table.standUp(sessionID);
