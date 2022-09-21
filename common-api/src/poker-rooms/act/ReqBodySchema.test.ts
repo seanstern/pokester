@@ -1,4 +1,4 @@
-import reqBodySchema from "./ReqBodySchema";
+import reqBodySchema, { maxSeatNumber, minSeatNumber } from "./ReqBodySchema";
 import { PlayerAction, ReqBody } from "./Types";
 
 const validReqBodyTable: [string, ReqBody, ReqBody][] = [
@@ -16,7 +16,21 @@ const validReqBodyTable: [string, ReqBody, ReqBody][] = [
     { action: PlayerAction.RAISE, amount: 0.02 },
     { action: PlayerAction.RAISE, amount: 0.02 },
   ],
-  ["sit", { action: PlayerAction.SIT }, { action: PlayerAction.SIT }],
+  [
+    "sit (no seatNumber)",
+    { action: PlayerAction.SIT },
+    { action: PlayerAction.SIT },
+  ],
+  [
+    "sit (min seatNumber)",
+    { action: PlayerAction.SIT, seatNumber: minSeatNumber },
+    { action: PlayerAction.SIT, seatNumber: minSeatNumber },
+  ],
+  [
+    "sit (max seatNumber)",
+    { action: PlayerAction.SIT, seatNumber: maxSeatNumber },
+    { action: PlayerAction.SIT, seatNumber: maxSeatNumber },
+  ],
   ["stand", { action: PlayerAction.STAND }, { action: PlayerAction.STAND }],
 ];
 
@@ -51,6 +65,26 @@ const invalidReqBodyTable: [string, any, string][] = [
     "amount",
   ],
   ["raise with amount undefined", { action: PlayerAction.RAISE }, "amount"],
+  [
+    "sit with seatNumber of wrong type",
+    { action: PlayerAction.SIT, seatNumber: "foo" },
+    "seatNumber",
+  ],
+  [
+    "sit with non integer seatNumber",
+    { action: PlayerAction.SIT, seatNumber: 1.5 },
+    "seatNumber",
+  ],
+  [
+    "sit with seatNumber exeeding max",
+    { action: PlayerAction.SIT, seatNumber: maxSeatNumber + 1 },
+    "seatNumber",
+  ],
+  [
+    "sit with seatNumber below min",
+    { action: PlayerAction.SIT, seatNumber: minSeatNumber - 1 },
+    "seatNumber",
+  ],
 ];
 
 describe("reqBodySchema", () => {
