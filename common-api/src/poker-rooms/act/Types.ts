@@ -1,4 +1,4 @@
-import { Player } from "@chevtek/poker-engine";
+import { Player, Table } from "@chevtek/poker-engine";
 import PlayerAction from "../PlayerAction";
 
 export { PlayerAction };
@@ -27,6 +27,7 @@ type FoldActReqBody = {
 
 type SitActReqBody = {
   action: PlayerAction.SIT;
+  seatNumber?: Parameters<Table["sitDown"]>[2];
 };
 
 type StandActReqBody = {
