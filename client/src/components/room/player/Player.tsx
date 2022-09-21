@@ -189,9 +189,9 @@ const Player: FC<PlayerProps> = ({
     ? "text.secondary"
     : undefined;
   const idFontColor = isSelf && !left ? "primary.dark" : undefined;
-  const sectionLabelId = `id-${seatNumber}`;
-  const cardsLabelId = `cards-${seatNumber}`;
-  const betLabelId = `bet-${seatNumber}`;
+  const sectionLabelId = `player-id-${seatNumber}`;
+  const cardsLabelId = `player-cards-${seatNumber}`;
+  const betLabelId = `player-bet-${seatNumber}`;
   return (
     <Tooltip
       describeChild={true}
