@@ -2,7 +2,7 @@ import { Request, RequestHandler } from "express";
 
 export default interface RequestExtension<T extends Record<string, any>> {
   /**
-   * Middleware that ensures that {@linkcode RequestExtension.get} can be
+   * Middleware that ensures that {@linkcode get} can be
    * invoked on a request safely (i.e. without throwing);
    */
   extend: RequestHandler;

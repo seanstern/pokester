@@ -21,6 +21,8 @@ const isOIDCIdentifier = (
   );
 };
 
+type OIDCIdentifierExtension = RequestExtension<OIDCIdentifier>;
+
 /**
  * Given an HTTP request, an HTTP response, and a callback, attempts to ensure
  * the request contains sufficient information to return the
@@ -31,7 +33,7 @@ const isOIDCIdentifier = (
  * @param res an HTTP response
  * @param next the callback
  */
-const extend: RequestExtension<OIDCIdentifier>["extend"] = (req, res, next) => {
+const extend: OIDCIdentifierExtension["extend"] = (req, res, next) => {
   try {
     if (!isOIDCIdentifier(req.oidc.idTokenClaims)) {
       throw new Error("OIDC identifier missing");
@@ -45,13 +47,13 @@ const extend: RequestExtension<OIDCIdentifier>["extend"] = (req, res, next) => {
 };
 
 /**
- * Given a request that has been extend by {@linkcode extend}, returns the
+ * Given a request that has been extended by {@linkcode extend}, returns the
  * {@linkcode OIDCIdentifier} component of the request.
  *
  * @param req the request
  * @returns  the {@linkcode OIDCIdentifier} component of the request.
  */
-const get: RequestExtension<OIDCIdentifier>["get"] = (req) => {
+const get: OIDCIdentifierExtension["get"] = (req) => {
   const { idTokenClaims } = req.oidc;
   if (!isOIDCIdentifier(idTokenClaims)) {
     throw new Error("OIDC identifier missing");
@@ -60,6 +62,4 @@ const get: RequestExtension<OIDCIdentifier>["get"] = (req) => {
   return { iss, sub };
 };
 
-const RegistratoinExtension: RequestExtension<OIDCIdentifier> = { extend, get };
-
-export default RegistratoinExtension;
+export default { extend, get } as OIDCIdentifierExtension;
