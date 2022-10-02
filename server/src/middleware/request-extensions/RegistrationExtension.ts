@@ -15,8 +15,8 @@ export const incompleteRegistration = "Incomplete registraton";
  * Given an HTTP request, an HTTP response, and a callback, attempts to ensure
  * the request contains sufficient information to return the
  * {@linkcode CompleteRegistration} contained therein. Calls the callback with
- * no errors upon success; responses with status of 403 and a string when
- * registration is icomplete; calls the callback with error information upon
+ * no errors upon success; responds with status of 403 and a string when
+ * registration is incomplete; calls the callback with error information upon
  * other failure.
  *
  * @param req an HTTP request
