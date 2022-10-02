@@ -5,7 +5,7 @@ import { Schema } from "mongoose";
  * for accessing the API.
  */
 export type AllowedUserDoc = {
-  email: string;
+  email?: string;
 };
 
 const AllowedUserSchema = new Schema<AllowedUserDoc>(
