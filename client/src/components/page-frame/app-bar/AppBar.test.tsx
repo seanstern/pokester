@@ -3,8 +3,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import mediaQuery from "css-mediaquery";
 import AppBar, {
-  defaultSiteName,
-  defaultTitleSeparator,
+  getHeading,
   logoAlt,
   menuButtonLabel,
   showSiteNameBreakPoint,
@@ -33,7 +32,31 @@ test(`renders title (include site name) and clickable menu button at or above "$
   render(<AppBar onMenuClick={onMenuClick} title={title} />);
 
   screen.getByRole("heading", {
-    name: `${defaultSiteName}${defaultTitleSeparator}${title}`,
+    name: getHeading(true, title),
+    level: 1,
+  });
+
+  screen.getByRole("img", { name: logoAlt });
+
+  const menuButton = screen.getByRole("button", { name: menuButtonLabel });
+
+  await user.click(menuButton);
+
+  expect(onMenuClick).toHaveBeenCalledTimes(1);
+});
+
+test(`renders site name only (when title is "") and clickable menu button at or above "${showSiteNameBreakPoint}" breakpoint`, async () => {
+  window.matchMedia = createMatchMedia(showSiteNameWidth);
+
+  const user = userEvent.setup();
+
+  const title = "";
+  const onMenuClick = jest.fn(() => {});
+
+  render(<AppBar onMenuClick={onMenuClick} title={title} />);
+
+  screen.getByRole("heading", {
+    name: getHeading(true, title),
     level: 1,
   });
 
@@ -57,7 +80,7 @@ test(`renders title (excluding site name) and clickable menu button below "${sho
   render(<AppBar onMenuClick={onMenuClick} title={title} />);
 
   screen.getByRole("heading", {
-    name: `${defaultTitleSeparator}${title}`,
+    name: getHeading(false, title),
     level: 1,
   });
 
