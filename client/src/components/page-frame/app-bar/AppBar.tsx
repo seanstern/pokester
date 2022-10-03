@@ -29,7 +29,7 @@ export const getHeading = (showSiteName: boolean, title: string) =>
     showSiteName && title ? " " : "",
     title ? "/ " : "",
     title,
-  ].join();
+  ].join("");
 
 type AppBarProps = { title: string; onMenuClick: () => void };
 /**
