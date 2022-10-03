@@ -1,5 +1,5 @@
 import * as dotenv from "dotenv";
-dotenv.config({ path: "../../.env.local" });
+dotenv.config();
 import express from "express";
 import { auth, ConfigParams } from "express-openid-connect";
 import { connect, connection } from "mongoose";
@@ -41,6 +41,7 @@ import APIRouter from "./routers/APIRouter";
       return { ...options, returnTo: "/rooms" };
     },
   };
+
   app.use(auth(authRoutesConfig));
   app.get("*", (req, res) =>
     res.sendFile(path.join(__dirname, "../../client/build", "index.html"))
