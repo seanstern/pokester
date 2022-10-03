@@ -1,7 +1,7 @@
 import Paper from "@mui/material/Paper";
 import { FC } from "react";
 import Button from "@mui/material/Button";
-import { useAct } from "../../../queries/RoomsQueries";
+import { useAct } from "../../../queries/poker-rooms";
 import { PokerRooms } from "@pokester/common-api";
 
 /**

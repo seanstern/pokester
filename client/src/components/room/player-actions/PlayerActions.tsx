@@ -4,7 +4,7 @@ import { PokerRooms } from "@pokester/common-api";
 import last from "lodash/last";
 import { FC } from "react";
 import { useHistory } from "react-router-dom";
-import { useAct } from "../../../queries/RoomsQueries";
+import { useAct } from "../../../queries/poker-rooms";
 import ErrorSnackBar from "../../utils/ErrorSnackbar";
 import BetForm from "./BetForm";
 

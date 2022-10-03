@@ -10,7 +10,7 @@ import React, { FC } from "react";
 import { Controller, FieldError, Resolver, useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import { NumberSchema, reach } from "yup";
-import { useCreate } from "../../queries/RoomsQueries";
+import { useCreate } from "../../queries/poker-rooms";
 import ErrorSnackbar from "../utils/ErrorSnackbar";
 
 const {
