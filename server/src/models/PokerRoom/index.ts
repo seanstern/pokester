@@ -1,3 +1,1 @@
-import PokerRoomModel from "./PokerRoomModel";
-
-export default PokerRoomModel;
+export { default } from "./PokerRoomModel";

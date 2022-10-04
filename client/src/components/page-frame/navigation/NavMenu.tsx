@@ -5,65 +5,141 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
-import React, { FC } from "react";
+import { FC } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
-import navConfig, { NavConfigEntry } from "./navConfig";
+import {
+  AuthStatusQuery,
+  isAuthStatusError,
+  isAuthStatusPending,
+  isAuthStatusResult,
+  useAuthStatus,
+} from "../../../queries/user";
+import navConfig, {
+  NavConfig,
+  NavConfigCategoryEntry,
+  NavConfigEntry,
+  NavConfigLinkEntry,
+} from "./navConfig";
+
+/**
+ * Given an auth status query and a rule for when a nav config entry should
+ * be displayed, returns true if the auth status query meets the rule's
+ * requirements (and should be displayed); false otherwise.
+ *
+ * @param authStatusQuery query represeting the user's auth status
+ * @param displayOn rule that indicates when a nav config entry should be
+ *   displayed
+ * @returns true when the auth status query meets the rule's requirements
+ */
+export const display = (
+  authStatusQuery: AuthStatusQuery,
+  displayOn?: NavConfigEntry["displayOn"]
+) => {
+  if (!displayOn) {
+    return true;
+  }
+
+  if (displayOn.authStatusError && isAuthStatusError(authStatusQuery)) {
+    return true;
+  }
+
+  if (displayOn.authStatusPending && isAuthStatusPending(authStatusQuery)) {
+    return true;
+  }
+
+  const displayOnAuthStatus = Array.isArray(displayOn.authStatus)
+    ? displayOn.authStatus
+    : !!displayOn.authStatus
+    ? [displayOn.authStatus]
+    : [];
+  if (
+    isAuthStatusResult(authStatusQuery) &&
+    displayOnAuthStatus.includes(authStatusQuery.data)
+  ) {
+    return true;
+  }
+
+  return false;
+};
+
+/**
+ * Given an optional parent path and a child path component, returns a fully
+ * qualified path with the parent path prepended to the child path component.
+ *
+ * @param parentPath optional parent path
+ * @param childPathComponent a child path component
+ * @returns a fully qualified path with the parent path prepended to the child
+ *  path component.
+ */
+const getPath = (parentPath: string | undefined, childPathComponent: string) =>
+  `${parentPath ? parentPath : ""}/${childPathComponent}`;
 
 type NavMenuLinkProps = {
-  parentPath: string;
+  parentPath?: string;
   pathComponent: string;
-} & Exclude<NavConfigEntry, "navConfig">;
+  navConfigLinkEntry: NavConfigLinkEntry;
+};
 /**
  * Given props, returns a navigation menu link.
  *
  * @param props
- * @param props.parentPath a prefix to appended to the URL path of this
- *   navigation menu link (i.e. this menu link will have an href
- *   of the form `${parentPath}/${pathComponent}`)
- * @param props.pathComponent a suffix to append to the URL path of this
- *   navigation menu link (i.e. this menu link will have an href
- *   of the form `${parentPath}/${pathComponent}`)
- * @param props.humanName the display text of the link
- * @param props.icon an optional icon to display next to the link
+ * @param props.parentPath optional prefix that will be prepend to the
+ *   pathComponent to form a fully qualified URL path for the link
+ * @param props.pathComponent relative path of this link
+ * @param props.navConfigLinkEntry link properties of the navConfigEntry
+ *
  * @returns a navigation menu link
  */
 const NavMenuLink: FC<NavMenuLinkProps> = ({
   parentPath,
   pathComponent,
-  humanName,
-  icon,
+  navConfigLinkEntry,
 }) => {
-  const path = `${parentPath}/${pathComponent}`;
+  const path = getPath(parentPath, pathComponent);
   const match = useRouteMatch(path);
+
+  const { nativeLink, icon, humanName } = navConfigLinkEntry;
+
+  const listItemLinkProps = nativeLink
+    ? { component: "a", href: path }
+    : { component: Link, to: path };
+
   return (
-    <ListItemButton selected={!!match} component={Link} to={path}>
+    <ListItemButton selected={!!match} {...listItemLinkProps}>
       {!!icon && <ListItemIcon>{icon}</ListItemIcon>}
-      <ListItemText inset={!icon} primary={humanName} />
+      <ListItemText inset={!icon && !!parentPath} primary={humanName} />
     </ListItemButton>
   );
 };
 
 type NavMenuCategoryProps = {
+  parentPath?: string;
   pathComponent: string;
-} & Exclude<NavConfigEntry, "icon">;
+  authStatusQuery: AuthStatusQuery;
+  navConfigCategoryEntry: NavConfigCategoryEntry;
+};
 /**
  * Given props, returns a navigation menu category (i.e. a named list of
  * related navigation menu links).
  *
  * @param props
- * @param props.pathComponent a prefix to appended to the URL path of all
- *   navigation menu links (i.e. each navigatin menu link will have an href
- *   of the form `/${pathComponent}/${navigationMenuLinkSpecificSubpath}`)
- * @param props.humanName the name of the navigation menu category
+ * @param props.parentPath optional prefix that will be prepend to the
+ *   pathComponent to form a fully qualified URL path for the category
+ * @param props.pathComponent relative path of this category
+ * @param props.authStatusQuery the auth status of the user
+ * @param props.navConfigCategoryEntry category properties of the navConfigEntry
  * @returns a navigation menu category (i.e. a named list of related
  *   navigation menu links)
  */
 const NavMenuCategory: FC<NavMenuCategoryProps> = ({
+  parentPath,
   pathComponent,
-  humanName,
-  navConfig,
+  authStatusQuery,
+  navConfigCategoryEntry,
 }) => {
-  const listSubheaderId = `site-nav-category-${pathComponent}`;
+  const path = getPath(parentPath, pathComponent);
+  const listSubheaderId = `site-nav-category-${path}`;
+  const { humanName, navConfig } = navConfigCategoryEntry;
   return (
     <>
       <List
@@ -72,16 +148,105 @@ const NavMenuCategory: FC<NavMenuCategoryProps> = ({
           <ListSubheader id={listSubheaderId}>{humanName}</ListSubheader>
         }
       >
-        {Object.entries(navConfig || {}).map(([linkPathComponent, data]) => (
-          <NavMenuLink
-            key={linkPathComponent}
-            pathComponent={linkPathComponent}
-            parentPath={`/${pathComponent}`}
-            {...data}
-          />
-        ))}
+        <NavMenuEntries
+          parentPath={path}
+          authStatusQuery={authStatusQuery}
+          navConfig={navConfig}
+        />
       </List>
       <Divider />
+    </>
+  );
+};
+
+type NavMenuEntryProps = {
+  parentPath?: string;
+  pathComponent: string;
+  authStatusQuery: AuthStatusQuery;
+  navConfigEntry: NavConfigEntry;
+};
+/**
+ * Given props, returns a navigation menu entry--which will be one of
+ *  - null when navConfigEntry.displayOn indicates it should
+ *    not be displayed
+ *  - a {@linkcode NavMenuLink} when navConfigEntry doesn't have a child
+ *    navConfig
+ *  - a {@linkcode NavMenuCategory} when navConfigEntry does have a child
+ *    navConfig
+ *
+ * @param props
+ * @param props.parentPath optional prefix that will be prepend to the
+ *   pathComponent to form a fully qualified URL path for the entry
+ * @param props.pathComponent relative path of this entry
+ * @param props.authStatusQuery the auth status of the user
+ * @param props.navConfigEntry properties of the entry
+ * @returns a navigation menu entry--which will be one of
+ *  - null when navConfigEntry.displayOn indicates it should
+ *    not be displayed
+ *  - a {@linkcode NavMenuLink} when navConfigEntry doesn't have a child
+ *    navConfig
+ *  - a {@linkcode NavMenuCategory} when navConfigEntry does have a child
+ *    navConfig
+ */
+const NavMenuEntry: FC<NavMenuEntryProps> = ({
+  parentPath,
+  pathComponent,
+  authStatusQuery,
+  navConfigEntry,
+}) => {
+  if (!display(authStatusQuery, navConfigEntry.displayOn)) {
+    return null;
+  }
+  if (!navConfigEntry.navConfig) {
+    return (
+      <NavMenuLink
+        parentPath={parentPath}
+        pathComponent={pathComponent}
+        navConfigLinkEntry={navConfigEntry}
+      />
+    );
+  }
+  return (
+    <NavMenuCategory
+      parentPath={parentPath}
+      pathComponent={pathComponent}
+      authStatusQuery={authStatusQuery}
+      navConfigCategoryEntry={navConfigEntry}
+    />
+  );
+};
+
+type NavMenuEntriesProps = {
+  parentPath?: string;
+  authStatusQuery: AuthStatusQuery;
+  navConfig: NavConfig;
+};
+/**
+ * Given props, returns a {@linkcode NavMenuEntry} list
+ *
+ * @param props
+ * @param props.parentPath optional prefix that will be prepend to each
+ *   {@linkcode NavMenuEntry} element to form a fully qualified URL path for
+ *   the entry
+ * @param props.authStatusQuery the auth status of the user
+ * @param props.navConig a navConfig containing one or more entries
+ */
+const NavMenuEntries: FC<NavMenuEntriesProps> = ({
+  parentPath,
+  authStatusQuery,
+  navConfig,
+}) => {
+  return (
+    <>
+      {Object.entries(navConfig).map(([pathComponent, navConfigEntry]) => (
+        <NavMenuEntry
+          key={pathComponent}
+          parentPath={parentPath}
+          pathComponent={pathComponent}
+          authStatusQuery={authStatusQuery}
+          navConfigEntry={navConfigEntry}
+        />
+      ))}
     </>
   );
 };
@@ -92,16 +257,14 @@ export const navMenuLabel = "Navigation Menu";
  *
  * @returns a menu for navigating the site with entries based on the navConfig.
  */
-const NavMenu: FC = () => (
-  <Box component="nav" aria-label={navMenuLabel}>
-    {Object.entries(navConfig).map(([pathComponent, data]) => (
-      <NavMenuCategory
-        key={pathComponent}
-        pathComponent={pathComponent}
-        {...data}
-      />
-    ))}
-  </Box>
-);
+const NavMenu: FC = () => {
+  const authStatusQuery = useAuthStatus();
+
+  return (
+    <Box component="nav" aria-label={navMenuLabel}>
+      <NavMenuEntries authStatusQuery={authStatusQuery} navConfig={navConfig} />
+    </Box>
+  );
+};
 
 export default NavMenu;

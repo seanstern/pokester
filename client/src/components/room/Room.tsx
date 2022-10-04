@@ -2,7 +2,7 @@ import { PokerRooms } from "@pokester/common-api";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { FC, useMemo } from "react";
 import { useHistory, useParams, useRouteMatch } from "react-router-dom";
-import { useAct, useGet } from "../../queries/RoomsQueries";
+import { useAct, useGet } from "../../queries/poker-rooms";
 import { useSetPageTitle } from "../page-frame";
 
 type PlayerProps = {

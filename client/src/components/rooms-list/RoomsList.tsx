@@ -2,7 +2,7 @@ import Grid from "@mui/material/Grid";
 import { PokerRooms } from "@pokester/common-api";
 import React, { FC } from "react";
 import useValidParsedQs from "../../hooks/qs/useValidParsedQs";
-import { useAct, useGetAll } from "../../queries/RoomsQueries";
+import { useAct, useGetAll } from "../../queries/poker-rooms";
 import ErrorSnackbar from "../utils/ErrorSnackbar";
 import LoadingProgress from "../utils/LoadingProgress";
 import Filters from "./filters";

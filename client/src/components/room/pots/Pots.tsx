@@ -27,7 +27,7 @@ const Pots: FC<PotsProps> = ({ pots }) => {
     <Box
       component="section"
       textAlign="center"
-      minHeight={82}
+      minHeight={68}
       aria-label={potsRegionLabel}
     >
       {!hasSidePots && (

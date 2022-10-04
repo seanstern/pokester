@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 import { PokerRooms } from "@pokester/common-api";
 import React, { FC } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { useAct } from "../../queries/RoomsQueries";
+import { useAct } from "../../queries/poker-rooms";
 import SeatingAvailabilityIcon from "../icons/SeatingAvailabilityIcon";
 
 export const findByCreatorLinkLabelPrefix = "Find rooms created by";

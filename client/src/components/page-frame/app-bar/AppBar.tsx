@@ -11,9 +11,25 @@ import pokesterImage from "./pokester.png";
 
 export const menuButtonLabel = "Menu";
 export const logoAlt = "Joker Card";
-export const defaultSiteName = "Pokester ";
-export const defaultTitleSeparator = "/ ";
 export const showSiteNameBreakPoint = "sm";
+
+/**
+ * Given a boolean indicating whether or not the site name should be shown
+ * and a page title, returns a string that serves as the heading for the
+ * AppBar.
+ *
+ * @param showSiteName boolean indicating whether or not the site name should
+ *   be shown.
+ * @param title a page specific title string.
+ * @returns  a string that serves as the heading for the AppBar.
+ */
+export const getHeading = (showSiteName: boolean, title: string) =>
+  [
+    showSiteName ? "Pokester" : "",
+    showSiteName && title ? " " : "",
+    title ? "/ " : "",
+    title,
+  ].join("");
 
 type AppBarProps = { title: string; onMenuClick: () => void };
 /**
@@ -50,8 +66,7 @@ const AppBar: FC<AppBarProps> = ({ title, onMenuClick }) => {
           <img src={pokesterImage} alt={logoAlt} />
         </Box>
         <Typography variant="h6" component="h1" noWrap>
-          {`${showSiteName ? defaultSiteName : ""}${defaultTitleSeparator}`}
-          {title}
+          {getHeading(showSiteName, title)}
         </Typography>
       </Toolbar>
     </MuiAppBar>
