@@ -52,7 +52,7 @@ const useAct = () => {
           qc.setQueryData([...queryKey, roomId], pokerRoom);
         }
       },
-      onSettled: (data, err, { roomId }) => {
+      onSettled: () => {
         qc.invalidateQueries([...queryKey]);
       },
     }
