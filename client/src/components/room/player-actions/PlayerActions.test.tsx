@@ -1,13 +1,17 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { PokerRooms } from "@pokester/common-api";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { QueryClient, QueryClientProvider, setLogger } from "react-query";
+import { MemoryRouter, Route } from "react-router-dom";
+import server, { validRoomIdForPatch } from "../../../__fixtures__/server";
 import PlayerActions, {
   amountLabel,
   postStandRedirectLocation,
 } from "./PlayerActions";
-import { PokerRooms } from "@pokester/common-api";
-import { QueryClient, QueryClientProvider } from "react-query";
-import server, { validRoomIdForPatch } from "../../../__fixtures__/server";
-import { MemoryRouter, Route } from "react-router-dom";
+import { serverError } from "../../../queries/poker-rooms/useAct.fixture";
+import { defaultMessage } from "../../utils/ErrorSnackbar";
+
+setLogger({ log: console.log, warn: console.warn, error: () => {} });
 
 const PlayerAction = PokerRooms.Act.PlayerAction;
 
@@ -56,9 +60,9 @@ test("renders fold, call, raise actions when they are the only legal actions; cl
 
   for (const legalAction of legalActions) {
     const actionButton = screen.getByRole("button", { name: legalAction });
-    expect(actionButton).toBeEnabled();
-    await user.click(actionButton);
+    await waitFor(() => expect(actionButton).toBeEnabled());
     expect(screen.queryByRole("alert")).toBeNull();
+    await user.click(actionButton);
   }
 });
 
@@ -103,9 +107,9 @@ test("renders bet, check, stand when they are the only legal actions; clicking e
 
   for (const legalAction of legalActions) {
     const actionButton = screen.getByRole("button", { name: legalAction });
-    expect(actionButton).toBeEnabled();
-    await user.click(actionButton);
+    await waitFor(() => expect(actionButton).toBeEnabled());
     expect(screen.queryByRole("alert")).toBeNull();
+    await user.click(actionButton);
   }
 
   await waitFor(() => expect(pathname).toBe(postStandRedirectLocation));
@@ -162,25 +166,15 @@ test("renders high priority actions when all legal actions present", async () =>
 });
 
 describe("renders alert when clicked action produces server error", () => {
-  afterAll(() => jest.restoreAllMocks());
-
-  test("stand, 404", async () => {
-    // Suppress error logs in unit test
-    const { error } = console;
-    jest
-      .spyOn(console, "error")
-      .mockImplementation((err, ...optionalParams) => {
-        if (err.isAxiosError && err.toJSON().status === 404) {
-          return;
-        }
-        error(err, ...optionalParams);
-      });
-
+  test("stand, 500", async () => {
     const user = userEvent.setup();
+
+    server.use(serverError);
+
     render(
       <QueryClientProvider client={new QueryClient()}>
         <PlayerActions
-          roomId={`invalid${validRoomIdForPatch}`}
+          roomId={validRoomIdForPatch}
           legalActions={[PlayerAction.STAND]}
         />
       </QueryClientProvider>
@@ -188,8 +182,9 @@ describe("renders alert when clicked action produces server error", () => {
 
     expect(screen.queryByRole("alert")).toBeNull();
 
-    user.click(screen.getByRole("button", { name: PlayerAction.STAND }));
+    await user.click(screen.getByRole("button", { name: PlayerAction.STAND }));
 
-    await screen.findByRole("alert");
+    const alert = await screen.findByRole("alert");
+    within(alert).getByText(defaultMessage);
   });
 });
