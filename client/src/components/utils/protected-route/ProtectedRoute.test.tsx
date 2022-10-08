@@ -2,7 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider, setLogger } from "react-query";
 import { MemoryRouter, Route } from "react-router-dom";
 import { isAuthStatusResult } from "../../../queries/user";
-import * as UseAuthStatusFixtures from "../../../queries/user/__fixtures__/useAuthStatus";
+import * as UseAuthStatusFixtures from "../../../queries/user/useAuthStatus.fixture";
 import server from "../../../__fixtures__/server";
 import { defaultAriaLabel } from "../LoadingProgress";
 import ProtectedRoute, {

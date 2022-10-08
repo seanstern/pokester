@@ -2,7 +2,7 @@ import { render, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider, setLogger } from "react-query";
 import { MemoryRouter, Route } from "react-router-dom";
-import * as UseAuthStatusFixtures from "../../../queries/user/__fixtures__/useAuthStatus";
+import * as UseAuthStatusFixtures from "../../../queries/user/useAuthStatus.fixture";
 import server from "../../../__fixtures__/server";
 import { AuthStatus, flatNavConfig } from "./navConfig";
 import NavMenu, { display, navMenuLabel } from "./NavMenu";
