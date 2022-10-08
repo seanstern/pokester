@@ -1,7 +1,8 @@
 import { User } from "@pokester/common-api";
 import { rest, RestHandler } from "msw";
-import { path } from "../config";
-import { AuthStatus, AuthStatusQuery } from "../useAuthStatus";
+import { simulateDelay } from "../../__fixtures__/server";
+import { path } from "./config";
+import { AuthStatus, AuthStatusQuery } from "./useAuthStatus";
 
 type UseAuthStatusFixture = Readonly<{
   query: AuthStatusQuery;
@@ -20,7 +21,10 @@ export const error: UseAuthStatusFixture = {
     pending: false,
     error: new Error("Request failed with status code 500"),
   },
-  mswRestHandler: rest.get(path, (req, res, ctx) => res(ctx.status(500))),
+  mswRestHandler: rest.get(path, async (req, res, ctx) => {
+    await simulateDelay();
+    return res(ctx.status(500));
+  }),
 };
 
 export const unauthenticated: UseAuthStatusFixture = {
@@ -28,7 +32,10 @@ export const unauthenticated: UseAuthStatusFixture = {
     pending: false,
     data: AuthStatus.UNAUTHENTICATED,
   },
-  mswRestHandler: rest.get(path, (req, res, ctx) => res(ctx.status(401))),
+  mswRestHandler: rest.get(path, async (req, res, ctx) => {
+    await simulateDelay();
+    return res(ctx.status(401));
+  }),
 };
 
 export const authenticated: UseAuthStatusFixture = {
@@ -36,7 +43,10 @@ export const authenticated: UseAuthStatusFixture = {
     pending: false,
     data: AuthStatus.AUTHENTICATED,
   },
-  mswRestHandler: rest.get(path, (req, res, ctx) => res(ctx.status(403))),
+  mswRestHandler: rest.get(path, async (req, res, ctx) => {
+    await simulateDelay();
+    return res(ctx.status(403));
+  }),
 };
 
 export const authorized: UseAuthStatusFixture = {
@@ -44,14 +54,15 @@ export const authorized: UseAuthStatusFixture = {
     pending: false,
     data: AuthStatus.AUTHORIZED,
   },
-  mswRestHandler: rest.get(path, (req, res, ctx) =>
-    res(
+  mswRestHandler: rest.get(path, async (req, res, ctx) => {
+    await simulateDelay();
+    return res(
       ctx.status(200),
       ctx.json(
         User.Get.Fixtures.ResBody.unregisteredNoUsernameUnverifiedEmail.create()
       )
-    )
-  ),
+    );
+  }),
 };
 
 export const registered: UseAuthStatusFixture = {
@@ -59,10 +70,11 @@ export const registered: UseAuthStatusFixture = {
     pending: false,
     data: AuthStatus.REGISTERED,
   },
-  mswRestHandler: rest.get(path, (req, res, ctx) =>
-    res(
+  mswRestHandler: rest.get(path, async (req, res, ctx) => {
+    await simulateDelay();
+    return res(
       ctx.status(200),
       ctx.json(User.Get.Fixtures.ResBody.fullyRegistered.create())
-    )
-  ),
+    );
+  }),
 };
