@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import QsSearch from "../../utils/QsSearch";
 
-export const label = "Name";
+export const label = "Room Name";
 /**
  * Returns a search box that controls the name query key value in the query
  * string component of the URL.
