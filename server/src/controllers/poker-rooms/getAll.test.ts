@@ -3,7 +3,7 @@ import { flop, playersSeated } from "@pokester/poker-engine-fixtures/table";
 import { Types } from "mongoose";
 import RegistrationExtension from "../../middleware/request-extensions/RegistrationExtension";
 import PokerRoom from "../../models/PokerRoom/index";
-import getAll from "./getAll";
+import getAll, { prefixMatchQueryOp } from "./getAll";
 
 const username = "usernameValue";
 jest
@@ -64,7 +64,9 @@ describe("succeeds", () => {
     expect(mockFind).toHaveBeenCalledTimes(1);
     expect(mockFind).toHaveBeenCalledWith();
     expect(mockFindWhere).toHaveBeenCalledTimes(1);
-    expect(mockFindWhere).toHaveBeenCalledWith(query);
+    expect(mockFindWhere).toHaveBeenCalledWith({
+      creatorId: prefixMatchQueryOp(query.creatorId),
+    });
     expect(mockFindSelect).toHaveBeenCalledTimes(1);
     expect(mockFindSelect).toHaveBeenCalledWith({
       name: 1,
@@ -92,7 +94,9 @@ describe("succeeds", () => {
     expect(mockFind).toHaveBeenCalledTimes(1);
     expect(mockFind).toHaveBeenCalledWith();
     expect(mockFindWhere).toHaveBeenCalledTimes(1);
-    expect(mockFindWhere).toHaveBeenCalledWith(query);
+    expect(mockFindWhere).toHaveBeenCalledWith({
+      name: prefixMatchQueryOp(query.name),
+    });
     expect(mockFindSelect).toHaveBeenCalledTimes(1);
     expect(mockFindSelect).toHaveBeenCalledWith({
       name: 1,
