@@ -5,6 +5,17 @@ import PokerRoom from "../../models/PokerRoom/index";
 
 export { ReqQuery, ResBody };
 
+const escapeEmbeddedRegExpStr = (str: string) =>
+  str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/**
+ * Given a string, returns a query operator for prefix matching based on the
+ * given string.
+ */
+export const prefixMatchQueryOp = (str: string) => ({
+  $regex: new RegExp(`^${escapeEmbeddedRegExpStr(str)}`),
+});
+
 /**
  * Given an HTTP request to get PokerRooms (including optional filters),
  * an HTTP response, and a callback, attempts to respond with a JSON
@@ -35,10 +46,14 @@ export const getAll: RequestHandler<
 
     const mutablePokerRoomsQuery = PokerRoom.find();
     if (name) {
-      mutablePokerRoomsQuery.where({ name });
+      mutablePokerRoomsQuery.where({
+        name: prefixMatchQueryOp(name),
+      });
     }
     if (creatorId) {
-      mutablePokerRoomsQuery.where({ creatorId });
+      mutablePokerRoomsQuery.where({
+        creatorId: prefixMatchQueryOp(creatorId),
+      });
     }
     if (canSit && ["false", "true"].includes(canSit)) {
       mutablePokerRoomsQuery.byCanPlayerSit(username, canSit === "true");
