@@ -5,7 +5,7 @@ import { ReqBody } from "./Types";
 export const smallBlindLabel = "small blind";
 export const bigBlindLabel = "big blind";
 export const buyInLabel = "buy in";
-export const nameLabel = "name";
+export const nameLabel = "room name";
 
 export const defaultSmallBlind = 0.5;
 export const defaultBigBlindToSmallBlindRatio = 2;
