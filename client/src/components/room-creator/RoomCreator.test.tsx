@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter, Route } from "react-router-dom";
@@ -14,11 +14,6 @@ import RoomCreator, {
   smallBlindLabel,
 } from "./RoomCreator";
 
-const nameLabelRegExp = new RegExp(`^${nameLabel}$`, "i");
-const smallBlindLabelRegExp = new RegExp(`^${smallBlindLabel}$`, "i");
-const bigBlindLabelRegExp = new RegExp(`^${bigBlindLabel}$`, "i");
-const buyInLabelRegExp = new RegExp(`^${buyInLabel}$`, "i");
-
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
@@ -33,10 +28,11 @@ test("renders initial form", async () => {
     </QueryClientProvider>
   );
 
+  expect(screen.queryByRole("progressbar")).toBeNull();
   expect(screen.queryByRole("alert")).toBeNull();
 
   const nameTextBox = screen.getByRole("textbox", {
-    name: nameLabelRegExp,
+    name: nameLabel,
   });
   expect(nameTextBox).toBeEnabled();
   expect(nameTextBox).toBeRequired();
@@ -45,7 +41,7 @@ test("renders initial form", async () => {
   expect(nameTextBox).toHaveDisplayValue("");
 
   const smallBlindTextBox = screen.getByRole("textbox", {
-    name: smallBlindLabelRegExp,
+    name: smallBlindLabel,
   });
   expect(smallBlindTextBox).toBeEnabled();
   expect(smallBlindTextBox).toBeRequired();
@@ -54,7 +50,7 @@ test("renders initial form", async () => {
   expect(smallBlindTextBox).toHaveDisplayValue(defaultSmallBlind.toString());
 
   const bigBlindTextBox = screen.getByRole("textbox", {
-    name: bigBlindLabelRegExp,
+    name: bigBlindLabel,
   });
   expect(bigBlindTextBox).toBeEnabled();
   expect(bigBlindTextBox).not.toBeRequired();
@@ -64,7 +60,7 @@ test("renders initial form", async () => {
   expect(bigBlindTextBox).toHaveAttribute("readOnly");
 
   const buyInTextBox = screen.getByRole("textbox", {
-    name: buyInLabelRegExp,
+    name: buyInLabel,
   });
   expect(buyInTextBox).toBeEnabled();
   expect(buyInTextBox).toBeRequired();
@@ -76,7 +72,7 @@ test("renders initial form", async () => {
   expect(createButton).toBeEnabled();
 
   await user.type(nameTextBox, "Foo!");
-  await act(() => user.click(smallBlindTextBox));
+  await user.click(smallBlindTextBox);
   await waitFor(() =>
     expect(nameTextBox).toHaveAccessibleDescription(new RegExp(nameLabel, "i"))
   );
@@ -97,28 +93,26 @@ describe("renders error message and disables create button for invalid; no error
     );
 
     const nameTextBox = screen.getByRole("textbox", {
-      name: nameLabelRegExp,
+      name: nameLabel,
     });
 
     const bigBlindTextBox = screen.getByRole("textbox", {
-      name: bigBlindLabelRegExp,
+      name: bigBlindLabel,
     });
 
     const createButton = screen.getByRole("button", { name: createLabel });
 
     await user.type(nameTextBox, " ! $ %");
-    await act(() => user.click(bigBlindTextBox));
+    await user.click(bigBlindTextBox);
 
     await waitFor(() =>
-      expect(nameTextBox).toHaveAccessibleDescription(
-        new RegExp(nameLabel, "i")
-      )
+      expect(nameTextBox).toHaveAccessibleDescription(new RegExp("room", "i"))
     );
     expect(nameTextBox).toBeInvalid();
     expect(createButton).toBeDisabled();
 
-    await act(() => user.clear(nameTextBox));
-    await act(() => user.type(nameTextBox, "myfirstroom"));
+    await user.clear(nameTextBox);
+    await user.type(nameTextBox, "myfirstroom");
 
     await waitFor(() =>
       expect(nameTextBox).not.toHaveAccessibleDescription(
@@ -140,18 +134,18 @@ describe("renders error message and disables create button for invalid; no error
     );
 
     const smallBlindTextBox = screen.getByRole("textbox", {
-      name: smallBlindLabelRegExp,
+      name: smallBlindLabel,
     });
 
     const bigBlindTextBox = screen.getByRole("textbox", {
-      name: bigBlindLabelRegExp,
+      name: bigBlindLabel,
     });
 
     const createButton = screen.getByRole("button", { name: createLabel });
 
     await user.clear(smallBlindTextBox);
-    await act(() => user.type(smallBlindTextBox, (-10).toString()));
-    await act(() => user.click(bigBlindTextBox));
+    await user.type(smallBlindTextBox, (-10).toString());
+    await user.click(bigBlindTextBox);
 
     await waitFor(() =>
       expect(smallBlindTextBox).toHaveAccessibleDescription(
@@ -161,8 +155,8 @@ describe("renders error message and disables create button for invalid; no error
     expect(smallBlindTextBox).toBeInvalid();
     expect(createButton).toBeDisabled();
 
-    await act(() => user.clear(smallBlindTextBox));
-    await act(() => user.type(smallBlindTextBox, defaultSmallBlind.toString()));
+    await user.clear(smallBlindTextBox);
+    await user.type(smallBlindTextBox, defaultSmallBlind.toString());
 
     await waitFor(() =>
       expect(smallBlindTextBox).not.toHaveAccessibleDescription(
@@ -184,18 +178,18 @@ describe("renders error message and disables create button for invalid; no error
     );
 
     const buyInTextBox = screen.getByRole("textbox", {
-      name: buyInLabelRegExp,
+      name: buyInLabel,
     });
 
     const bigBlindTextBox = screen.getByRole("textbox", {
-      name: bigBlindLabelRegExp,
+      name: bigBlindLabel,
     });
 
     const createButton = screen.getByRole("button", { name: createLabel });
 
     await user.clear(buyInTextBox);
-    await act(() => user.type(buyInTextBox, defaultBigBlind.toString()));
-    await act(() => user.click(bigBlindTextBox));
+    await user.type(buyInTextBox, defaultBigBlind.toString());
+    await user.click(bigBlindTextBox);
 
     await waitFor(() =>
       expect(buyInTextBox).toHaveAccessibleDescription(
@@ -205,8 +199,8 @@ describe("renders error message and disables create button for invalid; no error
     expect(buyInTextBox).toBeInvalid();
     expect(createButton).toBeDisabled();
 
-    await act(() => user.clear(buyInTextBox));
-    await act(() => user.type(buyInTextBox, defaultBuyIn.toString()));
+    await user.clear(buyInTextBox);
+    await user.type(buyInTextBox, defaultBuyIn.toString());
 
     await waitFor(() =>
       expect(buyInTextBox).not.toHaveAccessibleDescription(
@@ -229,22 +223,21 @@ test("renders error message, disable create button after clicking create with in
   );
 
   const nameTextBox = screen.getByRole("textbox", {
-    name: nameLabelRegExp,
+    name: nameLabel,
   });
 
   const createButton = screen.getByRole("button", { name: createLabel });
 
-  await act(() => user.click(createButton));
+  await user.click(createButton);
 
   await waitFor(() =>
     expect(nameTextBox).toHaveAccessibleDescription(new RegExp(nameLabel, "i"))
   );
   expect(nameTextBox).toBeInvalid();
-  expect(nameTextBox).toHaveFocus();
   expect(createButton).toBeDisabled();
 });
 
-test("creates new room and redirects to it after clicking create with valid input", async () => {
+test("renders saving data, redirected route on success", async () => {
   const user = userEvent.setup();
   let pathname: string | undefined;
   render(
@@ -262,14 +255,40 @@ test("creates new room and redirects to it after clicking create with valid inpu
     </QueryClientProvider>
   );
 
+  expect(screen.queryByRole("alert")).toBeNull();
+  expect(screen.queryByRole("progressbar")).toBeNull();
+
   const nameTextBox = screen.getByRole("textbox", {
-    name: nameLabelRegExp,
+    name: nameLabel,
   });
+  expect(nameTextBox).toBeEnabled();
+
+  const smallBlindTextBox = screen.getByRole("textbox", {
+    name: smallBlindLabel,
+  });
+  expect(smallBlindTextBox).toBeEnabled();
+
+  const bigBlindTextBox = screen.getByRole("textbox", {
+    name: bigBlindLabel,
+  });
+  expect(bigBlindTextBox).toBeEnabled();
+
+  const buyInTextBox = screen.getByRole("textbox", {
+    name: buyInLabel,
+  });
+  expect(buyInTextBox).toBeEnabled();
 
   const createButton = screen.getByRole("button", { name: createLabel });
 
   await user.type(nameTextBox, "an example room name");
-  await act(() => user.click(createButton));
+  await user.click(createButton);
+
+  screen.getByRole("progressbar");
+  expect(screen.queryByRole("alert")).toBeNull();
+  expect(nameTextBox).toBeDisabled();
+  expect(smallBlindTextBox).toBeDisabled();
+  expect(bigBlindTextBox).toBeDisabled();
+  expect(buyInTextBox).toBeDisabled();
 
   await waitFor(() => expect(pathname).toMatch(/^\/room\/[^/]+$/));
 });

@@ -2,16 +2,18 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Button from "@mui/material/Button";
 import InputAdornment from "@mui/material/InputAdornment";
 import Stack from "@mui/material/Stack";
-import TextField, { TextFieldProps } from "@mui/material/TextField";
+import TextField from "@mui/material/TextField";
 import { PokerRooms } from "@pokester/common-api";
 import startCase from "lodash/startCase";
-import upperFirst from "lodash/upperFirst";
-import React, { FC } from "react";
-import { Controller, FieldError, Resolver, useForm } from "react-hook-form";
+import { FC } from "react";
+import { Controller, Resolver, useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import { NumberSchema, reach } from "yup";
 import { useCreate } from "../../queries/poker-rooms";
+import getBadRequestErrorMessage from "../../utils/getBadRequestErrorMessage";
+import getTextFieldErrorInfoProps from "../form-utils/getTextFieldErrorInfoProps";
 import ErrorSnackbar from "../utils/ErrorSnackbar";
+import LoadingProgress from "../utils/LoadingProgress";
 
 const {
   nameLabel: rawNameLabel,
@@ -60,52 +62,6 @@ export const defaultBuyIn =
   defaultBuyInToBigBlindRatio;
 
 /**
- * Given a boolean indicating whether or not an entire form is valid and
- * an optional field error, returns true when the entire form is invalid
- * and the field error exists; false otherwise.
- *
- * @param isFormValid boolean indicating whether or not an entire form is
- *   valid
- * @param error an optional field error
- * @returns true when the entire form is invalid and the field error
- *   exists
- */
-const getTextFieldError = (isFormValid: boolean, error?: FieldError) =>
-  !isFormValid && !!error;
-
-/**
- * Given a boolean indicating whether or not an entire form is valid and
- * an optional field error, returns a formatted version of the error's
- * message when the error message exists AND the entire form is invalid;
- * a string containing a single space (i.e. " ") otherwise.
- *
- * @param isFormValid boolean indicating whether or not an entire form is valid
- * @param error an optional field error
- * @returns a formatted version of the error's message when the error message
- *   exists AND the entire form is invalid; " " otherwise
- */
-const getTextFieldHelperText = (isFormValid: boolean, error?: FieldError) =>
-  (!isFormValid && upperFirst(error?.message)) || " ";
-
-/**
- * Given a boolean indicating whether or not an entire form is valid and
- * an optional field error, returns an object containing the error and
- * helperText props for a the field error's corresponding TextField.
- *
- * @param isFormValid boolean indicating whether or not an entire form is valid
- * @param error an optional field error
- * @returns an object containg the error and helperText props for the field
- *   error's corresponding TextField
- */
-const getTextFieldErrorInfoProps = (
-  isFormValid: boolean,
-  error?: FieldError
-): Pick<TextFieldProps, "error" | "helperText"> => ({
-  error: getTextFieldError(isFormValid, error),
-  helperText: getTextFieldHelperText(isFormValid, error),
-});
-
-/**
  * Returns the page containg a form for creating a new room.
  *
  * @returns the page containing a form for create a new room.
@@ -138,12 +94,16 @@ const RoomCreator: FC = () => {
     } catch (err) {}
   };
 
-  const enableSubmitButton =
-    !isSubmitting && (Object.keys(errors).length === 0 || isValid);
-
+  const disableSubmitButton =
+    isSubmitting || (Object.keys(errors).length > 0 && !isValid);
+  const disableInput = isSubmitting;
   return (
     <>
-      <ErrorSnackbar show={create.isError && !create.isLoading}></ErrorSnackbar>
+      <ErrorSnackbar
+        show={create.isError && !create.isLoading}
+        message={getBadRequestErrorMessage(create.error)}
+      ></ErrorSnackbar>
+      <LoadingProgress show={create.isLoading} />
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack
           alignItems="stretch"
@@ -160,6 +120,7 @@ const RoomCreator: FC = () => {
             }) => {
               return (
                 <TextField
+                  disabled={disableInput}
                   sx={{ alignSelf: "stretch" }}
                   id={fieldSansRef.name}
                   label={nameLabel}
@@ -183,6 +144,7 @@ const RoomCreator: FC = () => {
               }) => {
                 return (
                   <TextField
+                    disabled={disableInput}
                     sx={{ width: 1 / 2 }}
                     id={fieldSansRef.name}
                     label={smallBlindLabel}
@@ -201,6 +163,7 @@ const RoomCreator: FC = () => {
               }}
             />
             <TextField
+              disabled={disableInput}
               sx={{ width: 1 / 2 }}
               id="bigBlind"
               label={bigBlindLabel}
@@ -225,6 +188,7 @@ const RoomCreator: FC = () => {
             }) => {
               return (
                 <TextField
+                  disabled={disableInput}
                   id={fieldSansRef.name}
                   label={buyInLabel}
                   variant="filled"
@@ -246,7 +210,7 @@ const RoomCreator: FC = () => {
             variant="contained"
             color="primary"
             type="submit"
-            disabled={!enableSubmitButton}
+            disabled={disableSubmitButton}
           >
             {createLabel}
           </Button>
