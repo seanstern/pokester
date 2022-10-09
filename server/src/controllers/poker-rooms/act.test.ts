@@ -1,13 +1,17 @@
 import { getMockReq, getMockRes } from "@jest-mock/express";
 import { PlayerAction } from "@pokester/common-api/poker-rooms/act";
-import { flop, playersSeated } from "@pokester/poker-engine-fixtures/table";
+import {
+  flop,
+  onePlayerSeated,
+  playersSeated,
+} from "@pokester/poker-engine-fixtures/table";
 import RegistrationExtension from "../../middleware/request-extensions/RegistrationExtension";
 import PokerRoom from "../../models/PokerRoom/index";
 import act, {
+  BadRequestMessage,
+  pokerRoomNotFound,
   ReqBody,
   ReqParams,
-  pokerRoomNotFound,
-  BadRequestMessage,
 } from "./act";
 
 const mockRegistrationExtensionGet = jest.spyOn(RegistrationExtension, "get");
@@ -17,6 +21,10 @@ const mockSave = jest
   .mockImplementation(function (this: any) {
     return Promise.resolve(this);
   });
+
+const mockDeleteOne = jest
+  .spyOn(PokerRoom, "deleteOne")
+  .mockReturnValue(Promise.resolve() as any);
 
 const name = "tableName";
 const { currentActor, bigBlind, players } = flop.create();
@@ -69,7 +77,9 @@ describe("succeeds", () => {
     await act(req, res, next);
 
     expect(next).not.toHaveBeenCalled();
+    expect(mockDeleteOne).not.toHaveBeenCalled();
     expect(mockFindOne).toHaveBeenCalledTimes(1);
+    expect(mockFindOne).toHaveBeenCalledWith({ _id: roomIdParam.roomId });
     expect(mockSave).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(204);
@@ -96,7 +106,9 @@ describe("succeeds", () => {
     await act(req, res, next);
 
     expect(next).not.toHaveBeenCalled();
+    expect(mockDeleteOne).not.toHaveBeenCalled();
     expect(mockFindOne).toHaveBeenCalledTimes(1);
+    expect(mockFindOne).toHaveBeenCalledWith({ _id: roomIdParam.roomId });
     expect(mockSave).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(204);
@@ -125,8 +137,47 @@ describe("succeeds", () => {
     await act(req, res, next);
 
     expect(next).not.toHaveBeenCalled();
+    expect(mockDeleteOne).not.toHaveBeenCalled();
     expect(mockFindOne).toHaveBeenCalledTimes(1);
+    expect(mockFindOne).toHaveBeenCalledWith({ _id: roomIdParam.roomId });
     expect(mockSave).toHaveBeenCalledTimes(1);
+    expect(res.status).toHaveBeenCalledTimes(1);
+    expect(res.status).toHaveBeenCalledWith(204);
+    expect(res.send).toHaveBeenCalledTimes(1);
+    expect(res.send).toHaveBeenCalledWith();
+  });
+
+  test("and deletes room when last player stands", async () => {
+    const table = onePlayerSeated.create();
+    const onlyPlayerId = table.players.find((p) => !!p)?.id;
+    if (!onlyPlayerId) {
+      throw new Error("player should exist");
+    }
+
+    mockRegistrationExtensionGet.mockReturnValueOnce({
+      user: { username: onlyPlayerId },
+    } as any);
+
+    const pokerRoom = new PokerRoom({ name, table, creatorId: onlyPlayerId });
+
+    mockFindOneExec.mockResolvedValueOnce(pokerRoom);
+
+    const params: ReqParams = roomIdParam;
+    const body: ReqBody = {
+      action: PlayerAction.STAND,
+    };
+
+    const req = getMockReq<Parameters<typeof act>[0]>({ params, body });
+    const { res, next } = getMockRes<Parameters<typeof act>[1]>();
+
+    await act(req, res, next);
+
+    expect(next).not.toHaveBeenCalled();
+    expect(mockSave).not.toHaveBeenCalled();
+    expect(mockFindOne).toHaveBeenCalledTimes(1);
+    expect(mockFindOne).toHaveBeenCalledWith({ _id: roomIdParam.roomId });
+    expect(mockDeleteOne).toHaveBeenCalledTimes(1);
+    expect(mockDeleteOne).toHaveBeenCalledWith({ _id: pokerRoom._id });
     expect(res.status).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(204);
     expect(res.send).toHaveBeenCalledTimes(1);
@@ -152,6 +203,7 @@ describe("fails", () => {
     await act(req, res, next);
 
     expect(mockSave).not.toHaveBeenCalled();
+    expect(mockDeleteOne).not.toHaveBeenCalled();
     expect(next).not.toHaveBeenCalled();
     expect(res.json).not.toHaveBeenCalled();
     expect(mockFindOne).toHaveBeenCalledTimes(1);
@@ -177,6 +229,7 @@ describe("fails", () => {
     await act(req, res, next);
 
     expect(mockSave).not.toHaveBeenCalled();
+    expect(mockDeleteOne).not.toHaveBeenCalled();
     expect(next).not.toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(400);
@@ -204,6 +257,7 @@ describe("fails", () => {
     await act(req, res, next);
 
     expect(mockSave).not.toHaveBeenCalled();
+    expect(mockDeleteOne).not.toHaveBeenCalled();
     expect(next).not.toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(400);
@@ -234,6 +288,7 @@ describe("fails", () => {
     await act(req, res, next);
 
     expect(mockSave).not.toHaveBeenCalled();
+    expect(mockDeleteOne).not.toHaveBeenCalled();
     expect(next).not.toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(400);
@@ -285,6 +340,7 @@ describe("fails", () => {
     await act(req, res, next);
 
     expect(mockSave).not.toHaveBeenCalled();
+    expect(mockDeleteOne).not.toHaveBeenCalled();
     expect(next).not.toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(400);
@@ -308,6 +364,7 @@ describe("fails", () => {
     await act(req, res, next);
 
     expect(mockSave).not.toHaveBeenCalled();
+    expect(mockDeleteOne).not.toHaveBeenCalled();
     expect(next).not.toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledTimes(1);
     expect(res.status).toHaveBeenCalledWith(400);
