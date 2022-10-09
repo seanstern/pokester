@@ -1,5 +1,5 @@
 import { Player, Table } from "@chevtek/poker-engine";
-import { ReqBody, PlayerAction } from "@pokester/common-api/poker-rooms/act";
+import { PlayerAction, ReqBody } from "@pokester/common-api/poker-rooms/act";
 import actReqBodySchema from "@pokester/common-api/poker-rooms/act/reqBodySchema";
 import { RequestHandler } from "express";
 import RegistrationExtension from "../../middleware/request-extensions/RegistrationExtension";
@@ -43,6 +43,21 @@ export enum BadRequestMessage {
   ACTION_ILLEGAL = "That's not a legal action.",
 }
 
+const badReqMessageMap: Readonly<
+  Record<PokerEngineErrorMessage, BadRequestMessage>
+> = {
+  [PokerEngineErrorMessage.NO_PLAYER_FOUND]: BadRequestMessage.ACTION_UNSEATED,
+  [PokerEngineErrorMessage.ACTION_OUT_OF_TURN]:
+    BadRequestMessage.ACTION_OUT_OF_TURN,
+  [PokerEngineErrorMessage.ALREADY_JOINED]:
+    BadRequestMessage.SIT_ALREADY_SEATED,
+  [PokerEngineErrorMessage.ALREADY_PLAYER_IN_SEAT]:
+    BadRequestMessage.SIT_SEAT_TAKEN,
+  [PokerEngineErrorMessage.NO_AVAILABLE_SEATS]:
+    BadRequestMessage.SIT_FULL_TABLE,
+  [PokerEngineErrorMessage.ILLEGAL_ACTION]: BadRequestMessage.ACTION_ILLEGAL,
+};
+
 export type ReqParams = { roomId: string };
 
 /**
@@ -84,7 +99,7 @@ export const act: RequestHandler<ReqParams, string, ReqBody> = async (
       return;
     }
 
-    const { table } = pr;
+    const { table, _id } = pr;
 
     try {
       switch (body.action) {
@@ -119,34 +134,20 @@ export const act: RequestHandler<ReqParams, string, ReqBody> = async (
           throw new Error(`action "${(body as any).action}" is invalid`);
       }
     } catch (err: any) {
-      if (err?.message === PokerEngineErrorMessage.NO_PLAYER_FOUND) {
-        res.status(400).send(BadRequestMessage.ACTION_UNSEATED);
-        return;
-      }
-      if (err?.message === PokerEngineErrorMessage.ACTION_OUT_OF_TURN) {
-        res.status(400).send(BadRequestMessage.ACTION_OUT_OF_TURN);
-        return;
-      }
-      if (err?.message === PokerEngineErrorMessage.ALREADY_JOINED) {
-        res.status(400).send(BadRequestMessage.SIT_ALREADY_SEATED);
-        return;
-      }
-      if (err?.messsage === PokerEngineErrorMessage.ALREADY_PLAYER_IN_SEAT) {
-        res.status(400).send(BadRequestMessage.SIT_SEAT_TAKEN);
-        return;
-      }
-      if (err?.message === PokerEngineErrorMessage.NO_AVAILABLE_SEATS) {
-        res.status(400).send(BadRequestMessage.SIT_FULL_TABLE);
-        return;
-      }
-      if (err?.message === PokerEngineErrorMessage.ILLEGAL_ACTION) {
-        res.status(400).send(BadRequestMessage.ACTION_ILLEGAL);
+      if (Object.values(PokerEngineErrorMessage).includes(err?.message)) {
+        res
+          .status(400)
+          .send(badReqMessageMap[err.message as PokerEngineErrorMessage]);
         return;
       }
       throw err;
     }
 
-    await pr.save();
+    if (table.players.find((p) => !!p && !p.left)) {
+      await pr.save();
+    } else {
+      await PokerRoom.deleteOne({ _id });
+    }
 
     res.status(204).send();
     return;
