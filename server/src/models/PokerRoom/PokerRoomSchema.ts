@@ -235,6 +235,7 @@ const PokerRoomSchema = new Schema<
       type: String,
       required: true,
       immutable: true,
+      index: true,
     },
     serializedTable: {
       type: Schema.Types.Mixed,
@@ -253,6 +254,11 @@ const PokerRoomSchema = new Schema<
       byIsPlayerSeated,
     },
   }
+);
+
+PokerRoomSchema.index(
+  { updatedAt: 1 },
+  { expireAfterSeconds: 60 * 60 * 24 * 7 }
 );
 
 /**

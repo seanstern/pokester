@@ -27,7 +27,7 @@ const handleReqBodyValidationError: ErrorRequestHandler = (
   next
 ) => {
   if (ValidationError.isError(err)) {
-    return res.status(400).send(err.errors.join("\n"));
+    return res.status(400).send(getSendBody(err));
   }
   return next(err);
 };
