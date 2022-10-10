@@ -1,8 +1,10 @@
 import { PokerRooms } from "@pokester/common-api";
 import { render, screen, within } from "@testing-library/react";
 import Player, {
+  hasWinnings,
   betRegionLabel,
-  betToCurrencyFormat,
+  displayCardsAndAmount,
+  positiveNumToCurrencyFormat,
   bigBlindChipText,
   BlindPosition,
   cardsRegionLabel,
@@ -13,6 +15,7 @@ import Player, {
   stackRegionLabel,
   stackToCurrencyFormat,
   toToolTipText,
+  winningsRegionLabel,
 } from "./Player";
 
 const jestCasesTable = [
@@ -53,6 +56,16 @@ const jestCasesTable = [
       props: { ...props, blindPosition: undefined },
     },
   ])
+  .flatMap(({ description, props }) => [
+    {
+      description: `${description}, winnings present`,
+      props: { ...props, winnings: 8675309.12 },
+    },
+    {
+      description: `${description}, winnings absent`,
+      props: { ...props, winnings: undefined },
+    },
+  ])
   .flatMap(({ description, props }) =>
     Object.values(PokerRooms.Get.Fixtures.Player).map((fixture) => ({
       description: `${description} player based on poker-engine-fixture: "${fixture.description}"`,
@@ -63,12 +76,19 @@ const jestCasesTable = [
 test.each(jestCasesTable)("renders $description", ({ create }) => {
   const playerProps = create();
   const seatNumber = 0;
+  const isWinner = hasWinnings(playerProps.winnings);
+
   render(<Player {...playerProps} seatNumber={seatNumber} />);
 
   const playerRegion = screen.getByRole("region", {
     name: playerProps.id,
     description:
-      toToolTipText(playerProps.left, playerProps.folded, false) || undefined,
+      toToolTipText(
+        playerProps.left,
+        playerProps.folded,
+        playerProps.isCurrentActor,
+        isWinner
+      ) || undefined,
   });
 
   within(playerRegion).getByRole("heading", { level: 2, name: playerProps.id });
@@ -92,24 +112,37 @@ test.each(jestCasesTable)("renders $description", ({ create }) => {
   });
   within(stackRegion).getByText(stackToCurrencyFormat(playerProps.stackSize));
 
-  const cardsRegion = within(playerRegion).getByRole("region", {
-    name: cardsRegionLabel,
-  });
-  within(cardsRegion).getByRole("heading", {
-    level: 3,
-    name: cardsRegionLabel,
-  });
-  holeCardsToStrings(
-    playerProps.holeCards,
+  const hasCardsAndAmount = displayCardsAndAmount(
     playerProps.isRoundInProgress,
-    playerProps.folded
-  ).forEach((hcText) => {
-    if (hcText) within(cardsRegion).getAllByText(hcText);
-  });
+    isWinner
+  );
 
-  const betRegion = within(playerRegion).getByRole("region", {
-    name: betRegionLabel,
+  const cardsRegion = within(playerRegion).queryByRole("region", {
+    name: cardsRegionLabel,
   });
-  const betInCurrencyFormat = betToCurrencyFormat(playerProps.bet);
-  if (betInCurrencyFormat) within(betRegion).getByText(betInCurrencyFormat);
+  expect(cardsRegion).toEqual(hasCardsAndAmount ? expect.anything() : null);
+  if (cardsRegion) {
+    within(cardsRegion).getByRole("heading", {
+      level: 3,
+      name: cardsRegionLabel,
+    });
+    holeCardsToStrings(
+      playerProps.holeCards,
+      playerProps.isRoundInProgress,
+      isWinner,
+      playerProps.folded
+    ).forEach((hcText) => {
+      if (hcText) within(cardsRegion).getAllByText(hcText);
+    });
+  }
+
+  const amountRegion = within(playerRegion).queryByRole("region", {
+    name: isWinner ? winningsRegionLabel : betRegionLabel,
+  });
+  expect(amountRegion).toEqual(hasCardsAndAmount ? expect.anything() : null);
+  const amountInCurrencyFormat = positiveNumToCurrencyFormat(
+    isWinner ? playerProps.winnings! : playerProps.bet
+  );
+  if (amountRegion && amountInCurrencyFormat)
+    within(amountRegion).getByText(amountInCurrencyFormat);
 });

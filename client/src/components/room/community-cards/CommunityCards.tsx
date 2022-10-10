@@ -29,7 +29,12 @@ const CommunityCards: FC<CommunityCardsProps> = ({ communityCards }) => (
     </Typography>
     <Box display="flex" justifyContent="center" alignItems="center">
       {communityCards.map((cc, idx) => (
-        <PlayingCard key={idx} value={cardToString(cc)} color={cc.color} />
+        <PlayingCard
+          key={idx}
+          value={cardToString(cc)}
+          color={cc.color}
+          size="lg"
+        />
       ))}
     </Box>
   </Box>
