@@ -21,8 +21,12 @@ export type PotsProps = {
  */
 const Pots: FC<PotsProps> = ({ pots }) => {
   const currencyColor = useCurrencyColor();
-  const [mainPots, ...sidePots] = [...pots].reverse();
+  const [mainPot, ...sidePots] = [...pots].reverse();
   const hasSidePots = sidePots.length > 0;
+  const hasAnyWinners = pots.find(
+    ({ winners }) => winners && winners.length > 0
+  );
+  const potColor = hasAnyWinners ? "text.disabled" : currencyColor;
   return (
     <Box
       component="section"
@@ -38,22 +42,16 @@ const Pots: FC<PotsProps> = ({ pots }) => {
       <Typography
         component={!hasSidePots ? "p" : "h2"}
         variant={!hasSidePots ? "h5" : "body1"}
-        fontWeight="bold"
-        color={currencyColor}
+        color={potColor}
       >
-        {toCurrencyFormat(mainPots.amount)}
+        {toCurrencyFormat(mainPot.amount)}
       </Typography>
       {hasSidePots && (
         <Box component="section" aria-labelledby={sidePotsLabelId}>
           <Typography variant="caption" component="h3" id={sidePotsLabelId}>
             {sidePotsRegionLabel}
           </Typography>
-          <Typography
-            component="p"
-            variant="body2"
-            noWrap
-            color={currencyColor}
-          >
+          <Typography component="p" variant="body2" noWrap color={potColor}>
             {sidePots.map((sp) => toCurrencyFormat(sp.amount)).join(", ") || (
               <>&nbsp;</>
             )}
