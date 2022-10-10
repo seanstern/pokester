@@ -76,6 +76,7 @@ const selfPlayerFixtures = transform(
 const toOpponentPlayer = (p: PokerEngine.Player): OpponentPlayer => ({
   ...pick(p, ["bet", "folded", "left", "id", "stackSize"]),
   isSelf: false,
+  holeCards: p.showCards ? p.holeCards : undefined,
 });
 
 type OpponentPlayerFixturesKey = `opponent${Capitalize<
