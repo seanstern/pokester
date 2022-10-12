@@ -7,7 +7,7 @@ import popLegalActions, {
 } from "./mutation-utils/LegalActionsPopper";
 import pushLegalActions from "./mutation-utils/LegalActionsPusher";
 
-type ActParam = {
+export type ActParam = {
   roomId: string;
   data: PokerRooms.Act.ReqBody;
 };
