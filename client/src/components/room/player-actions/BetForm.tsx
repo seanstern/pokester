@@ -28,7 +28,7 @@ export type BetFormProps = Pick<VariableWagerActReqBody, "action"> & {
  *
  * @param props
  * @param props.actInRoom an ActInRoom mutation
- * @param props.bigBlind the big blind for the room
+ * @param props.amountAtRoundStart the bet amount at the start of a round
  * @param props.currentRound the current round
  * @param props.disabled boolean indicating if the form should be disabled or
  *   not; set to true when betting/raising is not a legal action
