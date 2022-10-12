@@ -4,8 +4,7 @@ import { PokerRooms } from "@pokester/common-api";
 import last from "lodash/last";
 import { FC } from "react";
 import { useHistory } from "react-router-dom";
-import { useAct } from "../../../queries/poker-rooms";
-import ErrorSnackBar from "../../utils/ErrorSnackbar";
+import { ActInRoomMutation } from "../../../queries/poker-rooms";
 import BetForm from "./BetForm";
 
 export { amountLabel } from "./BetForm";
@@ -55,18 +54,27 @@ const combineSimilarActions = <T extends PlayerActionType>(
 const buttonSx = { maxWidth: 64 };
 
 export type PlayerActionsProps = {
+  actInRoom: ActInRoomMutation;
+  betAtRoundStart: number;
+  currentRound?: PokerRooms.Get.BettingRound;
   legalActions?: PlayerActionType[];
-  roomId: string;
 };
 /**
  * Give props, returns UI representing the actions a player can take.
+ *
  * @param props
- * @param props.legalActions the legal actions a player can take
- * @param props.roomId the room the player is in
+ * @param props.actInRoom an ActInRoom mutation
+ * @param props.betAtRoundStart the bet amount at the start of a round
+ * @param props.currentRound the current round
+ * @param props.legalActions optional legal actions a player can take
  * @returns UI representing the actions a player can take.
  */
-const PlayerActions: FC<PlayerActionsProps> = ({ legalActions, roomId }) => {
-  const act = useAct();
+const PlayerActions: FC<PlayerActionsProps> = ({
+  actInRoom,
+  betAtRoundStart,
+  currentRound,
+  legalActions,
+}) => {
   const history = useHistory();
 
   const foldOrStand = combineSimilarActions(
@@ -90,34 +98,30 @@ const PlayerActions: FC<PlayerActionsProps> = ({ legalActions, roomId }) => {
 
   return (
     <>
-      <ErrorSnackBar show={act.isError} />
       <Stack direction="row" spacing={1} marginTop={1}>
         <Button
           variant="contained"
-          disabled={foldOrStand.disabled || act.isLoading}
+          disabled={foldOrStand.disabled || actInRoom.isLoading}
           sx={buttonSx}
           onClick={async () => {
-            const mutateArg = {
-              roomId,
-              data: { action: foldOrStand.action },
-            };
-            if (mutateArg.data.action === PlayerActionEnum.STAND) {
+            const mutateArg = { action: foldOrStand.action };
+            if (mutateArg.action === PlayerActionEnum.STAND) {
               try {
-                await act.mutateAsync(mutateArg);
+                await actInRoom.mutateAsync(mutateArg);
                 history.push(postStandRedirectLocation);
               } catch (err) {}
               return;
             }
-            act.mutate(mutateArg);
+            actInRoom.mutate(mutateArg);
           }}
         >
           {foldOrStand.action}
         </Button>
         <Button
           variant="contained"
-          disabled={dealCallOrCheck.disabled || act.isLoading}
+          disabled={dealCallOrCheck.disabled || actInRoom.isLoading}
           onClick={() => {
-            act.mutate({ roomId, data: { action: dealCallOrCheck.action } });
+            actInRoom.mutate({ action: dealCallOrCheck.action });
           }}
           sx={buttonSx}
         >
@@ -125,9 +129,11 @@ const PlayerActions: FC<PlayerActionsProps> = ({ legalActions, roomId }) => {
         </Button>
         <BetForm
           action={raiseOrBet.action}
-          disabled={raiseOrBet.disabled || act.isLoading}
-          act={(data) => act.mutate({ roomId, data })}
+          disabled={raiseOrBet.disabled || actInRoom.isLoading}
+          actInRoom={actInRoom}
           buttonSx={buttonSx}
+          amountAtRoundStart={betAtRoundStart}
+          currentRound={currentRound}
         />
       </Stack>
     </>
