@@ -7,7 +7,7 @@ import withInjectedActInRoom from "../test-utils/withInjectedActInRoom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import server from "../../../__fixtures__/server";
 
-const BetForm = withInjectedActInRoom("foo", RawBetForm);
+const BetForm = withInjectedActInRoom("someRoomId", RawBetForm);
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
