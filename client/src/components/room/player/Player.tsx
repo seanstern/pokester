@@ -282,14 +282,13 @@ const Player: FC<PlayerProps> = ({
                 component="section"
                 aria-label={positionsRegionLabel}
               >
-                {isDealer && (
+                {isDealer ? (
                   <Chip
                     size="small"
                     label={dealerChipText}
                     color={positionChipColor}
                   />
-                )}
-                {blindPosition && (
+                ) : blindPosition ? (
                   <Chip
                     size="small"
                     label={
@@ -300,7 +299,7 @@ const Player: FC<PlayerProps> = ({
                     color={positionChipColor}
                     aria-label={blindPosition}
                   />
-                )}
+                ) : null}
               </Box>
             </Box>
           </Box>

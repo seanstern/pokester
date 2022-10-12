@@ -101,10 +101,14 @@ test.each(jestCasesTable)("renders $description", ({ create }) => {
     playerProps.isDealer ? expect.anything() : null
   );
   expect(within(positionRegion).queryByText(smallBlindChipText)).toEqual(
-    playerProps.blindPosition === BlindPosition.SMALL ? expect.anything() : null
+    !playerProps.isDealer && playerProps.blindPosition === BlindPosition.SMALL
+      ? expect.anything()
+      : null
   );
   expect(within(positionRegion).queryByText(bigBlindChipText)).toEqual(
-    playerProps.blindPosition === BlindPosition.BIG ? expect.anything() : null
+    !playerProps.isDealer && playerProps.blindPosition === BlindPosition.BIG
+      ? expect.anything()
+      : null
   );
 
   const stackRegion = within(playerRegion).getByRole("region", {
