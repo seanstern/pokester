@@ -27,11 +27,18 @@ const Pots: FC<PotsProps> = ({ pots }) => {
     ({ winners }) => winners && winners.length > 0
   );
   const potColor = hasAnyWinners ? "text.disabled" : currencyColor;
+  const mainPotTypographyProps = hasSidePots
+    ? {
+        component: "h2" as "h2",
+        variant: "body1" as "body1",
+        fontWeight: "bold" as "bold",
+      }
+    : { component: "p" as "p", variant: "h6" as "h6" };
   return (
     <Box
       component="section"
+      minHeight={64}
       textAlign="center"
-      minHeight={68}
       aria-label={potsRegionLabel}
     >
       {!hasSidePots && (
@@ -39,11 +46,7 @@ const Pots: FC<PotsProps> = ({ pots }) => {
           {potsRegionLabel}
         </Typography>
       )}
-      <Typography
-        component={!hasSidePots ? "p" : "h2"}
-        variant={!hasSidePots ? "h5" : "body1"}
-        color={potColor}
-      >
+      <Typography color={potColor} {...mainPotTypographyProps}>
         {toCurrencyFormat(mainPot.amount)}
       </Typography>
       {hasSidePots && (
