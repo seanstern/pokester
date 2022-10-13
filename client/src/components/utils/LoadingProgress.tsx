@@ -1,6 +1,6 @@
 import Fade from "@mui/material/Fade";
 import LinearProgress from "@mui/material/LinearProgress";
-import React, { FC } from "react";
+import { FC } from "react";
 
 // Delay before progress bar fades in
 // (see https://mui.com/material-ui/react-progress/#delaying-appearance)
@@ -41,8 +41,8 @@ const LoadingProgress: FC<LoadingProgressProps> = ({
   >
     <LinearProgress
       sx={{
-        marginTop: 1,
-        marginBottom: 1,
+        marginTop: 0.25,
+        marginBottom: 0.25,
       }}
       color="secondary"
       aria-label={`${defaultAriaLabel}${
