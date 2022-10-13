@@ -1,11 +1,10 @@
 import { PokerRooms } from "@pokester/common-api";
 import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import RawBetForm, { amountLabel } from "./BetForm";
-import withInjectedActInRoom from "../test-utils/withInjectedActInRoom";
-// import { serverError } from "../../../queries/poker-rooms/useAct.fixture";
 import { QueryClient, QueryClientProvider } from "react-query";
 import server from "../../../__fixtures__/server";
+import withInjectedActInRoom from "../test-utils/withInjectedActInRoom";
+import RawBetForm, { amountLabel } from "./BetForm";
 
 const BetForm = withInjectedActInRoom("someRoomId", RawBetForm);
 
