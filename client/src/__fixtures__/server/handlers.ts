@@ -1,14 +1,22 @@
 import { PokerRooms, User } from "@pokester/common-api";
 import { rest } from "msw";
 
-export const validRoomIdForPatch = "validRoomIdForPatch";
 export const postRoomsRes =
   PokerRooms.Create.Fixtures.ResBody.standard.create();
 export const getUserRes = User.Get.Fixtures.ResBody.fullyRegistered.create();
+export const getRoomRes =
+  PokerRooms.Get.Fixtures.ResBody.opponentsInOnePlayerSeated.create();
 
 export const simulateDelay = () => new Promise((res) => setTimeout(res, 15));
 
 const handlers = [
+  rest.get<undefined, { roomId: string }, PokerRooms.Get.ResBody>(
+    "/api/rooms/:roomId",
+    async (req, res, ctx) => {
+      await simulateDelay();
+      return res(ctx.status(200), ctx.json(getRoomRes));
+    }
+  ),
   rest.post<
     PokerRooms.Create.ReqBody,
     Record<string, never>,
