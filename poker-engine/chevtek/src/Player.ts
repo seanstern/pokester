@@ -91,9 +91,9 @@ export class Player {
     if (raiseByAmount < minRaiseByAmount && amount < this.stackSize) {
       if (currentBet) {
         throw new Error(
-          `You must raise the table bet by at least \`$${minRaiseByAmount}\` (making the table bet \`$${
+          `You must raise the table bet by at least $${minRaiseByAmount} (making the table bet $${
             minRaiseByAmount + currentBet
-          }\`), or you can go all-in.`
+          }), or you can go all-in.`
         );
       } else {
         throw new Error(
