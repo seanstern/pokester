@@ -38,7 +38,7 @@ const incompleteRegistrationMessage: Readonly<
 > = {
   [User.Get.RegistrationStep.EMAIL_VERIFICATION]: (
     <>
-      click the verification link that was sent to your email, and then{" "}
+      click the verification link in your email, and then{" "}
       <Box
         component="a"
         href={emailVerificationMessageLinkTo}
