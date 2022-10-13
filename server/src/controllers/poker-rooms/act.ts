@@ -58,6 +58,11 @@ const badReqMessageMap: Readonly<
   [PokerEngineErrorMessage.ILLEGAL_ACTION]: BadRequestMessage.ACTION_ILLEGAL,
 };
 
+const passThroughBadReqMessages: string[] = [
+  "You must raise the table bet by at least",
+  "A bet must be at least as much as the big blind.",
+];
+
 export type ReqParams = { roomId: string };
 
 /**
@@ -138,6 +143,14 @@ export const act: RequestHandler<ReqParams, string, ReqBody> = async (
         res
           .status(400)
           .send(badReqMessageMap[err.message as PokerEngineErrorMessage]);
+        return;
+      }
+      if (
+        passThroughBadReqMessages.find((message) =>
+          err?.message?.startsWith(message)
+        )
+      ) {
+        res.status(400).send(err.message);
         return;
       }
       throw err;
