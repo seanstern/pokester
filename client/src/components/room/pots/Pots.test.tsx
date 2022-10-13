@@ -3,6 +3,21 @@ import { render, screen, within } from "@testing-library/react";
 import Pots, { potsRegionLabel, sidePotsRegionLabel } from "./Pots";
 import toCurrencyFormat from "../toCurrencyFormat";
 
+test("renders with no pots", () => {
+  render(<Pots pots={[]} />);
+
+  const potsRegion = screen.getByRole("region", { name: potsRegionLabel });
+  within(potsRegion).getByRole("heading", {
+    level: 2,
+    name: potsRegionLabel,
+  });
+  within(potsRegion).getByText(toCurrencyFormat(0));
+
+  expect(
+    within(potsRegion).queryByRole("region", { name: sidePotsRegionLabel })
+  ).toBeNull();
+});
+
 describe("renders main pot only", () => {
   test.each(Object.values(PokerRooms.Get.Fixtures.Pot))(
     "$description",
