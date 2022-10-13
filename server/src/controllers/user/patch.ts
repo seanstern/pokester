@@ -10,10 +10,10 @@ export const badRequestMessage =
   "Request body must contain at least one property";
 
 export const usernameTakenMessage = (username?: string) =>
-  `"${username}" has already been taken`;
+  `"${username}" has already been taken.`;
 
 export const usernameChangeMessage =
-  "Usernames can't be changed after initial selection";
+  "Usernames can't be changed after initial selection.";
 
 /**
  * Given an optional username, returns a filter for updateOne that ensures that
