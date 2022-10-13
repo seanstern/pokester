@@ -60,7 +60,7 @@ const selfPlayerFixtures = transform(
   (selfPlayerFixtures, { description, create }, fixtureName) => {
     const key = `self${upperFirst(fixtureName)}` as SelfPlayerFixturesKey;
     selfPlayerFixtures[key] = {
-      description,
+      description: `${description}; including self`,
       create: () => toSelfPlayer(create()),
     };
     return selfPlayerFixtures;
@@ -89,7 +89,7 @@ const opponentPlayerFixtures = transform(
       fixtureName
     )}` as OpponentPlayerFixturesKey;
     opponentPlayerFixtures[key] = {
-      description,
+      description: `${description}; only opponents`,
       create: () => toOpponentPlayer(create()),
     };
     return opponentPlayerFixtures;
@@ -148,7 +148,7 @@ const selfInPotFixtures = transform(
   (selfInPotFixtures, { description, create }, fixtureName) => {
     const key = `selfIn${upperFirst(fixtureName)}` as SelfInPotFixturesKey;
     selfInPotFixtures[key] = {
-      description,
+      description: `${description}; including self`,
       create: () => toPot(create(), true),
     };
     return selfInPotFixtures;
@@ -167,7 +167,7 @@ const opponentsInPotFixtures = transform(
       fixtureName
     )}` as OpponentsInPotFixturesKey;
     opponentsInPotFixtures[key] = {
-      description,
+      description: `${description}; only opponents`,
       create: () => toPot(create(), false),
     };
     return selfInPotFixtures;
@@ -201,7 +201,7 @@ const opponentsInTableFixtures = transform(
       fixtureName
     )}` as OpponentsInTableFixturesKey;
     opponentsInTableFixtures[key] = {
-      description,
+      description: `${description}; only opponents`,
       create: () => ({
         ...pick(pokerEngineTable, [
           "bigBlindPosition",
@@ -253,7 +253,7 @@ const selfInTableFixtures = transform(
 
     const key = `selfIn${upperFirst(fixtureName)}` as SelfInTableFixturesKey;
     selfInTableFixtures[key] = {
-      description,
+      description: `${description}; including self`,
       create: () => ({
         ...pick(pokerEngineTable, [
           "bigBlindPosition",
