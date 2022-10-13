@@ -43,6 +43,14 @@ import APIRouter from "./routers/APIRouter";
   };
 
   app.use(auth(authRoutesConfig));
+  app.get("/account/signup", (req, res) => {
+    res.oidc.login({
+      authorizationParams: {
+        screen_hint: "signup",
+      },
+    });
+    return;
+  });
   app.get("*", (req, res) =>
     res.sendFile(path.join(__dirname, "../../client/build", "index.html"))
   );
