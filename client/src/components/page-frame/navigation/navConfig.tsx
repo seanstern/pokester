@@ -2,10 +2,11 @@ import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import RecentActorsIcon from "@mui/icons-material/RecentActors";
 import SearchIcon from "@mui/icons-material/Search";
 import TableRestaurantIcon from "@mui/icons-material/TableRestaurant";
-import { AuthStatus } from "../../../queries/user";
 import intersection from "lodash/intersection";
+import { AuthStatus } from "../../../queries/user";
 
 export { AuthStatus } from "../../../queries/user";
 
@@ -146,15 +147,23 @@ const navConfig: NavConfig = {
           authStatusError: true,
         },
         nativeLink: true,
-        humanName: "Logout",
+        humanName: "Log out",
         icon: <LogoutIcon />,
+      },
+      signup: {
+        displayOn: {
+          authStatus: AuthStatus.UNAUTHENTICATED,
+        },
+        nativeLink: true,
+        humanName: "Sign up",
+        icon: <RecentActorsIcon />,
       },
       login: {
         displayOn: {
           authStatus: AuthStatus.UNAUTHENTICATED,
         },
         nativeLink: true,
-        humanName: "Login/Signup",
+        humanName: "Log in",
         icon: <LoginIcon />,
       },
     },
