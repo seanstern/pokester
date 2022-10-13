@@ -6,57 +6,78 @@ import { Theme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import { SxProps } from "@mui/system";
 import { PokerRooms } from "@pokester/common-api";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Controller, Resolver, useForm } from "react-hook-form";
 import { object } from "yup";
+import { ActInRoomMutation } from "../../../queries/poker-rooms";
 
 export const amountLabel = "amount";
-export const defaultAmount = 0.0;
 
 type VariableWagerActReqBody = PokerRooms.Act.VariableWagerActReqBody;
 type AmountOnlyActReqBody = Pick<VariableWagerActReqBody, "amount">;
 
 export type BetFormProps = Pick<VariableWagerActReqBody, "action"> & {
+  actInRoom: ActInRoomMutation;
+  amountAtRoundStart: number;
+  currentRound?: PokerRooms.Get.BettingRound;
   disabled: boolean;
-  act: (reqBody: VariableWagerActReqBody) => void;
   buttonSx?: SxProps<Theme>;
 };
 /**
  * Given props, returns a form for entering a bet or raise.
  *
  * @param props
+ * @param props.actInRoom an ActInRoom mutation
+ * @param props.amountAtRoundStart the bet amount at the start of a round
+ * @param props.currentRound the current round
  * @param props.disabled boolean indicating if the form should be disabled or
  *   not; set to true when betting/raising is not a legal action
- * @param props.act a callback that the betting/raising action
  * @param props.buttonSx sx prop passed to button(s) in the form
  * @returns a form for entering a bet or raise
  */
-const BetForm: FC<BetFormProps> = ({ action, disabled, act, buttonSx }) => {
+const BetForm: FC<BetFormProps> = ({
+  action,
+  actInRoom,
+  amountAtRoundStart,
+  currentRound,
+  disabled,
+  buttonSx,
+}) => {
   const {
     control,
     handleSubmit,
+    reset,
     formState: { isSubmitting, errors, isValid },
   } = useForm({
     mode: "onTouched",
-    defaultValues: { amount: defaultAmount },
+    defaultValues: { amount: amountAtRoundStart },
     resolver: yupResolver(
       object({ amount: PokerRooms.Act.ReqBodySchema.amountSchema })
     ) as Resolver<AmountOnlyActReqBody>,
   });
 
-  const disabledBecauseOfForm =
-    isSubmitting || (Object.keys(errors).length !== 0 && !isValid);
+  useEffect(
+    () => reset({ amount: amountAtRoundStart }),
+    [reset, currentRound, amountAtRoundStart]
+  );
+
+  const disableSubmit =
+    disabled ||
+    actInRoom.isLoading ||
+    isSubmitting ||
+    (Object.keys(errors).length !== 0 && !isValid);
+
+  const disableInput = disabled || actInRoom.isLoading || isSubmitting;
+
+  const onSubmit = (reqBody: AmountOnlyActReqBody) =>
+    actInRoom.mutate({ ...reqBody, action });
 
   return (
-    <form
-      onSubmit={handleSubmit((reqBody: AmountOnlyActReqBody) =>
-        act({ ...reqBody, action })
-      )}
-    >
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Stack direction="row" spacing={1}>
         <Button
           variant="contained"
-          disabled={disabled || disabledBecauseOfForm}
+          disabled={disableSubmit}
           type="submit"
           sx={buttonSx}
         >
@@ -72,7 +93,7 @@ const BetForm: FC<BetFormProps> = ({ action, disabled, act, buttonSx }) => {
           }) => {
             return (
               <TextField
-                disabled={disabled}
+                disabled={disableInput}
                 fullWidth
                 hiddenLabel
                 size="small"

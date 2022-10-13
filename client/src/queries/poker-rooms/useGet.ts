@@ -13,7 +13,14 @@ const useGet = (roomId: string) =>
       );
       return data;
     },
-    { refetchInterval: 1000, refetchIntervalInBackground: true }
+    {
+      refetchInterval: (data, query) => {
+        if (query.state.fetchFailureCount > 3) {
+          return false;
+        }
+        return 1500;
+      },
+    }
   );
 
 export default useGet;

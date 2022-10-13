@@ -1,8 +1,10 @@
-import Paper from "@mui/material/Paper";
-import { FC } from "react";
+import EmailIcon from "@mui/icons-material/Email";
 import Button from "@mui/material/Button";
-import { useAct } from "../../../queries/poker-rooms";
+import Paper from "@mui/material/Paper";
 import { PokerRooms } from "@pokester/common-api";
+import { FC } from "react";
+import { useLocation } from "react-router-dom";
+import { ActInRoomMutation } from "../../../queries/poker-rooms";
 
 /**
  * Given a seatNumber, returns the label for the region representing the seat.
@@ -12,23 +14,42 @@ import { PokerRooms } from "@pokester/common-api";
  */
 export const getSeatRegionLabel = (seatNumber: number) => `Seat ${seatNumber}`;
 
+const mailtoSubject = "Let's play pokester";
+const mailtoBodyPrefix = `Join me for a game of poker at ${process.env.REACT_APP_BASE_URL}`;
+
+/**
+ * Given a pathname, returns a string representing a mailto URI for invitations.
+ *
+ * @param pathname a string representing a path; typically the current one
+ * @returns a string representing a mailto URI for invitations.
+ */
+export const getInviteMailTo = (pathname: string) =>
+  `mailto:?subject=${encodeURIComponent(
+    mailtoSubject
+  )}&body=${encodeURIComponent(`${mailtoBodyPrefix}${pathname}\n\n`)}`;
+
+export const inviteLabel = "Invite";
+
 export type SeatProps = {
-  roomId: string;
-  seatNumber: number;
+  actInRoom: ActInRoomMutation;
   canSit: boolean;
+  seatNumber: number;
+  showInvite?: boolean;
 };
 /**
  * Given props, returns an empty seat.
  *
  * @param props
- * @param props.roomId the id of the room that the seat is in
- * @param props.seatNumber the number of the seat in the room
+ * @param props.actInRoom an ActInRoom mutation
  * @param props.canSit a boolean indicating whether or not a player can sit
  *   at the seat
+ * @param props.seatNumber the number of the seat in the room
+ * @param showInvite an optional boolean indicating if the seat should show
+ *   the invite button
  * @returns an empty seat.
  */
-const Seat: FC<SeatProps> = ({ roomId, seatNumber, canSit }) => {
-  const act = useAct();
+const Seat: FC<SeatProps> = ({ seatNumber, canSit, actInRoom, showInvite }) => {
+  const { pathname } = useLocation();
 
   return (
     <Paper
@@ -43,19 +64,27 @@ const Seat: FC<SeatProps> = ({ roomId, seatNumber, canSit }) => {
       component="section"
       aria-label={getSeatRegionLabel(seatNumber)}
     >
-      {(canSit || act.isLoading) && (
+      {canSit ? (
         <Button
-          disabled={!canSit || act.isLoading}
+          disabled={actInRoom.isLoading}
           onClick={() =>
-            act.mutate({
-              roomId,
-              data: { action: PokerRooms.Act.PlayerAction.SIT, seatNumber },
+            actInRoom.mutate({
+              action: PokerRooms.Act.PlayerAction.SIT,
+              seatNumber,
             })
           }
         >
           {PokerRooms.Act.PlayerAction.SIT}
         </Button>
-      )}
+      ) : showInvite ? (
+        <Button
+          color="secondary"
+          href={getInviteMailTo(pathname)}
+          startIcon={<EmailIcon />}
+        >
+          {inviteLabel}
+        </Button>
+      ) : null}
     </Paper>
   );
 };

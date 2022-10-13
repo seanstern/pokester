@@ -1,7 +1,7 @@
-export { default, rest } from "./server";
 export {
-  validRoomIdForPatch,
+  getRoomRes,
   getUserRes,
   postRoomsRes,
   simulateDelay,
 } from "./handlers";
+export { default, rest } from "./server";

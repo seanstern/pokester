@@ -1,323 +1,220 @@
+import Grid from "@mui/material/Grid";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { PokerRooms } from "@pokester/common-api";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import React, { FC, useMemo } from "react";
-import { useHistory, useParams, useRouteMatch } from "react-router-dom";
-import { useAct, useGet } from "../../queries/poker-rooms";
+import { FC } from "react";
+import { useParams } from "react-router-dom";
+import {
+  ActInRoomMutation,
+  useActInRoom,
+  useGet,
+} from "../../queries/poker-rooms";
+import getBadRequestErrorMessage from "../../utils/getBadRequestErrorMessage";
 import { useSetPageTitle } from "../page-frame";
+import ErrorSnackbar from "../utils/ErrorSnackbar";
+import LoadingProgress from "../utils/LoadingProgress";
+import CommunityCards from "./community-cards";
+import {
+  GridItemConfig,
+  GridItemType,
+  lg as lgGridConfig,
+  sm as smGridConfig,
+  xs as xsGridConfig,
+} from "./GridConfigs";
+import Player, { BlindPosition } from "./player";
+import PlayerActions from "./player-actions";
+import Pots from "./pots";
+import Seat from "./seat";
 
-type PlayerProps = {
-  position: number;
-  player: PokerRooms.Get.Player | null;
-  specialPosition?: "dealer" | "smallBlind" | "bigBlind";
-  currentActor: boolean;
+/**
+ * Given a playerId and an array of pots, returns a positive number when the
+ * player has winnings and undefined otherwise.
+ *
+ * @param playerId id of a player
+ * @param pots an array of pots
+ * @returns a positive number when the player has winnings and undefined
+ *   otherwise
+ */
+const getWinningsForPlayer = (playerId: string, pots: PokerRooms.Get.Pot[]) =>
+  pots
+    .map(({ amount, winners }) =>
+      winners && winners.find(({ id }) => id === playerId)
+        ? amount / winners.length
+        : 0
+    )
+    .reduce((total, addend) => total + addend) || undefined;
+
+type GridItemContentProps = {
+  actInRoom: ActInRoomMutation;
+  canSit: boolean;
+  config: GridItemConfig;
+  table: PokerRooms.Get.Table;
 };
-const Player: FC<PlayerProps> = ({
-  player,
-  position,
-  specialPosition,
-  currentActor,
+/**
+ * Given props, returns contents of a Grid item in a Room.
+ *
+ * @param props
+ * @param props.actInRoom an ActInRoomMutation
+ * @param props.canSit a boolean indicating whether or not a the player can
+ *   sit at the table
+ * @param props.config a configuration indicating what type of content should
+ *   be rendered
+ * @param props.table the table in the room
+ * @returns
+ */
+const GridItemContent: FC<GridItemContentProps> = ({
+  actInRoom,
+  canSit,
+  config,
+  table,
 }) => {
-  const { bet, folded, left, id, stackSize, holeCards, isSelf, handDescr } =
-    player ?? {};
+  if (config.type === GridItemType.COMMUNITY_CARDS) {
+    return <CommunityCards communityCards={table.communityCards} />;
+  }
+  if (config.type === GridItemType.POTS) {
+    return <Pots pots={table.pots} />;
+  }
+  const { seatNumber } = config;
+  const player = table.players[seatNumber];
+  const inviteSeatNumber = table.players.findIndex((p) => !p);
+  if (!player) {
+    return (
+      <Seat
+        seatNumber={seatNumber}
+        canSit={canSit}
+        actInRoom={actInRoom}
+        showInvite={inviteSeatNumber === seatNumber}
+      />
+    );
+  }
   return (
-    <tr className={currentActor ? "currentActor" : left ? "leftPlayer" : ""}>
-      <td>{position + 1}</td>
-      <td>{specialPosition}</td>
-      <td className={folded ? "foldedPlayer" : ""}>
-        {id && `${id}${isSelf ? " (You)" : ""}`}
-      </td>
-      <td>{stackSize}</td>
-      <td>{bet}</td>
-      <td>{holeCards && `${holeCards[0].rank}${holeCards[0].suitChar}`}</td>
-      <td>{holeCards && `${holeCards[1].rank}${holeCards[1].suitChar}`}</td>
-      <td>{handDescr}</td>
-    </tr>
-  );
-};
-
-type PlayersProps = {
-  table: PokerRooms.Get.Table;
-};
-const Players: FC<PlayersProps> = ({ table }) => {
-  const {
-    currentPosition,
-    dealerPosition,
-    smallBlindPosition,
-    bigBlindPosition,
-  } = table;
-
-  const playerRows = table.players.map((player, position) => (
     <Player
-      key={position}
-      {...{
-        position,
-        player,
-        currentActor: position === currentPosition,
-        specialPosition:
-          position === dealerPosition
-            ? "dealer"
-            : position === smallBlindPosition
-            ? "smallBlind"
-            : position === bigBlindPosition
-            ? "bigBlind"
-            : undefined,
-      }}
-    />
-  ));
-  const headerRow = (
-    <tr>
-      <th>Seat</th>
-      <th>Position</th>
-      <th>Player ID</th>
-      <th>Stack</th>
-      <th>Bet</th>
-      <th colSpan={2}>Hole Cards</th>
-      <th>Hand</th>
-    </tr>
-  );
-  return (
-    <table>
-      <thead>{headerRow}</thead>
-      <tbody>{playerRows}</tbody>
-    </table>
-  );
-};
-
-type BetActionProps = {
-  roomId: string;
-  action: PokerRooms.Get.PlayerAction.BET | PokerRooms.Get.PlayerAction.RAISE;
-};
-const BetAction: FC<BetActionProps> = ({ roomId, action }) => {
-  const act = useAct();
-  return (
-    <Formik
-      initialValues={{ amount: 0 } as { amount: number }}
-      initialErrors={{ amount: "Required" } as { amount?: string }}
-      validate={(values) => {
-        const errors = {} as { amount?: string };
-        if ((values.amount as any) === "") {
-          errors.amount = "Required";
-        } else if (values.amount <= 0) {
-          console.log((values.amount as any) === "");
-          errors.amount = "Must be positive";
-        }
-        return errors;
-      }}
-      onSubmit={async (values) =>
-        act.mutateAsync({
-          roomId,
-          data: { ...values, action },
-        })
+      {...player}
+      blindPosition={
+        seatNumber === table.bigBlindPosition
+          ? BlindPosition.BIG
+          : seatNumber === table.smallBlindPosition
+          ? BlindPosition.SMALL
+          : undefined
       }
-    >
-      {(fb) => (
-        <Form>
-          <label>
-            Amount
-            <Field type="number" name="amount" />
-            <ErrorMessage name="amount" />
-          </label>
-          <button type="submit" disabled={fb.isSubmitting || !fb.isValid}>
-            {action.toUpperCase()}
-          </button>
-        </Form>
-      )}
-    </Formik>
+      isCurrentActor={seatNumber === table.currentPosition}
+      isDealer={seatNumber === table.dealerPosition}
+      isRoundInProgress={!!table.currentRound}
+      seatNumber={seatNumber}
+      winnings={getWinningsForPlayer(player.id, table.pots)}
+    />
   );
 };
 
-type PlayerActionProps = {
-  playerAction: PokerRooms.Get.PlayerAction;
-};
-const PlayerAction: FC<PlayerActionProps> = ({ playerAction }) => {
-  const history = useHistory();
-  const match = useRouteMatch<{ roomId: string }>("/rooms/:roomId");
-  const act = useAct();
-
-  if (!match) {
-    return <></>;
+/**
+ * Given a configuration and a table, returns true when the contents of the
+ * grid item will appear elevated and false otherwise. Userful for adjusting
+ * zIndex of grid items to ensure proper shadowing.
+ *
+ * @param config a configuration indicating what type of content should
+ *   be rendered by the grid item
+ * @param table the table in the room
+ * @returns true when the contents of the grid item will appear elevated false
+ *   otherwise
+ */
+const isGridItemElevated = (
+  config: GridItemConfig,
+  table: PokerRooms.Get.Table
+) => {
+  if (config.type !== GridItemType.PLAYER) {
+    return false;
   }
-
-  const {
-    params: { roomId },
-  } = match;
-
-  switch (playerAction) {
-    case PokerRooms.Get.PlayerAction.BET:
-    case PokerRooms.Get.PlayerAction.RAISE:
-      return <BetAction action={playerAction} roomId={roomId} />;
-    case PokerRooms.Get.PlayerAction.STAND:
-      return (
-        <button
-          onClick={async () => {
-            try {
-              await act.mutateAsync({ roomId, data: { action: playerAction } });
-              history.push("..");
-            } catch (err) {}
-          }}
-        >
-          {playerAction.toUpperCase()}
-        </button>
-      );
-    case PokerRooms.Get.PlayerAction.SIT:
-    case PokerRooms.Get.PlayerAction.CHECK:
-    case PokerRooms.Get.PlayerAction.CALL:
-    case PokerRooms.Get.PlayerAction.FOLD:
-    case PokerRooms.Get.PlayerAction.DEAL:
-      return (
-        <button
-          onClick={() => act.mutate({ roomId, data: { action: playerAction } })}
-        >
-          {playerAction.toUpperCase()}
-        </button>
-      );
-    default:
-      return <></>;
+  const player = table.players[config.seatNumber];
+  if (!player) {
+    return false;
   }
-};
-
-type PlayerActionsProps = {
-  selfPlayer?: PokerRooms.Get.SelfPlayer;
-};
-const PlayerActions: FC<PlayerActionsProps> = ({ selfPlayer }) => {
-  if (!selfPlayer || !selfPlayer.legalActions) {
-    return <></>;
+  if (
+    !getWinningsForPlayer(player.id, table.pots) &&
+    config.seatNumber !== table.currentPosition
+  ) {
+    return false;
   }
-  return (
-    <>
-      {selfPlayer.legalActions
-        .filter((la) => la !== PokerRooms.Get.PlayerAction.STAND)
-        .map((legalAction) => (
-          <PlayerAction playerAction={legalAction} key={legalAction} />
-        ))}
-    </>
-  );
+  return true;
 };
 
-const communityCardLabels = ["Flop", "Flop", "Flop", "Turn", "River"];
-const headerCells = communityCardLabels.map((label, idx) => (
-  <th key={idx}>{label}</th>
-));
-const communityCardsToStrings = (communityCards: PokerRooms.Get.Card[]) =>
-  communityCardLabels.map((_, idx) => {
-    const communityCard = communityCards[idx] ?? { rank: "?", suitChar: "?" };
-    return `${communityCard.rank}${communityCard.suitChar}`;
-  });
-
-type CommunityCardsProps = {
-  communityCards: PokerRooms.Get.Card[];
-};
-const CommunityCards: FC<CommunityCardsProps> = ({ communityCards }) => {
-  const communityCardStrings = useMemo(
-    () => communityCardsToStrings(communityCards),
-    [communityCards]
-  );
-  return (
-    <table>
-      <thead>
-        <tr>{headerCells}</tr>
-      </thead>
-      <tbody>
-        <tr>
-          {communityCardStrings.map((ccs, idx) => (
-            <td key={idx}>{ccs}</td>
-          ))}
-        </tr>
-      </tbody>
-    </table>
-  );
-};
-
-type PotProps = {
-  pot: PokerRooms.Get.Pot;
-};
-const Pot: FC<PotProps> = ({ pot }) => {
-  const { amount, eligiblePlayers, winners } = pot;
-  return (
-    <>
-      {eligiblePlayers.map((ep, idx) => (
-        <tr key={idx}>
-          {idx === 0 && <td rowSpan={eligiblePlayers.length}>{amount}</td>}
-          <td>{ep.id}</td>
-          {winners && winners[idx] && <td>{winners[idx].id}</td>}
-        </tr>
-      ))}
-    </>
-  );
-};
-
-type PotsProps = {
-  pots: PokerRooms.Get.Pot[];
-};
-const Pots: FC<PotsProps> = ({ pots }) => {
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>Amount</th>
-          <th>Eligible Player(s)</th>
-          <th>Winner(s)</th>
-        </tr>
-      </thead>
-      <tbody>
-        {pots.map((p, idx) => (
-          <Pot key={idx} pot={p} />
-        ))}
-      </tbody>
-    </table>
-  );
-};
-
-type BodyProps = {
-  table: PokerRooms.Get.Table;
-};
-const Body: FC<BodyProps> = ({ table }) => {
-  const selfPlayer = table.players.find((p) => p?.isSelf) as
-    | PokerRooms.Get.SelfPlayer
-    | undefined;
-  return (
-    <>
-      <CommunityCards communityCards={table.communityCards} />
-      <Players table={table} />
-      <PlayerActions selfPlayer={selfPlayer} />
-      <Pots pots={table.pots} />
-    </>
-  );
-};
-
-type RoomProps = {};
-const Room: FC<RoomProps> = () => {
+/**
+ * Given props, returns a poker room (players, community cards, pots, and
+ * actions).
+ *
+ *
+ * @returns
+ */
+const Room: FC = () => {
   const { roomId } = useParams<{ roomId: string }>();
+
   const roomQuery = useGet(roomId);
+
+  const actInRoom = useActInRoom(roomId);
+
   useSetPageTitle(roomQuery.data?.name || "");
-  switch (roomQuery.status) {
-    case "error":
-      return <div>Could not load game.</div>;
-    //intentional fallthrough
-    case "idle":
-    case "loading":
-      return <div>Loading game...</div>;
-    // intentional fallthrough
-    case "success":
-    default:
-      return (
+
+  const theme = useTheme();
+
+  const shouldUseXsGrid = useMediaQuery(theme.breakpoints.only("xs"));
+
+  const shouldUseSmGrid = useMediaQuery(theme.breakpoints.between("sm", "lg"));
+
+  const queryOrMutationInProgress = roomQuery.isLoading || actInRoom.isLoading;
+
+  const isQueryOrMutationError = roomQuery.isError || actInRoom.isError;
+
+  const { spacing, columns, itemConfigs } = shouldUseXsGrid
+    ? xsGridConfig
+    : shouldUseSmGrid
+    ? smGridConfig
+    : lgGridConfig;
+
+  return (
+    <>
+      <ErrorSnackbar
+        show={isQueryOrMutationError && !queryOrMutationInProgress}
+        message={getBadRequestErrorMessage(actInRoom.error)}
+      ></ErrorSnackbar>
+      <LoadingProgress show={queryOrMutationInProgress} />
+      {roomQuery.data && (
         <>
-          {roomQuery.data.canSit && (
-            <PlayerAction playerAction={PokerRooms.Act.PlayerAction.SIT} />
-          )}
-          {roomQuery.data.table.players.find(
-            (p) =>
-              p?.isSelf &&
-              p?.legalActions?.find(
-                (la) => la === PokerRooms.Act.PlayerAction.STAND
-              )
-          ) && (
-            <PlayerAction playerAction={PokerRooms.Act.PlayerAction.STAND} />
-          )}
-          <Body table={roomQuery.data.table} />
+          <Grid container spacing={spacing} columns={columns}>
+            {itemConfigs.map((itemConfig, idx) => (
+              <Grid
+                key={idx}
+                item
+                xs={1}
+                sx={
+                  isGridItemElevated(itemConfig, roomQuery.data.table)
+                    ? { zIndex: 1 }
+                    : undefined
+                }
+              >
+                <GridItemContent
+                  config={itemConfig}
+                  table={roomQuery.data.table}
+                  canSit={roomQuery.data.canSit}
+                  actInRoom={actInRoom}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          <PlayerActions
+            actInRoom={actInRoom}
+            legalActions={
+              (
+                roomQuery.data.table.players.find(
+                  (p) => p?.isSelf
+                ) as Partial<PokerRooms.Get.SelfPlayer>
+              )?.legalActions
+            }
+            betAtRoundStart={roomQuery.data.table.bigBlind}
+            currentRound={roomQuery.data.table.currentRound}
+          />
         </>
-      );
-  }
+      )}
+    </>
+  );
 };
 
 export default Room;

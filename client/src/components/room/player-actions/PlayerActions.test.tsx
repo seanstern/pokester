@@ -1,17 +1,17 @@
 import { PokerRooms } from "@pokester/common-api";
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { QueryClient, QueryClientProvider, setLogger } from "react-query";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter, Route } from "react-router-dom";
-import server, { validRoomIdForPatch } from "../../../__fixtures__/server";
-import PlayerActions, {
+import server from "../../../__fixtures__/server";
+import withInjectedActInRoom from "../test-utils/withInjectedActInRoom";
+import RawPlayerActions, {
   amountLabel,
   postStandRedirectLocation,
+  playerActionsLabel,
 } from "./PlayerActions";
-import { serverError } from "../../../queries/poker-rooms/useAct.fixture";
-import { defaultMessage } from "../../utils/ErrorSnackbar";
 
-setLogger({ log: console.log, warn: console.warn, error: () => {} });
+const PlayerActions = withInjectedActInRoom("someRoomId", RawPlayerActions);
 
 const PlayerAction = PokerRooms.Act.PlayerAction;
 
@@ -33,96 +33,136 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-test("renders fold, call, raise actions when they are the only legal actions; clicking each button does not trigger alert", async () => {
-  const user = userEvent.setup();
-  const legalActions = [
-    PlayerAction.FOLD,
-    PlayerAction.CALL,
-    PlayerAction.RAISE,
-  ];
-  render(
-    <QueryClientProvider client={new QueryClient()}>
-      <PlayerActions roomId={validRoomIdForPatch} legalActions={legalActions} />
-    </QueryClientProvider>
+const enabledActionsCases: {
+  prop: PokerRooms.Act.PlayerAction[];
+  rendered: PokerRooms.Act.PlayerAction[];
+}[] = [
+  {
+    prop: [PlayerAction.FOLD, PlayerAction.CALL, PlayerAction.RAISE],
+    rendered: [PlayerAction.FOLD, PlayerAction.CALL, PlayerAction.RAISE],
+  },
+  {
+    prop: [PlayerAction.BET, PlayerAction.CHECK, PlayerAction.STAND],
+    rendered: [PlayerAction.BET, PlayerAction.CHECK, PlayerAction.STAND],
+  },
+  {
+    prop: possibleLegalActions,
+    rendered: highPriorityLegalActions,
+  },
+];
+
+describe("renders enabled", () => {
+  test.each(enabledActionsCases)(
+    "$rendered actions when $prop are legal actions",
+    async ({ prop, rendered }) => {
+      const betAtRoundStart = 15;
+
+      // See "Resolving act warning during test" at
+      // https://react-hook-form.com/advanced-usage/#TestingForm
+      // eslint-disable-next-line testing-library/no-unnecessary-act
+      await act(async () => {
+        render(
+          <QueryClientProvider client={new QueryClient()}>
+            <PlayerActions
+              legalActions={prop}
+              betAtRoundStart={betAtRoundStart}
+            />
+          </QueryClientProvider>
+        );
+      });
+
+      getOmittedLegalActions(rendered).forEach((omittedLegalAction) =>
+        expect(
+          screen.queryByRole("button", { name: omittedLegalAction })
+        ).toBeNull()
+      );
+
+      const playerActionsRegion = screen.getByRole("region", {
+        name: playerActionsLabel,
+      });
+
+      const amountTextBox = within(playerActionsRegion).getByRole("textbox", {
+        name: amountLabel,
+      });
+      expect(amountTextBox).toHaveDisplayValue(betAtRoundStart.toString());
+      expect(amountTextBox).toBeEnabled();
+
+      for (const legalAction of rendered) {
+        const actionButton = within(playerActionsRegion).getByRole("button", {
+          name: legalAction,
+        });
+        expect(actionButton).toBeEnabled();
+      }
+    }
   );
-
-  expect(screen.queryByRole("alert")).toBeNull();
-
-  getOmittedLegalActions(legalActions).forEach((omittedLegalAction) =>
-    expect(
-      screen.queryByRole("button", { name: omittedLegalAction })
-    ).toBeNull()
-  );
-
-  const amountTextBox = screen.getByRole("textbox", { name: amountLabel });
-  await user.clear(amountTextBox);
-  await user.type(amountTextBox, "15");
-
-  for (const legalAction of legalActions) {
-    const actionButton = screen.getByRole("button", { name: legalAction });
-    await waitFor(() => expect(actionButton).toBeEnabled());
-    expect(screen.queryByRole("alert")).toBeNull();
-    await user.click(actionButton);
-  }
 });
 
-test("renders bet, check, stand when they are the only legal actions; clicking each button does not trigger alert; clicking stand redirects page", async () => {
-  const user = userEvent.setup();
+describe("during submission disables rendered", () => {
+  test.each(enabledActionsCases)(
+    "$rendered actions",
+    async ({ prop, rendered }) => {
+      const user = userEvent.setup();
 
-  let pathname: string | undefined;
-  const legalActions = [
-    PlayerAction.BET,
-    PlayerAction.CHECK,
-    PlayerAction.STAND,
-  ];
-  render(
-    <QueryClientProvider client={new QueryClient()}>
-      <MemoryRouter>
-        <PlayerActions
-          roomId={validRoomIdForPatch}
-          legalActions={legalActions}
-        />
-        <Route
-          path="*"
-          render={({ location }) => {
-            pathname = location.pathname;
-            return null;
-          }}
-        />
-      </MemoryRouter>
-    </QueryClientProvider>
+      const betAtRoundStart = 15;
+
+      // See "Resolving act warning during test" at
+      // https://react-hook-form.com/advanced-usage/#TestingForm
+      // eslint-disable-next-line testing-library/no-unnecessary-act
+      await act(async () => {
+        render(
+          <QueryClientProvider client={new QueryClient()}>
+            <PlayerActions
+              legalActions={prop}
+              betAtRoundStart={betAtRoundStart}
+            />
+          </QueryClientProvider>
+        );
+      });
+
+      const playerActionsRegion = screen.getByRole("region", {
+        name: playerActionsLabel,
+      });
+
+      const amountTextBox = within(playerActionsRegion).getByRole("textbox", {
+        name: amountLabel,
+      });
+      expect(amountTextBox).toBeEnabled();
+
+      for (const legalAction of rendered) {
+        const actionButton = within(playerActionsRegion).getByRole("button", {
+          name: legalAction,
+        });
+        expect(actionButton).toBeEnabled();
+
+        await user.click(actionButton);
+
+        expect(amountTextBox).toBeDisabled();
+        within(playerActionsRegion)
+          .getAllByRole("button")
+          .forEach((button) => expect(button).toBeDisabled());
+
+        await waitFor(() => expect(amountTextBox).toBeEnabled());
+        within(playerActionsRegion)
+          .getAllByRole("button")
+          .forEach((button) => expect(button).toBeEnabled());
+      }
+    }
   );
-
-  expect(screen.queryByRole("alert")).toBeNull();
-
-  getOmittedLegalActions(legalActions).forEach((omittedLegalAction) =>
-    expect(
-      screen.queryByRole("button", { name: omittedLegalAction })
-    ).toBeNull()
-  );
-
-  const amountTextBox = screen.getByRole("textbox", { name: amountLabel });
-  await user.clear(amountTextBox);
-  await user.type(amountTextBox, "15");
-
-  for (const legalAction of legalActions) {
-    const actionButton = screen.getByRole("button", { name: legalAction });
-    await waitFor(() => expect(actionButton).toBeEnabled());
-    expect(screen.queryByRole("alert")).toBeNull();
-    await user.click(actionButton);
-  }
-
-  await waitFor(() => expect(pathname).toBe(postStandRedirectLocation));
 });
 
-test("renders disabled bet, disabled check, disabled stand when there are no legal actions", async () => {
-  render(
-    <QueryClientProvider client={new QueryClient()}>
-      <PlayerActions roomId={validRoomIdForPatch} />
-    </QueryClientProvider>
-  );
+test("renders disabled bet, check, & stand when there are no legal actions", async () => {
+  const betAtRoundStart = 15;
 
-  expect(screen.queryByRole("alert")).toBeNull();
+  // See "Resolving act warning during test" at
+  // https://react-hook-form.com/advanced-usage/#TestingForm
+  // eslint-disable-next-line testing-library/no-unnecessary-act
+  await act(async () => {
+    render(
+      <QueryClientProvider client={new QueryClient()}>
+        <PlayerActions betAtRoundStart={betAtRoundStart} />
+      </QueryClientProvider>
+    );
+  });
 
   getOmittedLegalActions(defaultLegalActions).forEach((omittedLegalAction) =>
     expect(
@@ -130,61 +170,62 @@ test("renders disabled bet, disabled check, disabled stand when there are no leg
     ).toBeNull()
   );
 
+  const playerActionsRegion = screen.getByRole("region", {
+    name: playerActionsLabel,
+  });
+
+  const amountTextBox = within(playerActionsRegion).getByRole("textbox", {
+    name: amountLabel,
+  });
+  expect(amountTextBox).toHaveDisplayValue(betAtRoundStart.toString());
+  expect(amountTextBox).toBeDisabled();
+
   defaultLegalActions.forEach((defaultLegalAction) => {
-    const actionButton = screen.getByRole("button", {
+    const actionButton = within(playerActionsRegion).getByRole("button", {
       name: defaultLegalAction,
     });
     expect(actionButton).toBeDisabled();
   });
 });
 
-test("renders high priority actions when all legal actions present", async () => {
-  render(
-    <QueryClientProvider client={new QueryClient()}>
-      <PlayerActions
-        roomId={validRoomIdForPatch}
-        legalActions={possibleLegalActions}
-      />
-    </QueryClientProvider>
-  );
+test("clicking stand redirects", async () => {
+  const user = userEvent.setup();
 
-  expect(screen.queryByRole("alert")).toBeNull();
+  const betAtRoundStart = 15;
+  const standAction = PlayerAction.STAND;
 
-  getOmittedLegalActions(highPriorityLegalActions).forEach(
-    (omittedLegalAction) =>
-      expect(
-        screen.queryByRole("button", { name: omittedLegalAction })
-      ).toBeNull()
-  );
+  let pathname: string | undefined;
 
-  highPriorityLegalActions.forEach((highPriorityLegalAction) => {
-    const actionButton = screen.getByRole("button", {
-      name: highPriorityLegalAction,
-    });
-    expect(actionButton).toBeEnabled();
-  });
-});
-
-describe("renders alert when clicked action produces server error", () => {
-  test("stand, 500", async () => {
-    const user = userEvent.setup();
-
-    server.use(serverError);
-
+  // See "Resolving act warning during test" at
+  // https://react-hook-form.com/advanced-usage/#TestingForm
+  // eslint-disable-next-line testing-library/no-unnecessary-act
+  await act(async () => {
     render(
       <QueryClientProvider client={new QueryClient()}>
-        <PlayerActions
-          roomId={validRoomIdForPatch}
-          legalActions={[PlayerAction.STAND]}
-        />
+        <MemoryRouter>
+          <PlayerActions
+            legalActions={[standAction]}
+            betAtRoundStart={betAtRoundStart}
+          />
+          <Route
+            path="*"
+            render={({ location }) => {
+              pathname = location.pathname;
+              return null;
+            }}
+          />
+        </MemoryRouter>
       </QueryClientProvider>
     );
-
-    expect(screen.queryByRole("alert")).toBeNull();
-
-    await user.click(screen.getByRole("button", { name: PlayerAction.STAND }));
-
-    const alert = await screen.findByRole("alert");
-    within(alert).getByText(defaultMessage);
   });
+
+  const playerActionsRegion = screen.getByRole("region", {
+    name: playerActionsLabel,
+  });
+
+  await user.click(
+    within(playerActionsRegion).getByRole("button", { name: standAction })
+  );
+
+  await waitFor(() => expect(pathname).toBe(postStandRedirectLocation));
 });
