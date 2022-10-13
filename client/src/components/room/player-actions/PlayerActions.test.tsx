@@ -1,5 +1,5 @@
 import { PokerRooms } from "@pokester/common-api";
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter, Route } from "react-router-dom";
@@ -8,6 +8,7 @@ import withInjectedActInRoom from "../test-utils/withInjectedActInRoom";
 import RawPlayerActions, {
   amountLabel,
   postStandRedirectLocation,
+  playerActionsLabel,
 } from "./PlayerActions";
 
 const PlayerActions = withInjectedActInRoom("someRoomId", RawPlayerActions);
@@ -76,12 +77,20 @@ describe("renders enabled", () => {
         ).toBeNull()
       );
 
-      const amountTextBox = screen.getByRole("textbox", { name: amountLabel });
+      const playerActionsRegion = screen.getByRole("region", {
+        name: playerActionsLabel,
+      });
+
+      const amountTextBox = within(playerActionsRegion).getByRole("textbox", {
+        name: amountLabel,
+      });
       expect(amountTextBox).toHaveDisplayValue(betAtRoundStart.toString());
       expect(amountTextBox).toBeEnabled();
 
       for (const legalAction of rendered) {
-        const actionButton = screen.getByRole("button", { name: legalAction });
+        const actionButton = within(playerActionsRegion).getByRole("button", {
+          name: legalAction,
+        });
         expect(actionButton).toBeEnabled();
       }
     }
@@ -110,22 +119,30 @@ describe("during submission disables rendered", () => {
         );
       });
 
-      const amountTextBox = screen.getByRole("textbox", { name: amountLabel });
+      const playerActionsRegion = screen.getByRole("region", {
+        name: playerActionsLabel,
+      });
+
+      const amountTextBox = within(playerActionsRegion).getByRole("textbox", {
+        name: amountLabel,
+      });
       expect(amountTextBox).toBeEnabled();
 
       for (const legalAction of rendered) {
-        const actionButton = screen.getByRole("button", { name: legalAction });
+        const actionButton = within(playerActionsRegion).getByRole("button", {
+          name: legalAction,
+        });
         expect(actionButton).toBeEnabled();
 
         await user.click(actionButton);
 
         expect(amountTextBox).toBeDisabled();
-        screen
+        within(playerActionsRegion)
           .getAllByRole("button")
           .forEach((button) => expect(button).toBeDisabled());
 
         await waitFor(() => expect(amountTextBox).toBeEnabled());
-        screen
+        within(playerActionsRegion)
           .getAllByRole("button")
           .forEach((button) => expect(button).toBeEnabled());
       }
@@ -153,12 +170,18 @@ test("renders disabled bet, check, & stand when there are no legal actions", asy
     ).toBeNull()
   );
 
-  const amountTextBox = screen.getByRole("textbox", { name: amountLabel });
+  const playerActionsRegion = screen.getByRole("region", {
+    name: playerActionsLabel,
+  });
+
+  const amountTextBox = within(playerActionsRegion).getByRole("textbox", {
+    name: amountLabel,
+  });
   expect(amountTextBox).toHaveDisplayValue(betAtRoundStart.toString());
   expect(amountTextBox).toBeDisabled();
 
   defaultLegalActions.forEach((defaultLegalAction) => {
-    const actionButton = screen.getByRole("button", {
+    const actionButton = within(playerActionsRegion).getByRole("button", {
       name: defaultLegalAction,
     });
     expect(actionButton).toBeDisabled();
@@ -196,7 +219,13 @@ test("clicking stand redirects", async () => {
     );
   });
 
-  await user.click(screen.getByRole("button", { name: standAction }));
+  const playerActionsRegion = screen.getByRole("region", {
+    name: playerActionsLabel,
+  });
+
+  await user.click(
+    within(playerActionsRegion).getByRole("button", { name: standAction })
+  );
 
   await waitFor(() => expect(pathname).toBe(postStandRedirectLocation));
 });

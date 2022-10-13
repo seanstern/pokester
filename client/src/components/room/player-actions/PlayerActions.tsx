@@ -9,6 +9,7 @@ import BetForm from "./BetForm";
 
 export { amountLabel } from "./BetForm";
 
+export const playerActionsLabel = "Actions";
 export const postStandRedirectLocation = "/rooms/browse";
 
 type PlayerActionType = PokerRooms.Act.PlayerAction;
@@ -98,7 +99,13 @@ const PlayerActions: FC<PlayerActionsProps> = ({
 
   return (
     <>
-      <Stack direction="row" spacing={1} marginTop={1}>
+      <Stack
+        direction="row"
+        spacing={1}
+        marginTop={1}
+        component="section"
+        aria-label={playerActionsLabel}
+      >
         <Button
           variant="contained"
           disabled={foldOrStand.disabled || actInRoom.isLoading}
