@@ -79,8 +79,8 @@ const EmptySeatIcon: FC<EmptySeatIconProps> = ({ tableTo, color }) => {
 
 export enum SeatingAvailabilityDescription {
   YOU_ARE_SEATED = "You're seated",
-  OPEN_SEAT = "An open seat",
-  NO_OPEN_SEATS = "No open seats",
+  OPEN_SEAT = "Has an open seat for you",
+  NO_OPEN_SEATS = "No open seats for you",
 }
 
 type SeatingAvailabilityIconProps = {
