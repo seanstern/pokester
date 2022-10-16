@@ -68,7 +68,7 @@ const About: FC = () => (
         >
           implementation
         </Link>{" "}
-        that ensures players' hole cards remain private
+        that keeps hole cards private
       </Box>
       <Box component="li">a little bit fun</Box>
     </Box>
