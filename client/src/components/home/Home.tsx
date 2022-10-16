@@ -14,7 +14,7 @@ const Home: FC = () => (
       bgcolor="secondary.light"
       color="secondary.contrastText"
       mt={-3}
-      mb={6}
+      mb={5}
       mx={-3}
       px={3}
       py={6}
