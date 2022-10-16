@@ -59,7 +59,7 @@ const About: FC = () => (
           href="https://auth0.com/blog/hashing-passwords-one-way-road-to-security/#Simplifying-Password-Management-with-Auth0"
           target="_blank"
         >
-          professional-grade password management for users
+          professional-grade password management
         </Link>{" "}
         and an{" "}
         <Link
@@ -68,7 +68,7 @@ const About: FC = () => (
         >
           implementation
         </Link>{" "}
-        that ensures your hole cards remain private
+        that ensures players' hole cards remain private
       </Box>
       <Box component="li">a little bit fun</Box>
     </Box>
