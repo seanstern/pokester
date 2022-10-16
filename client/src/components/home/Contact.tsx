@@ -29,10 +29,8 @@ const Contact: FC = () => {
 
   return (
     <Box textAlign="right" minHeight={windowInnerHeight - scrollMarginTop}>
-      <Typography variant="h6" component="h2" my={1}>
-        Contact
-      </Typography>
       <Typography variant="body1" component="p">
+        {contactEmail}
         <IconButton
           aria-label={contactEmail}
           href={`mailto:${contactEmail}`}
@@ -41,9 +39,9 @@ const Contact: FC = () => {
         >
           <EmailIcon />
         </IconButton>
-        {contactEmail}
       </Typography>
       <Typography variant="body1" component="p">
+        {sourceLabel}
         <IconButton
           aria-label={sourceLabel}
           href="https://github.com/seanstern/pokester/"
@@ -53,7 +51,6 @@ const Contact: FC = () => {
         >
           <GitHubIcon />
         </IconButton>
-        {sourceLabel}
       </Typography>
     </Box>
   );
