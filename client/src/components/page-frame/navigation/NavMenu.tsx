@@ -6,7 +6,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
 import { FC } from "react";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import {
   AuthStatusQuery,
   isAuthStatusError,
@@ -95,17 +95,40 @@ const NavMenuLink: FC<NavMenuLinkProps> = ({
   pathComponent,
   navConfigLinkEntry,
 }) => {
+  const isId = pathComponent.startsWith("#");
+  const matchPath = getPath(parentPath, isId ? "" : pathComponent);
   const path = getPath(parentPath, pathComponent);
-  const match = useRouteMatch(path);
+  const match = useRouteMatch(matchPath);
+  const { hash } = useLocation();
+  const history = useHistory();
+  const selected = !!match && (!isId || (isId && hash === pathComponent));
 
   const { nativeLink, icon, humanName } = navConfigLinkEntry;
 
   const listItemLinkProps = nativeLink
     ? { component: "a", href: path }
+    : isId
+    ? {
+        component: Link,
+        to: path,
+        onClick: () => {
+          if (selected) {
+            // clear and then reset the id component of the URL to trigger
+            // scrollTo behavior when link that is identical to current id is
+            // clicked
+            (async () => {
+              await new Promise((res) => setTimeout(res, 1));
+              history.replace(matchPath);
+              await new Promise((res) => setTimeout(res, 1));
+              history.replace(path);
+            })().catch();
+          }
+        },
+      }
     : { component: Link, to: path };
 
   return (
-    <ListItemButton selected={!!match} {...listItemLinkProps}>
+    <ListItemButton selected={selected} {...listItemLinkProps}>
       {!!icon && <ListItemIcon>{icon}</ListItemIcon>}
       <ListItemText inset={!icon && !!parentPath} primary={humanName} />
     </ListItemButton>
