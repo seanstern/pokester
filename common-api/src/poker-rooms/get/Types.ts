@@ -1,7 +1,12 @@
 import * as PokerEngine from "@chevtek/poker-engine";
 import PlayerAction from "../PlayerAction";
 
-export { CardColor, BettingRound } from "@chevtek/poker-engine";
+export {
+  CardColor,
+  BettingRound,
+  CardRank,
+  CardSuit,
+} from "@chevtek/poker-engine";
 export { PlayerAction };
 
 export type Card = Pick<

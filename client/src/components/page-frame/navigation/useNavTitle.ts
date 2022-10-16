@@ -97,8 +97,8 @@ const defaultUseSiteNavNameOptions: UseSiteNavTitleOptions = {
 const useNavTitle = ({
   exact = true,
 }: UseSiteNavTitleOptions | undefined = defaultUseSiteNavNameOptions) => {
-  const { pathname } = useLocation();
-  return getNavTitle(pathname, exact);
+  const { pathname, hash } = useLocation();
+  return getNavTitle(`${pathname}${hash}`, exact);
 };
 
 export default useNavTitle;

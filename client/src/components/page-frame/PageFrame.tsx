@@ -41,12 +41,11 @@ const InnerPageFrame: FC = ({ children }) => {
       </ResponsiveDrawer>
       <Box
         component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { xs: 1, md: `calc(100% - ${drawerWidth}px)` },
-          maxWidth: "lg",
-        }}
+        flexGrow={1}
+        px={3}
+        pt={3}
+        width={{ xs: 1, md: `calc(100% - ${drawerWidth}px)` }}
+        maxWidth="lg"
       >
         <Toolbar />
         {children}
