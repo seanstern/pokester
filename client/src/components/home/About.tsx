@@ -10,9 +10,6 @@ import { FC } from "react";
  */
 const About: FC = () => (
   <>
-    <Typography variant="h6" component="h2" my={1}>
-      About
-    </Typography>
     <Typography variant="body1" component="p" my={1}>
       Pokester is a hobby project inspired by{" "}
       <Link href="https://donkhouse.com" target="_blank">
@@ -66,9 +63,8 @@ const About: FC = () => (
           href="https://github.com/seanstern/pokester/blob/main/server/src/views/player-views-of/ViewOfPlayer.ts"
           target="_blank"
         >
-          implementation
-        </Link>{" "}
-        that keeps hole cards private
+          implementation that keeps hole cards private
+        </Link>
       </Box>
       <Box component="li">a little bit fun</Box>
     </Box>
