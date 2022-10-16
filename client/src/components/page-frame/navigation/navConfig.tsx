@@ -168,13 +168,13 @@ const navConfig: NavConfig = {
       },
     },
   },
-  welcome: {
+  "#welcome": {
     humanName: "Welcome",
   },
-  about: {
+  "#about": {
     humanName: "About",
   },
-  contact: {
+  "#contact": {
     humanName: "Contact",
   },
 };

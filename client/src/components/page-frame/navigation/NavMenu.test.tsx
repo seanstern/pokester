@@ -156,7 +156,7 @@ describe.each(Object.values(UseAuthStatusFixtures))(
               <Route
                 path="*"
                 render={({ location }) => {
-                  pathname = location.pathname;
+                  pathname = `${location.pathname}${location.hash}`;
                   return null;
                 }}
               />
