@@ -77,11 +77,7 @@ const Seat: FC<SeatProps> = ({ seatNumber, canSit, actInRoom, showInvite }) => {
           {PokerRooms.Act.PlayerAction.SIT}
         </Button>
       ) : showInvite ? (
-        <Button
-          color="secondary"
-          href={getInviteMailTo(pathname)}
-          startIcon={<EmailIcon />}
-        >
+        <Button href={getInviteMailTo(pathname)} startIcon={<EmailIcon />}>
           {inviteLabel}
         </Button>
       ) : null}
