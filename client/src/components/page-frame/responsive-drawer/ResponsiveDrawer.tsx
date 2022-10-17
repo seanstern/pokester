@@ -1,17 +1,21 @@
 import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import Toolbar from "@mui/material/Toolbar";
-import React, { FC } from "react";
+import { FC, ReactNode } from "react";
 
 type ResponsiveDrawerProps = {
   isOpenForMobile: boolean;
   onCloseForMobile: () => void;
   drawerWidth: number;
+  nav: ReactNode;
+  settings: ReactNode;
 };
 /**
- * Given props, returns a drawer component containing children that is
- * responsive. More specifically, on mobile screens, drawer's visibility
- * depends on isOpenForMobile prop.
+ * Given props, returns a responsive drawer containing navigation and settings
+ * elements. Responsive means that on mobile screens, drawer's visibility
+ * depends on isOpenForMobile prop. Clicking navigation elements on mobile
+ * screens triggers close; no such behavior occurs for settings elements.
  *
  * @param props
  * @param props.isOpenForMobile boolean that controls visibility of mobile
@@ -19,13 +23,18 @@ type ResponsiveDrawerProps = {
  * @param props.onCloseForMobile callback repsonsible for handling close of
  *   mobile drawer
  * @param props.drawerWidth the width of the drawer
- * @returns a drawer component containing children that is reponsive
+ * @param props.nav the navigation elements of the drawer (e.g links to
+ *   pages within the app) that invoke onCloseForMobile when clicked
+ * @param props.settings settings elements of the drawer (e.g. dark mode toggle)
+ *   that do not invoke onCloseForMobile when clicked
+ * @returns a drawer component containing nav and settings that is reponsive
  */
 const ResponsiveDrawer: FC<ResponsiveDrawerProps> = ({
   isOpenForMobile,
   onCloseForMobile,
   drawerWidth,
-  children,
+  nav,
+  settings,
 }) => (
   <Box sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}>
     {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
@@ -44,15 +53,13 @@ const ResponsiveDrawer: FC<ResponsiveDrawerProps> = ({
         },
       }}
     >
-      <Box
-        sx={{
-          width: drawerWidth,
-        }}
-        role="presentation"
-        onClick={onCloseForMobile}
-      >
-        <Toolbar />
-        {children}
+      <Box width={drawerWidth} role="presentation">
+        <Box onClick={onCloseForMobile}>
+          <Toolbar />
+          {nav}
+        </Box>
+        <Divider />
+        {settings}
       </Box>
     </Drawer>
     <Drawer
@@ -67,7 +74,9 @@ const ResponsiveDrawer: FC<ResponsiveDrawerProps> = ({
       open
     >
       <Toolbar />
-      {children}
+      {nav}
+      <Divider />
+      {settings}
     </Drawer>
   </Box>
 );
