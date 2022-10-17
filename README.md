@@ -2,7 +2,7 @@
 
 **Description**: Pokester lets people play no-limit Texas hold'em for free with your friends using play money--on your computer, tablet, or phone.
 
-**Tech Stack**: Pokester is a web application written primarily in Typescript that uses a React front-end and an Express back-end that relies on MongoDB for data storage.
+**Tech Stack**: Pokester is a web application written primarily in [Typescript](https://www.typescriptlang.org/). It uses a [React](https://reactjs.org/) front-end and an [Express](https://expressjs.com/) back-end. It relies on [MongoDB](https://www.mongodb.com/) for data storage.
 
 **Project Status**: Beta
 
