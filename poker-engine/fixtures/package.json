@@ -1,8 +1,9 @@
 {
   "name": "@pokester/poker-engine-fixtures",
-  "private": true,
+  "version": "0.1.0",
   "description": "shared fixtures based on @chevtek/poker-engine for use in testing across @pokester/client and @pokester/server",
   "author": "seanstern",
+  "private": true,
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",
