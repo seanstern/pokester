@@ -25,7 +25,7 @@ export const showSiteNameBreakPoint = "sm";
  */
 export const getHeading = (showSiteName: boolean, title: string) =>
   [
-    showSiteName ? "Pokester" : "",
+    showSiteName || !title ? "Pokester" : "",
     showSiteName && title ? " " : "",
     title ? "/ " : "",
     title,
