@@ -1,5 +1,11 @@
 {
+  "name": "@pokester/app",
+  "version": "0.1.0",
+  "description": "application for playing no-stakes poker",
+  "author": "seanstern",
+  "homepage": "https://github.com/seanstern/pokester",
   "private": true,
+  "license": "GPL-3.0-only",
   "workspaces": [
     "client",
     "server",
