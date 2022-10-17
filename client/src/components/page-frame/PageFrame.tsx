@@ -1,17 +1,18 @@
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import AppBar from "./app-bar";
+import AppSettings from "./app-settings";
 import { NavMenu } from "./navigation";
 import { PageTitleProvider, usePageTitle } from "./page-title";
 import ResponsiveDrawer from "./responsive-drawer";
 
 const drawerWidth = 200;
 /**
- * Given props, returns a page frame--that is, an app bar and navigation menu
- * which frames all child nodes/page content. Exists as a component separate
- * from {@linkcode PageFrame} so {@linkcode usePageTitle} hook can be called
- * inside of {@linkcode PageTitleProvider}.
+ * Given props, returns a page frame--that is, an app bar, navigation menu, and
+ * app settings--which frames all child nodes/page content. Exists as a
+ * component separate from {@linkcode PageFrame} so {@linkcode usePageTitle}
+ * hook can be called inside of {@linkcode PageTitleProvider}.
  *
  * @param props
  * @param props.children the child nodes representing the page content inside
@@ -36,9 +37,9 @@ const InnerPageFrame: FC = ({ children }) => {
         isOpenForMobile={isOpenForMobile}
         onCloseForMobile={closeForMobile}
         drawerWidth={drawerWidth}
-      >
-        <NavMenu />
-      </ResponsiveDrawer>
+        nav={<NavMenu />}
+        settings={<AppSettings />}
+      />
       <Box
         component="main"
         flexGrow={1}
@@ -55,8 +56,8 @@ const InnerPageFrame: FC = ({ children }) => {
 };
 
 /**
- * Given props, returns a page frame--that is an app bar and navigation menu
- * which frames all child nodes/page content.
+ * Given props, returns a page frame--that is an app bar, navigation menu, and
+ * app settings--which frames all child nodes/page content.
  *
  * @param props
  * @param props.children the child nodes representing the page content inside
