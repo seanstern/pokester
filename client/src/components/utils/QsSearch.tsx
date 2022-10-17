@@ -1,7 +1,7 @@
 import TextField from "@mui/material/TextField";
 import debounce from "lodash/debounce";
 import { ParsedQs } from "qs";
-import React, { FC, useCallback, useMemo, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import useValidQsState, {
   IsValidParsedQsValue,
 } from "../../hooks/qs/useValidQsState";
@@ -60,6 +60,8 @@ const QsSearch: FC<QsSearchProps> = ({
 
   const qsValue = partialQsValue || "";
   const [inputValue, setInputValue] = useState<string>(qsValue);
+
+  useEffect(() => setInputValue(qsValue), [setInputValue, qsValue]);
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
