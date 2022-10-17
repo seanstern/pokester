@@ -1,4 +1,4 @@
-# Pokester
+# ![Pokester Logo](./client/public/favicon-32x32.png) Pokester
 
 **Description**: Pokester lets people play no-limit Texas hold'em for free with your friends using play money--on your computer, tablet, or phone.
 
