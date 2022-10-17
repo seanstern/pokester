@@ -1,9 +1,8 @@
-import { FC } from "react";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import { useGet } from "../../queries/user";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import { FC } from "react";
 
 const Waitlist: FC = () => (
   <Box display="flex" flexDirection="column" maxWidth="md" alignItems="center">
