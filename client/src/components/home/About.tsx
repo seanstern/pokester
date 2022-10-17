@@ -11,19 +11,20 @@ import { FC } from "react";
 const About: FC = () => (
   <>
     <Typography variant="body1" component="p" my={1}>
-      Pokester is a hobby project inspired by{" "}
+      Pokester is a hobby project inspired by socially distant rounds of poker
+      played{" "}
       <Link href="https://donkhouse.com" target="_blank">
-        rounds of poker played online
+        online
       </Link>{" "}
-      with socially distant friends during the COVID-19 pandemic.
+      with friends during the COVID-19 pandemic.
     </Typography>
     <Typography variant="body1" component="p" my={1}>
       As such, it comes with no warranties or guarantees of any kind. By signing
       up for Pokester, you understand Pokester is provided on an as is and as
-      avilable basis (i.e. Pokester disclaims responsiblity and liability for
-      the availability, timeliness, security, or reliability of the site and can
+      avilable basis. Pokester disclaims responsiblity and liability for the
+      availability, timeliness, security, or reliability of the site and can
       modify, suspend, or discontinue site operation at any time with or without
-      notice).
+      notice.
     </Typography>
     <Typography variant="body1" component="p" my={1}>
       All that being said, it was{" "}
@@ -51,20 +52,21 @@ const About: FC = () => (
         </Link>
       </Box>
       <Box component="li">
-        secure--including{" "}
+        secure (including{" "}
         <Link
           href="https://auth0.com/blog/hashing-passwords-one-way-road-to-security/#Simplifying-Password-Management-with-Auth0"
           target="_blank"
         >
           professional-grade password management
         </Link>{" "}
-        and an{" "}
+        and an implementation that{" "}
         <Link
           href="https://github.com/seanstern/pokester/blob/main/server/src/views/player-views-of/ViewOfPlayer.ts"
           target="_blank"
         >
-          implementation that keeps hole cards private
+          keeps hole cards private
         </Link>
+        )
       </Box>
       <Box component="li">a little bit fun</Box>
     </Box>
