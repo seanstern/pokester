@@ -233,7 +233,7 @@ const Player: FC<PlayerProps> = ({
     : folded
     ? "text.secondary"
     : undefined;
-  const idFontColor = isSelf && !left ? "primary.dark" : undefined;
+  const idFontColor = isSelf && !left ? "primary.main" : undefined;
   const sectionLabelId = `player-id-${seatNumber}`;
 
   const cardsLabelId = `player-cards-${seatNumber}`;
