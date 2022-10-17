@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Tooltip from "@mui/material/Tooltip";
-import Typogrpahy from "@mui/material/Typography";
+import Typography from "@mui/material/Typography";
 import { ParsedQs } from "qs";
 import React, { FC, ReactElement, useCallback, useMemo } from "react";
 import useValidQsState from "../../hooks/qs/useValidQsState";
@@ -73,14 +73,14 @@ const BooleanQsToggle: FC<BooleanQsToggleProps> = ({
 
   return (
     <Box>
-      <Typogrpahy
+      <Typography
         component="h3"
         variant="caption"
         id={labelId}
         color={qsValue ? "primary" : "text.secondary"}
       >
         {label}
-      </Typogrpahy>
+      </Typography>
       <ToggleButtonGroup
         value={qsValue ?? null}
         exclusive
