@@ -47,7 +47,7 @@ _The following instructions are useful for testing, running, and building the fu
 
 Run the following command from the root directory of the repository
 
-`yarn workspace foreach -t run test`
+`yarn workspaces foreach -t run test`
 
 ### Run in Development Mode
 
