@@ -2,9 +2,10 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import ResponsiveDrawer from "./ResponsiveDrawer";
 
-test("renders mobile drawer that calls onCloseForMobile when children are clicked", async () => {
+test("renders mobile drawer that only calls onCloseForMobile when nav clicked", async () => {
   const user = userEvent.setup();
-  const childName = "Example Child";
+  const navName = "Example Nav";
+  const settingsName = "Example Settings";
   const onCloseForMobile = jest.fn(() => {});
 
   render(
@@ -12,19 +13,24 @@ test("renders mobile drawer that calls onCloseForMobile when children are clicke
       isOpenForMobile
       onCloseForMobile={onCloseForMobile}
       drawerWidth={100}
-    >
-      <h1>{childName}</h1>
-    </ResponsiveDrawer>
+      nav={<h1>{navName}</h1>}
+      settings={<h1>{settingsName}</h1>}
+    />
   );
 
-  await user.click(screen.getByRole("heading", { name: childName }));
+  await user.click(screen.getByRole("heading", { name: settingsName }));
+
+  expect(onCloseForMobile).not.toHaveBeenCalled();
+
+  await user.click(screen.getByRole("heading", { name: navName }));
 
   expect(onCloseForMobile).toHaveBeenCalledTimes(1);
 });
 
-test("renders non-mobile drawer that does not call onCloseForMobile when children are clicked", async () => {
+test("renders non-mobile drawer that doesn't call onCloseForMobile when nav clicked", async () => {
   const user = userEvent.setup();
-  const childName = "Example Child";
+  const navName = "Example Nav";
+  const settingsName = "Example Settings";
   const onCloseForMobile = jest.fn(() => {});
 
   render(
@@ -32,12 +38,16 @@ test("renders non-mobile drawer that does not call onCloseForMobile when childre
       isOpenForMobile={false}
       onCloseForMobile={onCloseForMobile}
       drawerWidth={100}
-    >
-      <h1>{childName}</h1>
-    </ResponsiveDrawer>
+      nav={<h1>{navName}</h1>}
+      settings={<h1>{settingsName}</h1>}
+    />
   );
 
-  await user.click(screen.getByRole("heading", { name: childName }));
+  await user.click(screen.getByRole("heading", { name: settingsName }));
+
+  expect(onCloseForMobile).not.toHaveBeenCalled();
+
+  await user.click(screen.getByRole("heading", { name: navName }));
 
   expect(onCloseForMobile).not.toHaveBeenCalled();
 });
