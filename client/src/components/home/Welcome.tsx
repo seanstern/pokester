@@ -161,7 +161,7 @@ const Welcome: FC = () => {
         or phone.
       </Typography>
       <Box alignItems="center" display="flex" flexDirection="column" mt={2}>
-        <Collapse in={alertTransitionIn}>
+        <Collapse in={alertTransitionIn} mountOnEnter>
           <Alert severity="info" sx={{ my: 1 }}>
             <AlertTitle>Closed Beta in Progress</AlertTitle>
             {signupStatusBasedProps.alertBody}

@@ -151,7 +151,7 @@ const Room: FC = () => {
 
   const actInRoom = useActInRoom(roomId);
 
-  useSetPageTitle(roomQuery.data?.name || "");
+  useSetPageTitle(roomQuery.data?.name || " ");
 
   const theme = useTheme();
 
