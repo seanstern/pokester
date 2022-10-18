@@ -1,4 +1,4 @@
-# ![Pokester Logo](./client/public/favicon-32x32.png) Pokester
+# 🃏 Pokester
 
 **Description**: Pokester lets people play no-limit Texas hold'em for free with your friends using play money--on your computer, tablet, or phone.
 
@@ -31,12 +31,12 @@ _Note the following environment variables can be set by creating a `client/.env`
 
 ### Server
 
-_Note the following environment variables can be set by creating a `client/.env` file containing one `KEY=VALUE` pair on each line._
+_Note the following environment variables can be set by creating a `server/.env` file containing one `KEY=VALUE` pair on each line._
 
 - `OPEN_ID_CONNECT_SECRET`: [client secret for express-openid-connect](https://auth0.github.io/express-openid-connect/interfaces/configparams.html#secret)
 - `OPEN_ID_CONNECT_BASE_URL`: [base URL for express-openid-connect](https://auth0.github.io/express-openid-connect/interfaces/configparams.html#baseurl)
 - `OPEN_ID_CONNECT_CLIENT_ID`: [client id for express-open-id-connect](https://auth0.github.io/express-openid-connect/interfaces/configparams.html#clientid)
-- `OPEN_ID_CONNECT_ISSUER_BASE_URL`= [issure base URL for express-open-id-connect](https://auth0.github.io/express-openid-connect/interfaces/configparams.html#issuerbaseurl)
+- `OPEN_ID_CONNECT_ISSUER_BASE_URL`= [issuer base URL for express-open-id-connect](https://auth0.github.io/express-openid-connect/interfaces/configparams.html#issuerbaseurl)
 - `MONGOOSE_CONNECT`: [connection string for mongoDB](https://www.mongodb.com/docs/manual/reference/connection-string/) (e.g. local deployments might specify `mongodb://localhost:27017/pokester` as the value)
 
 ## Usage
@@ -51,7 +51,7 @@ Run the following command from the root directory of the repository
 
 ### Run in Development Mode
 
-Development mode reloads client and server when edits are made to `/client/src/**` and `/server/src/**`, respectively.
+_Note: Development mode reloads client and server processes when edits are made to `/client/src/**` and `/server/src/**`, respectively._
 
 Run the following command from the root directory of the repository
 
