@@ -6,7 +6,7 @@
 
 **Project Status**: Beta
 
-**Homepage**: https://playpokster.com
+**Homepage**: https://playpokester.com
 
 ## Dependencies
 
