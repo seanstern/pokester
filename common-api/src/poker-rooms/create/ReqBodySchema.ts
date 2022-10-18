@@ -18,10 +18,6 @@ const reqBodySchema: SchemaOf<ReqBody> = object({
     .min(3)
     .max(40)
     .matches(
-      /^[A-Za-z0-9 ]*$/,
-      "${path} must contain only alphanumeric chars and spaces"
-    )
-    .matches(
       /(.*[A-Za-z0-9]){3}/,
       "${path} must contain at least 3 alphanumeric chars"
     ),

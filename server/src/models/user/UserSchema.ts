@@ -43,6 +43,14 @@ const UserSchema = new Schema<UserDoc>(
   }
 );
 
+UserSchema.index(
+  { username: 1 },
+  {
+    name: "username_1_collation_en_2",
+    unique: true,
+    collation: { locale: "en", strength: 2 },
+  }
+);
 UserSchema.index({ "oidc.iss": 1, "oidc.sub": 1 }, { unique: true });
 
 export default UserSchema;
