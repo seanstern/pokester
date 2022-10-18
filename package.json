@@ -28,6 +28,8 @@
     "terser": "5.14.2"
   },
   "scripts": {
+    "build": "yarn workspaces foreach -t run build",
+    "start": "yarn workspace @pokester/server run serve",
     "g:clean": "cd $INIT_CWD && rimraf ./build",
     "g:build": "cd $INIT_CWD && run g:clean && tsc",
     "g:test": "cd $INIT_CWD && jest"
