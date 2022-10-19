@@ -1,8 +1,10 @@
 {
   "name": "@pokester/server",
   "version": "0.1.0",
-  "description": "pokester's back-end server",
-  "author": "seanstern",
+  "description": "Pokester's backe-end server",
+  "author": {
+    "name": "Sean Stern"
+  },
   "private": true,
   "dependencies": {
     "@chevtek/poker-engine": "workspace:*",

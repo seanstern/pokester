@@ -1,8 +1,10 @@
 {
   "name": "@pokester/common-api",
   "private": true,
-  "description": "shared libraries for use across @pokester/client and @pokester/server",
-  "author": "seanstern",
+  "description": "Shared libraries for use across @pokester/client and @pokester/server, primarily REST API typing and validation",
+  "author": {
+    "name": "Sean Stern"
+  },
   "main": "./build/index.js",
   "exports": {
     ".": "./build/index.js",

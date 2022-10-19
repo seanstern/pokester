@@ -1,8 +1,10 @@
 {
   "name": "@pokester/client",
   "version": "0.1.0",
-  "description": "pokester's front-end/client",
-  "author": "seanstern",
+  "description": "Pokester's front-end web client",
+  "author": {
+    "name": "Sean Stern"
+  },
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.0",
