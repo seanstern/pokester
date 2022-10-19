@@ -1,6 +1,6 @@
 # 🃏 Pokester
 
-**Description**: Pokester lets people play no-limit Texas hold'em for free with your friends using play money--on your computer, tablet, or phone.
+**Description**: Pokester lets people play no-limit Texas hold'em for free with their friends using play money--on a computer, tablet, or phone.
 
 **Tech Stack**: Pokester is a web application written primarily in [Typescript](https://www.typescriptlang.org/). It uses a [React](https://reactjs.org/) front-end and an [Express](https://expressjs.com/) back-end. It relies on [MongoDB](https://www.mongodb.com/) for data storage.
 
@@ -33,11 +33,12 @@ _Note the following environment variables can be set by creating a `client/.env`
 
 _Note the following environment variables can be set by creating a `server/.env` file containing one `KEY=VALUE` pair on each line._
 
+- `DISABLE_SSL`: optional boolean environment variable that disables use of SSL; reocommened that it be set to `TRUE` for local testing, **not set** in environments exposed to the internet
+- `MONGOOSE_CONNECT`: [connection string for mongoDB](https://www.mongodb.com/docs/manual/reference/connection-string/) (e.g. local deployments might specify `mongodb://localhost:27017/pokester` as the value)
 - `OPEN_ID_CONNECT_SECRET`: [client secret for express-openid-connect](https://auth0.github.io/express-openid-connect/interfaces/configparams.html#secret)
 - `OPEN_ID_CONNECT_BASE_URL`: [base URL for express-openid-connect](https://auth0.github.io/express-openid-connect/interfaces/configparams.html#baseurl)
 - `OPEN_ID_CONNECT_CLIENT_ID`: [client id for express-open-id-connect](https://auth0.github.io/express-openid-connect/interfaces/configparams.html#clientid)
 - `OPEN_ID_CONNECT_ISSUER_BASE_URL`= [issuer base URL for express-open-id-connect](https://auth0.github.io/express-openid-connect/interfaces/configparams.html#issuerbaseurl)
-- `MONGOOSE_CONNECT`: [connection string for mongoDB](https://www.mongodb.com/docs/manual/reference/connection-string/) (e.g. local deployments might specify `mongodb://localhost:27017/pokester` as the value)
 
 ## Usage
 

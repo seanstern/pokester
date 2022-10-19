@@ -1,9 +1,15 @@
 {
   "name": "@pokester/app",
   "version": "0.1.0",
-  "description": "application for playing no-stakes poker",
-  "author": "seanstern",
-  "homepage": "https://github.com/seanstern/pokester",
+  "description": "Web application for playing free, no-limit poker online using play money",
+  "author": {
+    "name": "Sean Stern"
+  },
+  "homepage": "https://www.playpokester.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seanstern/pokester"
+  },
   "private": true,
   "license": "GPL-3.0-only",
   "engines": {
@@ -17,10 +23,6 @@
     "common-api"
   ],
   "packageManager": "yarn@3.2.2",
-  "engines": {
-    "yarn": "3.x",
-    "node": "16.x"
-  },
   "devDependencies": {
     "@types/node": "^17.0.45",
     "eslint": "^8.22.0",
