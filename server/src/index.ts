@@ -62,7 +62,9 @@ import APIRouter from "./routers/APIRouter";
     console.log("mongoose connected");
     connection.on("error", () => console.log("mongoose conneciton error"));
 
-    app.listen(5000, () => console.log("server listening on port 5000"));
+    app.listen(process.env.PORT || 5000, () =>
+      console.log(`server listening on port ${process.env.PORT || 5000}`)
+    );
   } catch (err) {
     console.log("mongoose initial connection error");
   }
