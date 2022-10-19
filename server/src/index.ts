@@ -6,10 +6,13 @@ import { connect, connection } from "mongoose";
 import path from "path";
 import handleValidationError from "./middleware/error-handlers/handle-validation-error";
 import APIRouter from "./routers/APIRouter";
+import { HTTPS } from "express-sslify";
 
 (async () => {
   const app = express();
-
+  if (!process.env.DISABLE_SSL) {
+    app.use(HTTPS({ trustProtoHeader: true }));
+  }
   app.use(express.json());
 
   app.use(express.static(path.join(__dirname, "../../client/build")));
