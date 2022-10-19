@@ -5,7 +5,7 @@
   "main": "./build/index.js",
   "scripts": {
     "clean": "rimraf ./build",
-    "build": "npm run clean && tsc"
+    "build": "run clean && tsc"
   },
   "keywords": [
     "poker",
