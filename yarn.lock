@@ -4403,6 +4403,7 @@ __metadata:
     "@pokester/poker-engine-fixtures": "workspace:*"
     "@tsconfig/node16": ^1.0.3
     "@types/express": ^4.17.13
+    "@types/express-sslify": ^1.2.2
     "@types/jest": ^27.5.2
     "@types/node": ^17.0.45
     "@types/supertest": ^2.0.12
@@ -4412,6 +4413,7 @@ __metadata:
     eslint-config-prettier: ^8.5.0
     express: ^4.18.1
     express-openid-connect: ^2.8.0
+    express-sslify: ^1.2.0
     mongodb: ^4.8.1
     mongoose: ^6.5.2
     supertest: ^6.2.4
@@ -5025,6 +5027,15 @@ __metadata:
     "@types/qs": "*"
     "@types/range-parser": "*"
   checksum: 826489811a5b371c10f02443b4ca894ffc05813bfdf2b60c224f5c18ac9a30a2e518cb9ef9fdfcaa2a1bb17f8bfa4ed1859ccdb252e879c9276271b4ee2df5a9
+  languageName: node
+  linkType: hard
+
+"@types/express-sslify@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "@types/express-sslify@npm:1.2.2"
+  dependencies:
+    "@types/express": "*"
+  checksum: c9ddf0b34a59159935a776bc1ae8e3e121029c227a871c1595fe007762004da4b72274717de072b9630338b2db482ff2381d65f96dc83ee1294ed8a15321c88c
   languageName: node
   linkType: hard
 
@@ -9485,6 +9496,13 @@ __metadata:
   peerDependencies:
     express: ">= 4.17.0"
   checksum: 97f2a2a1163e8d261ec01c7be08e0abb95dfa5c0d1fac6d3b4094a839370acbc0c5f39fcce555a72718c0561d9d211a278c62902c83661ad3bd9dc386c5ab95b
+  languageName: node
+  linkType: hard
+
+"express-sslify@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "express-sslify@npm:1.2.0"
+  checksum: f2421b7d048bbdef350c65dd2a220b2d58932a935714556984bc638e307f6ad53fdefb52f9e7b87f7cc7da62de9ba7c36afc2bd81dfd1a44b43cc72b8dc565b1
   languageName: node
   linkType: hard
 

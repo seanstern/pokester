@@ -6,6 +6,9 @@
   "homepage": "https://github.com/seanstern/pokester",
   "private": true,
   "license": "GPL-3.0-only",
+  "engines": {
+    "node": "16.x"
+  },
   "workspaces": [
     "client",
     "server",

@@ -2,8 +2,6 @@
 
 # dependencies
 **/node_modules
-**/.pnp
-.pnp.js
 
 #production build
 **/build
@@ -27,8 +25,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
-.pnp.*
 .yarn/*
+!.yarn/cache
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases

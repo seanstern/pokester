@@ -6,10 +6,13 @@ import { connect, connection } from "mongoose";
 import path from "path";
 import handleValidationError from "./middleware/error-handlers/handle-validation-error";
 import APIRouter from "./routers/APIRouter";
+import { HTTPS } from "express-sslify";
 
 (async () => {
   const app = express();
-
+  if (!process.env.DISABLE_SSL) {
+    app.use(HTTPS({ trustProtoHeader: true }));
+  }
   app.use(express.json());
 
   app.use(express.static(path.join(__dirname, "../../client/build")));
@@ -62,7 +65,9 @@ import APIRouter from "./routers/APIRouter";
     console.log("mongoose connected");
     connection.on("error", () => console.log("mongoose conneciton error"));
 
-    app.listen(5000, () => console.log("server listening on port 5000"));
+    app.listen(process.env.PORT || 5000, () =>
+      console.log(`server listening on port ${process.env.PORT || 5000}`)
+    );
   } catch (err) {
     console.log("mongoose initial connection error");
   }
