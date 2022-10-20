@@ -1,20 +1,18 @@
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Button from "@mui/material/Button";
 import Collapse from "@mui/material/Collapse";
 import Link from "@mui/material/Link";
-import Paper from "@mui/material/Paper";
-import Slide from "@mui/material/Slide";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/system/Box";
-import { PokerRooms } from "@pokester/common-api";
 import { FC, useEffect, useState } from "react";
 import {
+  AuthStatus,
   isAuthStatusResult,
   useAuthStatus,
-  AuthStatus,
-} from "../../queries/user";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
+} from "../../../queries/user";
+import CardsAnimation from "./CardsAnimation";
 
 const alertBodyPreSignup =
   "Pokester is currently in closed beta testing. Sign up for the waitlist if you'd like to be considered as a potential beta tester.";
@@ -52,25 +50,6 @@ const postSignupProps = {
   buttonLabel: buttonLabelPostSignup,
 };
 
-/**
- * Returns 5 cards at random.
- *
- * @returns 5 cards at random.
- */
-const generateHand = () =>
-  Object.values(PokerRooms.Get.CardRank)
-    .flatMap((rank) =>
-      ["♣", "♦", "♥", "♠"].map((suit) => ({
-        value: `${rank}${suit}`,
-        color: ["♦", "♥"].includes(suit)
-          ? PokerRooms.Get.CardColor.RED
-          : PokerRooms.Get.CardColor.BLACK,
-        comparator: Math.random(),
-      }))
-    )
-    .sort((a, b) => a.comparator - b.comparator)
-    .slice(-5);
-
 const transitionTimeMs = 500;
 
 /**
@@ -80,7 +59,6 @@ const transitionTimeMs = 500;
  */
 const Welcome: FC = () => {
   const authStatusQuery = useAuthStatus();
-  const [hand] = useState(generateHand);
   const [initialTransitionIn, setInitialTransitionIn] = useState(false);
   useEffect(() => {
     setTimeout(() => setInitialTransitionIn(true), transitionTimeMs);
@@ -122,32 +100,10 @@ const Welcome: FC = () => {
         for you and your friends
       </Typography>
       <Box display="flex" justifyContent="center" my={1}>
-        {hand.map((card, idx) => (
-          <Slide
-            key={idx}
-            direction={"down"}
-            in={initialTransitionIn}
-            style={{
-              transitionDelay: `${(idx + 1) * transitionTimeMs}ms`,
-            }}
-            timeout={transitionTimeMs * (1 + idx / hand.length)}
-          >
-            <Paper
-              elevation={4}
-              sx={{
-                bgcolor: "white",
-                ml: -idx * 0.25,
-                px: 1,
-                py: 1.5,
-                zIndex: idx + 1,
-              }}
-            >
-              <Typography color={card.color} component="p" variant="h4">
-                {card.value}
-              </Typography>
-            </Paper>
-          </Slide>
-        ))}
+        <CardsAnimation
+          in={initialTransitionIn}
+          cardTransitionTimeMs={transitionTimeMs}
+        />
       </Box>
       <Typography variant="body1" component="p" my={2} textAlign="center">
         Play no-limit{" "}
