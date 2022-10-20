@@ -4340,6 +4340,7 @@ __metadata:
     qs: ^6.11.0
     react: ^17.0.2
     react-dom: ^17.0.2
+    react-easy-emoji: ^1.8.0
     react-hook-form: ^7.34.2
     react-query: ^3.39.2
     react-router-dom: ^5.3.3
@@ -15471,6 +15472,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-easy-emoji@npm:^1.8.0":
+  version: 1.8.0
+  resolution: "react-easy-emoji@npm:1.8.0"
+  dependencies:
+    string-replace-to-array: ^2.1.0
+  peerDependencies:
+    "@types/react": ">=0.14.0"
+    react: ">=0.14.27"
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 0f7921619f2a2876990e27ffdd673138116f657d5ed3bd93d4ee031fb59f4d1a11a15b3a1b22a2db9ee966b33a1d4a3e0190a3b68d25bc0ec863e1603951ff3c
+  languageName: node
+  linkType: hard
+
 "react-error-overlay@npm:^6.0.11":
   version: 6.0.11
   resolution: "react-error-overlay@npm:6.0.11"
@@ -16838,6 +16854,13 @@ __metadata:
   version: 3.0.1
   resolution: "string-natural-compare@npm:3.0.1"
   checksum: 65910d9995074086e769a68728395effbba9b7186be5b4c16a7fad4f4ef50cae95ca16e3e9086e019cbb636ae8daac9c7b8fe91b5f21865c5c0f26e3c0725406
+  languageName: node
+  linkType: hard
+
+"string-replace-to-array@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "string-replace-to-array@npm:2.1.0"
+  checksum: e53add3885534f2460ba512c4edd00d2b4089d4c9e3913b6404db3a5236bb3fa47a26cd43d335ef173b8ca59c099de6e04bc8a3aa6832b3b51f4d50583d04a3a
   languageName: node
   linkType: hard
 
