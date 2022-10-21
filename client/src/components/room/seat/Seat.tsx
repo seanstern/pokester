@@ -55,7 +55,7 @@ const Seat: FC<SeatProps> = ({ seatNumber, canSit, actInRoom, showInvite }) => {
     <Paper
       sx={{
         padding: 1,
-        minHeight: 89,
+        minHeight: 90,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
