@@ -33,7 +33,7 @@ type GridConfig = Readonly<{
 }>;
 
 export const xs: GridConfig = {
-  spacing: 0.5,
+  spacing: 0.25,
   columns: 2,
   itemConfigs: [
     { type: GridItemType.POTS },
