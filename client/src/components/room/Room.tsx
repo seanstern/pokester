@@ -1,3 +1,4 @@
+import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -97,9 +98,9 @@ const GridItemContent: FC<GridItemContentProps> = ({
           ? BlindPosition.SMALL
           : undefined
       }
-      isCurrentActor={seatNumber === table.currentPosition}
-      isDealer={seatNumber === table.dealerPosition}
-      isRoundInProgress={!!table.currentRound}
+      currentActor={seatNumber === table.currentPosition}
+      dealer={seatNumber === table.dealerPosition}
+      roundInProgress={!!table.currentRound}
       seatNumber={seatNumber}
       winnings={getWinningsForPlayer(player.id, table.pots)}
     />
@@ -199,18 +200,20 @@ const Room: FC = () => {
               </Grid>
             ))}
           </Grid>
-          <PlayerActions
-            actInRoom={actInRoom}
-            legalActions={
-              (
-                roomQuery.data.table.players.find(
-                  (p) => p?.isSelf
-                ) as Partial<PokerRooms.Get.SelfPlayer>
-              )?.legalActions
-            }
-            betAtRoundStart={roomQuery.data.table.bigBlind}
-            currentRound={roomQuery.data.table.currentRound}
-          />
+          <Box mb={1}>
+            <PlayerActions
+              actInRoom={actInRoom}
+              legalActions={
+                (
+                  roomQuery.data.table.players.find(
+                    (p) => p?.isSelf
+                  ) as Partial<PokerRooms.Get.SelfPlayer>
+                )?.legalActions
+              }
+              betAtRoundStart={roomQuery.data.table.bigBlind}
+              currentRound={roomQuery.data.table.currentRound}
+            />
+          </Box>
         </>
       )}
     </>
