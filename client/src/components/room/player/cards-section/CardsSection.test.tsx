@@ -11,6 +11,7 @@ test(`renders labeled region with header`, () => {
       holeCards={undefined}
     />
   );
-  screen.getByRole("region", { name: label });
-  within(screen.getByRole("heading", { level: 3, name: label }));
+
+  const cardRegion = screen.getByRole("region", { name: label });
+  within(cardRegion).getByRole("heading", { level: 3, name: label });
 });
