@@ -1,45 +1,46 @@
 import { PokerRooms } from "@pokester/common-api";
 import { render, screen, within } from "@testing-library/react";
+import { getVisibleCardLabel, hiddenCardLabel } from "../playing-card";
+import { positiveNumToCurrencyFormat as betOrWinningsToCurrency } from "./BetOrWinningsSection";
+import { displayedCards, label as cardsLabel } from "./cards-section";
 import Player, {
+  displayBetOrWinningsSection,
+  getBetOrWinningsLabel,
   hasWinnings,
-  betRegionLabel,
-  displayCardsAndAmount,
-  positiveNumToCurrencyFormat,
-  bigBlindChipText,
-  BlindPosition,
-  cardsRegionLabel,
-  dealerChipText,
-  holeCardsToStrings,
-  positionsRegionLabel,
-  smallBlindChipText,
-  stackRegionLabel,
-  stackToCurrencyFormat,
   toToolTipText,
-  winningsRegionLabel,
 } from "./Player";
+import {
+  BlindPosition,
+  getChipText,
+  label as positionsLabel,
+} from "./PositionsSection";
+import {
+  amountToCurrencyFormat as stackToCurrency,
+  label as stackLabel,
+} from "./StackSection";
 
 const jestCasesTable = [
-  { description: "non-dealer", props: { isDealer: true } },
-  { description: "dealer", props: { isDealer: false } },
+  { description: "non-dealer", props: { dealer: true } },
+  { description: "dealer", props: { dealer: false } },
 ]
   .flatMap(({ description, props }) => [
     {
       description: `${description}, non-current-actor`,
-      props: { ...props, isCurrentActor: false },
+      props: { ...props, currentActor: false },
     },
     {
       description: `${description}, current-actor`,
-      props: { ...props, isCurrentActor: true },
+      props: { ...props, currentActor: true },
     },
   ])
   .flatMap(({ description, props }) => [
     {
       description: `${description}, non-round-in-progress`,
-      props: { ...props, isRoundInProgress: false },
+      props: { ...props, roundInProgress: false },
     },
     {
       description: `${description}, round-in-progress`,
-      props: { ...props, isRoundInProgress: true },
+      props: { ...props, roundInProgress: true },
     },
   ])
   .flatMap(({ description, props }) => [
@@ -76,77 +77,66 @@ const jestCasesTable = [
 test.each(jestCasesTable)("renders $description", ({ create }) => {
   const playerProps = create();
   const seatNumber = 0;
-  const isWinner = hasWinnings(playerProps.winnings);
+  const winner = hasWinnings(playerProps.winnings);
 
   render(<Player {...playerProps} seatNumber={seatNumber} />);
 
   const playerRegion = screen.getByRole("region", {
     name: playerProps.id,
-    description:
-      toToolTipText(
-        playerProps.left,
-        playerProps.folded,
-        playerProps.isCurrentActor,
-        isWinner
-      ) || undefined,
+    description: toToolTipText({ ...playerProps, winner }) || undefined,
   });
 
-  within(playerRegion).getByRole("heading", { level: 2, name: playerProps.id });
-
-  const positionRegion = within(playerRegion).getByRole("region", {
-    name: positionsRegionLabel,
+  within(playerRegion).getByRole("heading", {
+    level: 2,
+    name: playerProps.id,
   });
 
-  expect(within(positionRegion).queryByText(dealerChipText)).toEqual(
-    playerProps.isDealer ? expect.anything() : null
-  );
-  expect(within(positionRegion).queryByText(smallBlindChipText)).toEqual(
-    !playerProps.isDealer && playerProps.blindPosition === BlindPosition.SMALL
-      ? expect.anything()
-      : null
-  );
-  expect(within(positionRegion).queryByText(bigBlindChipText)).toEqual(
-    !playerProps.isDealer && playerProps.blindPosition === BlindPosition.BIG
-      ? expect.anything()
-      : null
-  );
-
-  const stackRegion = within(playerRegion).getByRole("region", {
-    name: stackRegionLabel,
+  const positionsRegion = within(playerRegion).getByRole("region", {
+    name: positionsLabel,
   });
-  within(stackRegion).getByText(stackToCurrencyFormat(playerProps.stackSize));
-
-  const hasCardsAndAmount = displayCardsAndAmount(
-    playerProps.isRoundInProgress,
-    isWinner
-  );
-
-  const cardsRegion = within(playerRegion).queryByRole("region", {
-    name: cardsRegionLabel,
-  });
-  expect(cardsRegion).toEqual(hasCardsAndAmount ? expect.anything() : null);
-  if (cardsRegion) {
-    within(cardsRegion).getByRole("heading", {
-      level: 3,
-      name: cardsRegionLabel,
-    });
-    holeCardsToStrings(
-      playerProps.holeCards,
-      playerProps.isRoundInProgress,
-      isWinner,
-      playerProps.folded
-    ).forEach((hcText) => {
-      if (hcText) within(cardsRegion).getAllByText(hcText);
-    });
+  const chipText = getChipText(playerProps.dealer, playerProps.blindPosition);
+  if (chipText) {
+    within(positionsRegion).getByText(chipText);
   }
 
-  const amountRegion = within(playerRegion).queryByRole("region", {
-    name: isWinner ? winningsRegionLabel : betRegionLabel,
+  const stackRegion = within(playerRegion).getByRole("region", {
+    name: stackLabel,
   });
-  expect(amountRegion).toEqual(hasCardsAndAmount ? expect.anything() : null);
-  const amountInCurrencyFormat = positiveNumToCurrencyFormat(
-    isWinner ? playerProps.winnings! : playerProps.bet
+  within(stackRegion).getByText(stackToCurrency(playerProps.stackSize));
+
+  const cardsRegion = within(playerRegion).getByRole("region", {
+    name: cardsLabel,
+  });
+  within(cardsRegion).getByRole("heading", {
+    level: 3,
+    name: cardsLabel,
+  });
+  displayedCards({ ...playerProps, winner }).forEach((displayedCard) => {
+    within(cardsRegion).getAllByRole("generic", {
+      name: displayedCard
+        ? getVisibleCardLabel(displayedCard)
+        : hiddenCardLabel,
+    });
+  });
+
+  const betOrWinningsRegion = within(playerRegion).queryByRole("region", {
+    name: getBetOrWinningsLabel(winner),
+  });
+  expect(betOrWinningsRegion).toEqual(
+    displayBetOrWinningsSection(playerProps.roundInProgress, winner)
+      ? expect.anything()
+      : null
   );
-  if (amountRegion && amountInCurrencyFormat)
-    within(amountRegion).getByText(amountInCurrencyFormat);
+  if (betOrWinningsRegion) {
+    within(betOrWinningsRegion).getByRole("heading", {
+      level: 3,
+      name: getBetOrWinningsLabel(winner),
+    });
+    const amount = betOrWinningsToCurrency(
+      winner ? playerProps.winnings! : playerProps.bet
+    );
+    if (amount) {
+      within(betOrWinningsRegion).getByText(amount);
+    }
+  }
 });
