@@ -4,7 +4,7 @@ import { FC, useRef } from "react";
 import PlayingCard from "../../playing-card";
 
 export type HoleCardsProps = {
-  holeCards: PokerRooms.Get.Player["holeCards"];
+  holeCards?: PokerRooms.Get.Player["holeCards"];
   roundInProgress: boolean;
   winner: boolean;
   folded: boolean;
