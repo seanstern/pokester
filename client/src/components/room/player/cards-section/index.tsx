@@ -1,1 +1,2 @@
-export { default } from "./CardsSection";
+export { default, label } from "./CardsSection";
+export { displayedCards } from "./HoleCards";
