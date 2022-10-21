@@ -12,7 +12,7 @@ export type HoleCardsProps = {
 
 /**
  * Given an object that contains
- *   - and whether or not the player has folded
+ *   - whether or not the player has folded
  *   - a player's displayed hole cards
  *   - whether or not a round is in progress
  *   - whether or not the player is a winner
