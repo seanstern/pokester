@@ -258,7 +258,7 @@ const PokerRoomSchema = new Schema<
 
 PokerRoomSchema.index(
   { updatedAt: 1 },
-  { expireAfterSeconds: 60 * 60 * 24 * 7 }
+  { expireAfterSeconds: 60 * 60 * 24 * 2 }
 );
 
 /**
