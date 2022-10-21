@@ -5,11 +5,11 @@ import PlayingCard, {
   hiddenCardLabel,
 } from "./PlayingCard";
 
-test("renders hidden", () => {
+test("renders hidden", async () => {
   render(<PlayingCard />);
-  screen.getByRole("generic", { name: hiddenCardLabel });
+  await screen.findByRole("generic", { name: hiddenCardLabel });
 });
-test.each(deck())(`renders visible $rank$suitChar`, (card) => {
+test.each(deck())(`renders visible $rank$suitChar`, async (card) => {
   render(<PlayingCard visible={card} />);
-  screen.getByRole("generic", { name: getVisibleCardLabel(card) });
+  await screen.findByRole("generic", { name: getVisibleCardLabel(card) });
 });
