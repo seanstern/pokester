@@ -82,7 +82,7 @@ const VisiblePlayingCard: FC<VisiblePlayingCardProps> = ({
   containerRef,
   dealt,
 }) => {
-  const [transitionIn, setTransitionIn] = useState(true);
+  const [transitionIn, setTransitionIn] = useState(false);
   useEffect(() => {
     setTransitionIn(false);
     setTimeout(() => setTransitionIn(true), 1);
