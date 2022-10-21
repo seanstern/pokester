@@ -71,7 +71,7 @@ test("renders initial form", async () => {
   const createButton = screen.getByRole("button", { name: createLabel });
   expect(createButton).toBeEnabled();
 
-  await user.type(nameTextBox, "Foo!");
+  await user.type(nameTextBox, "a");
   await user.click(smallBlindTextBox);
   await waitFor(() =>
     expect(nameTextBox).toHaveAccessibleDescription(new RegExp(nameLabel, "i"))
