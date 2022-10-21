@@ -16,6 +16,9 @@ export const positiveNumToCurrencyFormat = (num: number) =>
 
 const timeoutMs = 1500;
 
+export const betLabel = "Bet";
+export const winningsLabel = "Winnings";
+
 type BetOrWinningsSectionProps = {
   amount: number;
   currencyColor?: string;
