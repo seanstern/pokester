@@ -1,4 +1,5 @@
 import * as PokerEngine from "@chevtek/poker-engine";
+import { Card } from "@chevtek/poker-engine";
 import {
   Fixture,
   FixtureModule,
@@ -19,6 +20,18 @@ import {
   SelfPlayer,
   Table as TableType,
 } from "./Types";
+
+/**
+ * Given a PokerEngine.Card, returns an Card. Useful because PokerEngine.Card
+ * getters (like suitChar) don't automatically serialize.
+ *
+ * @param c a PokerEngine.Card
+ * @returns a Card that conforms to the common-api
+ */
+const toCard = (c: PokerEngine.Card) => {
+  const { rank, suit, color, suitChar } = c;
+  return { rank, suit, color, suitChar };
+};
 
 // Useful for mapping PokerEngine*Fixtures keys to common-api *Fixtures keys
 type CamelCasePrepend<
@@ -45,7 +58,8 @@ const toSelfPlayer = (p: PokerEngine.Player): SelfPlayer => {
   }
 
   return {
-    ...pick(p, ["bet", "folded", "left", "id", "stackSize", "holeCards"]),
+    ...pick(p, ["bet", "folded", "left", "id", "stackSize"]),
+    holeCards: p.holeCards?.map(toCard) as [Card, Card] | undefined,
     isSelf: true,
     legalActions: legalActions.length > 0 ? legalActions : undefined,
   };
@@ -76,7 +90,9 @@ const selfPlayerFixtures = transform(
 const toOpponentPlayer = (p: PokerEngine.Player): OpponentPlayer => ({
   ...pick(p, ["bet", "folded", "left", "id", "stackSize"]),
   isSelf: false,
-  holeCards: p.showCards ? p.holeCards : undefined,
+  holeCards: p.showCards
+    ? (p.holeCards?.map(toCard) as [Card, Card] | undefined)
+    : undefined,
 });
 
 type OpponentPlayerFixturesKey = `opponent${Capitalize<
@@ -214,8 +230,8 @@ const opponentsInTableFixtures = transform(
           "buyIn",
           "smallBlind",
           "bigBlind",
-          "communityCards",
         ]),
+        communityCards: pokerEngineTable.communityCards.map(toCard),
         players,
         pots,
         winners,
@@ -266,8 +282,8 @@ const selfInTableFixtures = transform(
           "buyIn",
           "smallBlind",
           "bigBlind",
-          "communityCards",
         ]),
+        communityCards: pokerEngineTable.communityCards.map(toCard),
         players,
         pots,
         winners,
