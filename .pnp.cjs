@@ -7187,6 +7187,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["qs", "npm:6.11.0"],\
             ["react", "npm:17.0.2"],\
             ["react-dom", "virtual:89981e259bab7ad411f0d118f1662d8966f895db7133b07760a3d27040a2b1a1328f72a9dee029e2261cf545818074f8190b78833f20d5145a9e5dbf6108cecb#npm:17.0.2"],\
+            ["react-easy-emoji", "virtual:89981e259bab7ad411f0d118f1662d8966f895db7133b07760a3d27040a2b1a1328f72a9dee029e2261cf545818074f8190b78833f20d5145a9e5dbf6108cecb#npm:1.8.0"],\
             ["react-hook-form", "virtual:89981e259bab7ad411f0d118f1662d8966f895db7133b07760a3d27040a2b1a1328f72a9dee029e2261cf545818074f8190b78833f20d5145a9e5dbf6108cecb#npm:7.34.2"],\
             ["react-query", "virtual:89981e259bab7ad411f0d118f1662d8966f895db7133b07760a3d27040a2b1a1328f72a9dee029e2261cf545818074f8190b78833f20d5145a9e5dbf6108cecb#npm:3.39.2"],\
             ["react-router-dom", "virtual:89981e259bab7ad411f0d118f1662d8966f895db7133b07760a3d27040a2b1a1328f72a9dee029e2261cf545818074f8190b78833f20d5145a9e5dbf6108cecb#npm:5.3.3"],\
@@ -21353,6 +21354,29 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["react-easy-emoji", [\
+        ["npm:1.8.0", {\
+          "packageLocation": "./.yarn/cache/react-easy-emoji-npm-1.8.0-facbfc77b1-0f7921619f.zip/node_modules/react-easy-emoji/",\
+          "packageDependencies": [\
+            ["react-easy-emoji", "npm:1.8.0"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:89981e259bab7ad411f0d118f1662d8966f895db7133b07760a3d27040a2b1a1328f72a9dee029e2261cf545818074f8190b78833f20d5145a9e5dbf6108cecb#npm:1.8.0", {\
+          "packageLocation": "./.yarn/__virtual__/react-easy-emoji-virtual-f5c7b90121/0/cache/react-easy-emoji-npm-1.8.0-facbfc77b1-0f7921619f.zip/node_modules/react-easy-emoji/",\
+          "packageDependencies": [\
+            ["react-easy-emoji", "virtual:89981e259bab7ad411f0d118f1662d8966f895db7133b07760a3d27040a2b1a1328f72a9dee029e2261cf545818074f8190b78833f20d5145a9e5dbf6108cecb#npm:1.8.0"],\
+            ["@types/react", "npm:17.0.48"],\
+            ["react", "npm:17.0.2"],\
+            ["string-replace-to-array", "npm:2.1.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/react",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["react-error-overlay", [\
         ["npm:6.0.11", {\
           "packageLocation": "./.yarn/cache/react-error-overlay-npm-6.0.11-021cdeaa92-ce7b44c38f.zip/node_modules/react-error-overlay/",\
@@ -22896,6 +22920,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/string-natural-compare-npm-3.0.1-f6d0be6457-65910d9995.zip/node_modules/string-natural-compare/",\
           "packageDependencies": [\
             ["string-natural-compare", "npm:3.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["string-replace-to-array", [\
+        ["npm:2.1.0", {\
+          "packageLocation": "./.yarn/cache/string-replace-to-array-npm-2.1.0-dcd5909b74-e53add3885.zip/node_modules/string-replace-to-array/",\
+          "packageDependencies": [\
+            ["string-replace-to-array", "npm:2.1.0"]\
           ],\
           "linkType": "HARD"\
         }]\

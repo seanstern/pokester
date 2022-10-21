@@ -1,16 +1,18 @@
-import { render, screen, within } from "@testing-library/react";
-import CommunityCards, { communityCardsRegionLabel } from "./CommunityCards";
 import { PokerRooms } from "@pokester/common-api";
-import cardToString from "../cardToString";
+import { render, screen, within } from "@testing-library/react";
 import fromPairs from "lodash/fromPairs";
 import toPairs from "lodash/toPairs";
+import { getVisibleCardLabel } from "../playing-card";
+import CommunityCards, { communityCardsRegionLabel } from "./CommunityCards";
 
 const communityCardsFixtures = toPairs(
   fromPairs(
     Object.values(PokerRooms.Get.Fixtures.Table).map(
       ({ description, create }) => {
         const { communityCards } = create();
-        const cardsDescription = communityCards.map(cardToString).join(", ");
+        const cardsDescription = communityCards
+          .map(getVisibleCardLabel)
+          .join(", ");
         return [
           `${cardsDescription ? "" : "no "}cards${
             cardsDescription ? `: ${cardsDescription}` : ""
@@ -35,6 +37,8 @@ test.each(communityCardsFixtures)("renders with %s", (description, create) => {
     name: communityCardsRegionLabel,
   });
   communityCards.forEach((cc) =>
-    within(communityCardsRegion).getByText(cardToString(cc))
+    within(communityCardsRegion).getByRole("generic", {
+      name: getVisibleCardLabel(cc),
+    })
   );
 });

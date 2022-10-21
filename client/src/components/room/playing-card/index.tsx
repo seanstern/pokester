@@ -1,1 +1,1 @@
-export { default } from "./PlayingCard";
+export { default, hiddenCardLabel, getVisibleCardLabel } from "./PlayingCard";

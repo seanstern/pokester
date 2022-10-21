@@ -1,1 +1,2 @@
-export { default, BlindPosition } from "./Player";
+export { default } from "./Player";
+export { BlindPosition } from "./PositionsSection";

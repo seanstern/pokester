@@ -3,7 +3,7 @@ import { FC } from "react";
 import ScrollExp from "../utils/ScrollToAnchor";
 import About from "./About";
 import Contact from "./Contact";
-import Welcome from "./Welcome";
+import Welcome from "./welcome";
 
 const Home: FC = () => (
   <Box maxWidth="md">
