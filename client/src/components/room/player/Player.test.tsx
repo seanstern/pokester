@@ -74,7 +74,7 @@ const jestCasesTable = [
     }))
   );
 
-test.each(jestCasesTable)("renders $description", ({ create }) => {
+test.each(jestCasesTable)("renders $description", async ({ create }) => {
   const playerProps = create();
   const seatNumber = 0;
   const winner = hasWinnings(playerProps.winnings);
@@ -111,13 +111,12 @@ test.each(jestCasesTable)("renders $description", ({ create }) => {
     level: 3,
     name: cardsLabel,
   });
-  displayedCards({ ...playerProps, winner }).forEach((displayedCard) => {
-    within(cardsRegion).getAllByRole("generic", {
-      name: displayedCard
-        ? getVisibleCardLabel(displayedCard)
-        : hiddenCardLabel,
+  const dCards = displayedCards({ ...playerProps, winner });
+  for (const dc of dCards) {
+    await within(cardsRegion).findAllByRole("generic", {
+      name: dc ? getVisibleCardLabel(dc) : hiddenCardLabel,
     });
-  });
+  }
 
   const betOrWinningsRegion = within(playerRegion).queryByRole("region", {
     name: getBetOrWinningsLabel(winner),

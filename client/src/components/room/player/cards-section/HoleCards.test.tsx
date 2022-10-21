@@ -47,24 +47,17 @@ const cases = [
     },
   ]);
 
-test.each(cases)(`renders $description`, ({ props }) => {
+test.each(cases)(`renders $description`, async ({ props }) => {
+  // eslint-disable-next-line testing-library/no-unnecessary-act
+  // await act(async () => {
   render(<HoleCards {...props} />);
+  // });
 
   const dispCards = displayedCards(props);
 
-  definedHoleCards.forEach((hc) => {
-    const visibleCard = screen.queryByRole("generic", {
-      name: getVisibleCardLabel(hc),
+  for (const dc of dispCards) {
+    await screen.findAllByRole("generic", {
+      name: dc ? getVisibleCardLabel(dc) : hiddenCardLabel,
     });
-    expect(visibleCard).toEqual(
-      dispCards.length > 0 && dispCards[0] ? expect.anything() : null
-    );
-  });
-
-  const hiddenCards = screen.queryAllByRole("generic", {
-    name: hiddenCardLabel,
-  });
-  expect(hiddenCards).toHaveLength(
-    dispCards.length > 0 && !dispCards[0] ? 2 : 0
-  );
+  }
 });

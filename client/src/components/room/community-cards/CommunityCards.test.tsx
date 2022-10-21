@@ -24,21 +24,25 @@ const communityCardsFixtures = toPairs(
   )
 );
 
-test.each(communityCardsFixtures)("renders with %s", (description, create) => {
-  const communityCards = create();
+test.each(communityCardsFixtures)(
+  "renders with %s",
+  async (description, create) => {
+    const communityCards = create();
 
-  render(<CommunityCards communityCards={communityCards} />);
+    render(<CommunityCards communityCards={communityCards} />);
 
-  const communityCardsRegion = screen.getByRole("region", {
-    name: communityCardsRegionLabel,
-  });
-  within(communityCardsRegion).getByRole("heading", {
-    level: 2,
-    name: communityCardsRegionLabel,
-  });
-  communityCards.forEach((cc) =>
-    within(communityCardsRegion).getByRole("generic", {
-      name: getVisibleCardLabel(cc),
-    })
-  );
-});
+    const communityCardsRegion = screen.getByRole("region", {
+      name: communityCardsRegionLabel,
+    });
+    within(communityCardsRegion).getByRole("heading", {
+      level: 2,
+      name: communityCardsRegionLabel,
+    });
+
+    for (const cc of communityCards) {
+      await within(communityCardsRegion).findByRole("generic", {
+        name: getVisibleCardLabel(cc),
+      });
+    }
+  }
+);
