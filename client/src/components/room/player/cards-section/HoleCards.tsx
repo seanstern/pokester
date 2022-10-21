@@ -3,7 +3,7 @@ import { PokerRooms } from "@pokester/common-api";
 import { FC, useRef } from "react";
 import PlayingCard from "../../playing-card";
 
-type HoleCardsProps = {
+export type HoleCardsProps = {
   holeCards: PokerRooms.Get.Player["holeCards"];
   roundInProgress: boolean;
   winner: boolean;
