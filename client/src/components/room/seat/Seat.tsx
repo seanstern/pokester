@@ -14,7 +14,7 @@ import { ActInRoomMutation } from "../../../queries/poker-rooms";
  */
 export const getSeatRegionLabel = (seatNumber: number) => `Seat ${seatNumber}`;
 
-const mailtoSubject = "Let's play pokester";
+const mailtoSubject = "Let's Play Pokester";
 const mailtoBodyPrefix = `Join me for a game of poker at ${process.env.REACT_APP_BASE_URL}`;
 
 /**

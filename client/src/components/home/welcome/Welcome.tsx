@@ -20,13 +20,10 @@ const alertBodyPostSignup =
   "Thanks for signing up to beta test Pokester. Feel free to invite your friends to sign up too.";
 
 const mailtoSubject = "Beta Test an App With Me";
-const mailtoCC = "contact@playpokester.com";
-const mailtoBodyPrefix = `I recently signed up to beta test Pokester--a free app for playing poker with friends using play money.\n\n Sign up to beta test with me at ${process.env.REACT_APP_BASE_URL}`;
-const inviteMailTo = `mailto:?cc=${encodeURIComponent(
-  mailtoCC
-)}&subject=${encodeURIComponent(mailtoSubject)}&body=${encodeURIComponent(
-  `${mailtoBodyPrefix}`
-)}`;
+const mailtoBodyPrefix = `I signed up to beta test Pokester--a free app for playing poker with friends using play money.\n\n Sign up to join me at ${process.env.REACT_APP_BASE_URL}`;
+const inviteMailTo = `mailto:?subject=${encodeURIComponent(
+  mailtoSubject
+)}&body=${encodeURIComponent(`${mailtoBodyPrefix}`)}`;
 
 const hrefPreSignup = "/account/signup";
 const hrefPostSignup = inviteMailTo;

@@ -38,7 +38,7 @@ _Note the following environment variables can be set by creating a `server/.env`
 - `OPEN_ID_CONNECT_SECRET`: [client secret for express-openid-connect](https://auth0.github.io/express-openid-connect/interfaces/configparams.html#secret)
 - `OPEN_ID_CONNECT_BASE_URL`: [base URL for express-openid-connect](https://auth0.github.io/express-openid-connect/interfaces/configparams.html#baseurl)
 - `OPEN_ID_CONNECT_CLIENT_ID`: [client id for express-open-id-connect](https://auth0.github.io/express-openid-connect/interfaces/configparams.html#clientid)
-- `OPEN_ID_CONNECT_ISSUER_BASE_URL`= [issuer base URL for express-open-id-connect](https://auth0.github.io/express-openid-connect/interfaces/configparams.html#issuerbaseurl)
+- `OPEN_ID_CONNECT_ISSUER_BASE_URL`: [issuer base URL for express-open-id-connect](https://auth0.github.io/express-openid-connect/interfaces/configparams.html#issuerbaseurl)
 
 ## Usage
 
