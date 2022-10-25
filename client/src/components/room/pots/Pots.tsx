@@ -22,9 +22,7 @@ export type PotsProps = {
 const Pots: FC<PotsProps> = ({ pots }) => {
   const currencyColor = useCurrencyColor();
   const [mainPot, ...sidePots] =
-    pots.length > 0
-      ? [...pots].reverse()
-      : [{ amount: 0, eligiblePlayers: [] }];
+    pots.length > 0 ? pots : [{ amount: 0, eligiblePlayers: [] }];
   const hasSidePots = sidePots.length > 0;
   const hasAnyWinners = pots.find(
     ({ winners }) => winners && winners.length > 0
