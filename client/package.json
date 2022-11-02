@@ -86,8 +86,5 @@
   },
   "peerDependencies": {
     "jest": "*"
-  },
-  "resolutions": {
-    "@xmldom/xmldom": "0.8.4"
   }
 }

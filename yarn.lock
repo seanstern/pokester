@@ -5954,10 +5954,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xmldom/xmldom@npm:^0.8.3":
-  version: 0.8.3
-  resolution: "@xmldom/xmldom@npm:0.8.3"
-  checksum: 087303060fc794f0ec8c0e9031362c1ae56eb1cf06b291cc178602462c072fb9f84657a430ae9c8c1b4c0d33549259e89ed14ebc86ca1a696f253bdd7f0dffcf
+"@xmldom/xmldom@npm:0.8.4":
+  version: 0.8.4
+  resolution: "@xmldom/xmldom@npm:0.8.4"
+  checksum: 9046735714c47e95732449481954653788df5f93fa968a186ae62e6c201c0f9f7bed03647bbdfe25f26532d07a99604a48fadeddecbe437bae0edcf207751e02
   languageName: node
   linkType: hard
 
