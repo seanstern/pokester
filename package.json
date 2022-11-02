@@ -1,6 +1,6 @@
 {
   "name": "@pokester/app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Web application for playing free, no-limit poker online using play money",
   "author": {
     "name": "Sean Stern"
