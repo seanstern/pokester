@@ -35,7 +35,8 @@
   "resolutions": {
     "nth-check": "2.0.1",
     "terser": "5.14.2",
-    "minimatch": "3.1.2"
+    "minimatch": "3.1.2",
+    "@xmldom/xmldom": "0.8.4"
   },
   "scripts": {
     "build": "yarn workspaces foreach -t run build",
