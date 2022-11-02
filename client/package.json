@@ -1,6 +1,6 @@
 {
   "name": "@pokester/client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Pokester's front-end web client",
   "author": {
     "name": "Sean Stern"
@@ -86,5 +86,8 @@
   },
   "peerDependencies": {
     "jest": "*"
+  },
+  "resolutions": {
+    "@xmldom/xmldom": "0.8.4"
   }
 }
